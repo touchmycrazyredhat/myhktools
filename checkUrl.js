@@ -329,10 +329,7 @@ function fnCheckJavaFx(s)
 	});
 }
 
-
 var g_reServer = /(Tomcat|JBossWeb|JBoss[\-\/][\d\.]+)/gmi;
-
-
 
 // 避免重复处理
 var g_HtmlMd5Cf = {};
@@ -726,7 +723,8 @@ function fnTestStruts2(szUrl2, obj)
 	{
 		a[k].call(fnGetCpy(),szUrl2);
 	}
-	runChecks(szUrl2,"struts2");
+	// runChecks(szUrl2,"struts2");
+	runChecks(szUrl2,"weblogic");
 	// doStruts2_020(g_szUrl);
 	// doStruts2_052(szUrl2);
 	if(-1 == szUrl2.indexOf("login.jsp"))

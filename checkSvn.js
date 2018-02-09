@@ -6,24 +6,18 @@ var g_bDownload = true,
 	reFilter = /(jar|java|exe|cab|jsp|xml|zip|war|ear)$/gmi
 	;
 
-/*
-生成密码
-*/
-function fnMkUp (u,p)
-{
-	var s = new Buffer(u + ":" + p);
-	return(s.toString("base64"));
-}
-
+var g_oUrls = {};
 /*
 检查单个路径
 */
 function fnCheckSvn(url,u,p,fnCbk)
 {
+	if(g_oUrls[url])return;
+	g_oUrls[url]=1;
 	request({method: 'GET',uri:url,headers:
 		{
 			authorization: 'Basic ' + fnMkUp(u,p).replace(/\s/gmi, ''),
-			'user-agent':"Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540"//'Mozilla/6.0 (win10; Intel lly 99_88_55) ms/000.4.7 (KHTML, like Gecko) Version/99.0.2 Safari/888.1.5 lly'
+			'user-agent':g_szUa
 		}},function(e,r,b)
 	{
 		fnCbk(e,r,b);
@@ -31,7 +25,6 @@ function fnCheckSvn(url,u,p,fnCbk)
 }
 
 // 从序列化文件加载待下载的文件
-// 
 // 每个序列的url包含状态，{获取时间、用户名、密码、urls:[{url、状态（开始下载、已经下载）}]}
 function getUrls(szAddUrls)
 {
@@ -140,19 +133,22 @@ function fnCheckAll(u,user,pswd)
 		 		if(-1 == pwd.indexOf(pswd))
 		 			pwd.push(pswd);
 		 		// console.log(oUser);
-		 		console.log(["svn checkout",u + s,"--username",user,"--password",pswd].join(" "));
+		 		// --accept-regex=
+		 		var sT = '';
+		 		console.log(sT = "wget -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 no-http-keep-alive -r -np --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg\" --header=\"authorization:" +
+		 			r.request.headers["authorization"]
+		 			+ "\" " + r.request.href + " &");
+		 		// console.log(["svn checkout",u + s,"--username",user,"--password",pswd].join(" "));
 		 		// console.log(["Ok",r.statusCode, s1]);
 		 	}
 		});
 	});
 }
 
-
-
 function updateSvnIndexAll()
 {
-	fs.writeFileSync(indexAll,JSON.stringify(g_oSvnAll));
-	fs.writeFileSync(allSvnInfo,JSON.stringify(g_oSvnInfo));
+	fs.writeFileSync(indexAll,JSON.stringify(g_oSvnAll,null,' '));
+	fs.writeFileSync(allSvnInfo,JSON.stringify(g_oSvnInfo,null,' '));
 	
 }
 
@@ -235,6 +231,17 @@ if(g_bDownload)
 			}
 		}
 		////////////////////////*/
+
+		var y = g_oSvnAll;
+		for(var k in y)
+		{
+		    var oT = y[k];
+		    if(!oT['svns'])
+		    {
+		        child_process.execSync("node checkSvn.js http://118.112.188.108:8090/svn/ " + k + " " + oT.pwd[oT.pwd.length - 1] + " &");
+		    }
+		}
+
 	}();
 }
 /*
