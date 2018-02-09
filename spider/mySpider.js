@@ -195,7 +195,7 @@ for(var k in y)
                 // c.queue
                 (kk1 = {
                     user:k,
-                    uri:"http://118.112.188.108:8090/svn/" + x1,
+                    uri: + x1,
                     headers:{
                         authorization: 'Basic ' + fnMkUp(k, oT.pwd[oT.pwd.length - 1]).replace(/\s/gmi, '')
                     }

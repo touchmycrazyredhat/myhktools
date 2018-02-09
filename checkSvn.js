@@ -238,7 +238,7 @@ if(g_bDownload)
 		    var oT = y[k];
 		    if(!oT['svns'])
 		    {
-		        child_process.execSync("node checkSvn.js http://118.112.188.108:8090/svn/ " + k + " " + oT.pwd[oT.pwd.length - 1] + " &");
+		        child_process.execSync("node checkSvn.js  " + k + " " + oT.pwd[oT.pwd.length - 1] + " &");
 		    }
 		}
 
