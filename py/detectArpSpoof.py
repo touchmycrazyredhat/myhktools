@@ -2,11 +2,7 @@
 #!coding=utf-8
 __author__ = 'M.T.X.'
 '''
-1、发现当前网络中进行ARP欺骗
-2、保护自己免受ARP欺骗
-3、发现DNS欺骗
-4、保护面搜DNS欺骗
-5、发现Sniffer
+1、数据转发
 '''
 from scapy.all import *
 import pickle

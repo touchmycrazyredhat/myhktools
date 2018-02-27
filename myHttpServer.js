@@ -34,7 +34,8 @@ function fnWt(ip,s)
 			|| -1 < szName.indexOf("%20") 
 			|| -1 < szName.indexOf(",")
 			|| -1 < szName.indexOf("'")
-			|| -1 < szName.indexOf("\""))
+			|| -1 < szName.indexOf("\"")
+			|| "127.0.0.1" == ip)
 			return;
 		console.log([ip,szName,a[0]]);
 		if(!fs.existsSync(szFn))
