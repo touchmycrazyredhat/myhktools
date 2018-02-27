@@ -142,7 +142,7 @@ c = new Crawler(
                         c.queue({uri:s1,headers:hs});
                     };
                     
-                    // fnDoOneUrl(szP1,res.request.href,a[k].attribs.href);
+                    fnDoOneUrl(szP1,res.request.href,a[k].attribs.href);
                     
                     //else console.log(s);
                 }
@@ -156,6 +156,8 @@ c = new Crawler(
             {
                 // 目录请求时文件名的修正
                 szFileName = fnIdx(szFileName);
+
+                mkdirs(szFileName.substr(0, szFileName.lastIndexOf('/')));
 
                 fs.writeFileSync(szFileName,res.body);
                 // 修改日期
@@ -179,11 +181,13 @@ if(program.url)
     });
 }
 
-/*//////////////////////////
+//*//////////////////////////
 var y = JSON.parse(fs.readFileSync("../data/svn/indexAll.txt").toString());
 for(var k in y)
 {
     var oT = y[k];
+    // node mySpider.js -u http://118.112.188.108:8090/svn/JY12GD01003 --user linsen --pswd lins226621 --filter '\.(html|htm|txt|jdbc.properties|svg|cdm|pdm|java)$' --threads 11 --path ../data
+    if('linsen' != k)
     if(oT['svns'])
     {
         var o1 = oT['svns'];
@@ -191,16 +195,20 @@ for(var k in y)
         {
             +function(k,oT,x1)
             {
+                // child_process.execSync
+                console.log("node mySpider.js -u http://118.112.188.108:8090/svn/" + x1 + " --user linsen --pswd lins226621 --filter '\\.(html|htm|txt|jdbc.properties|svg|cdm|pdm|java|doc|docx|ppt|pptx|xls|xlsx|xml)$' --threads 11 --path ../data &");
+                /*////////////
                 var kk1 = '';
                 // c.queue
                 (kk1 = {
                     user:k,
-                    uri: + x1,
+                    uri:"http://118.112.188.108:8090/svn/" + x1,
                     headers:{
                         authorization: 'Basic ' + fnMkUp(k, oT.pwd[oT.pwd.length - 1]).replace(/\s/gmi, '')
                     }
                 });
                 console.log(kk1);
+                /////////////*/
             }(k,oT,o1[x]);
         }
     }

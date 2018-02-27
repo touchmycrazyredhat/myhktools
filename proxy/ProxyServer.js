@@ -6,6 +6,7 @@ var fs  = require("fs"),
     request = require("request"),
     g_aProxy = null,
     nPort = 8880,
+    g_szUA = "CaptiveNetworkSupport-355.30.1 wispr",
     szIp = "0.0.0.0";
 
 process.on('uncaughtException', function(e){});
@@ -147,12 +148,14 @@ function fnCreateProxyServer()
 				)
 			//////////////*/
 			{
+				req.headers["user-agent"] = g_szUA;
 				var r = request,// getRequest(),// 获取动态代理
 					x = r[req.method.toLowerCase()]({"uri":req.url,"timeout":nTimeout});
 					console.log(req.headers)
 				req.pipe(x);
 				// fnFilterFunc(resp);
 		    	resp = x.pipe(resp);
+		    	console.log(req.headers);
 	    	}
 	    	/*
 	    	else 

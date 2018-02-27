@@ -30,6 +30,12 @@ function fnWt(ip,s)
 	fs.appendFileSync("data/" + ip + ".txt", s + "\n");
 	try{
 		var a = s.split(/\t/),szName = /\/([^\/]+)\//gmi.exec(s)[1],szFn = "data/nmap/" + szName + ".xml ";
+		if(-1 < szName.indexOf(".jsp") 
+			|| -1 < szName.indexOf("%20") 
+			|| -1 < szName.indexOf(",")
+			|| -1 < szName.indexOf("'")
+			|| -1 < szName.indexOf("\""))
+			return;
 		console.log([ip,szName,a[0]]);
 		if(!fs.existsSync(szFn))
 			child_process.exec("echo ${rtpswd} | sudo -S nmap --host-timeout=100m  --max-rtt-timeout=3000ms --initial-rtt-timeout=1000ms --min-rtt-timeout=1000ms --max-retries=2 --stats-every 10s --min-hostgroup=64 --min-rate=500 --traceroute -PS1-65535 -A -O -oX " + szFn + " " + ip + " &",function(e,so,se){});
@@ -128,11 +134,14 @@ setInterval(function()
 		for(var k in a)
 		{
 			if(!a[k])continue;
+			// console.log(a[k]);
 			var x1 = a[k].split(/\s+/);
 			if(1 < x1.length)
 			{
+				if(-1 < x1[1].indexOf("Ti"))continue;
 				x1[1] = x1[1].replace(/[^\d]*/gmi,'');
-				if(128 > x1[1])
+
+				if("128Gi" > x1[1])
 				{
 					var sss = x1[x1.length - 1].trim(),k1 = sss.substr(sss.lastIndexOf('/'));
 					console.log("符合拷贝" + sss);

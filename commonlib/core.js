@@ -27,7 +27,7 @@ copyO2O({szMyName:'巅狼团队M.T.X._2017-06-08 1.0',
 	g_host2Ip:{},// 域名到ip转换缓存
 	async:require('async'),
 	g_nThread:5,// 并发线程数
-	g_szUa:"Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540",
+	g_szUa:"Mozilla/5.0 (ss) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/2188029 NetType/4G WebP/0.3.0 Pixel/540",
 	child_process:require("child_process"),
 	net:require('net'),
 	crypto:require('crypto'),

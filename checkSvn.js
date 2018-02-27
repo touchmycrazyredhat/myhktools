@@ -7,6 +7,7 @@ var g_bDownload = true,
 	;
 
 var g_oUrls = {};
+var args = process.argv.splice(2);
 /*
 检查单个路径
 */
@@ -52,7 +53,8 @@ function getUrls(szAddUrls)
 }
 // 存储目录
 var g_svnDataPath = "./data/svn/";
-var indexAll = "data/svn/indexAll.txt", allSvnInfo = g_svnDataPath + 'allSvnInfo.txt',g_oSvnAll = {},g_oSvnInfo = {};
+var indexAll = "data/svn/indexAll.txt", 
+	allSvnInfo = g_svnDataPath + 'allSvnInfo.txt',g_oSvnAll = {},g_oSvnInfo = {};
 function fnGetHds(resp,o)
 {
 	var oCurSvn = o,aH = "date,last-modified".split(g_szSplit);
@@ -135,12 +137,13 @@ function fnCheckAll(u,user,pswd)
 		 		// console.log(oUser);
 		 		// --accept-regex=
 		 		var sT = '';
-		 		console.log(sT = "wget -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 no-http-keep-alive -r -np --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg\" --header=\"authorization:" +
+		 		console.log(sT = "wget -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg\" --header=\"authorization:" +
 		 			r.request.headers["authorization"]
 		 			+ "\" " + r.request.href + " &");
 		 		// console.log(["svn checkout",u + s,"--username",user,"--password",pswd].join(" "));
 		 		// console.log(["Ok",r.statusCode, s1]);
 		 	}
+		 	// else console.log("no " + s);
 		});
 	});
 }
@@ -159,7 +162,7 @@ process.on('exit', (code) =>
 		updateSvnIndexAll();
 		console.log(g_oSvnInfo);
 	}
-	else console.log(g_oSvnAll);
+	// else console.log(g_oSvnAll);
 	// var ss = JSON.stringify(g_oSvnAll,null,' ');
 	// console.log(ss);
 	// console.log(g_oSvnAll);
@@ -226,21 +229,32 @@ if(g_bDownload)
 			{
 				for(var i = 0; i < o.pwd.length; i++)
 				{
-					fnCheckAll(process.env.svnUrl,k,o.pwd[i]);
+					fnCheckAll("http://118.112.188.108:8090/svn/"
+						// process.env.svnUrl
+						,k,o.pwd[i]);
 				}
 			}
 		}
 		////////////////////////*/
-
+		/*
 		var y = g_oSvnAll;
 		for(var k in y)
 		{
 		    var oT = y[k];
-		    if(!oT['svns'])
+		    if('linsen' != k)continue;
+		    if(oT['svns'])
 		    {
-		        child_process.execSync("node checkSvn.js  " + k + " " + oT.pwd[oT.pwd.length - 1] + " &");
+		    	// console.log([k,oT.pwd[0]]);
+		    	var t = oT['svns'];
+		    	for(var x in t)
+		    	console.log(sT = "wget -x -c -nH --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg,java,jar,xml\" --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --header=\"authorization: Basic " +
+		 			fnMkUp(k,oT.pwd[0])
+		 			+ "\" http://118.112.188.108:8090/svn/" 
+		 			+ t[x] + "/ &");
+		        // child_process.execSync("node checkSvn.js http://118.112.188.108:8090/svn/ " + k + " " + oT.pwd[oT.pwd.length - 1] + " &");
 		    }
 		}
+		///////////////*/
 
 	}();
 }
