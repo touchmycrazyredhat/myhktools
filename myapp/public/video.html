@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="utf-8">
+	    <title>二维码识别</title>
+<script type="text/javascript" src="mtx/jsqrcode/src/grid.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/version.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/detector.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/formatinf.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/errorlevel.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/bitmat.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/datablock.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/bmparser.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/datamask.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/rsdecoder.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/gf256poly.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/gf256.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/decoder.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/qrcode.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/findpat.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/alignpat.js"></script>
+<script type="text/javascript" src="mtx/jsqrcode/src/databr.js"></script>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<style>
+div.bar {
+    display: inline-block;
+    width: 20px;
+    height: 75px;   /* We'll override this later */
+    background-color: teal;
+    margin-right: 2px;
+}
+</style>
+	</head>
+<body>
+<video id="video" width="640" height="480" autoplay></video>
+<button id="snap" class="sexyButton">Snap Photo</button>
+<canvas id="canvas" width="640" height="480"></canvas>
+<script>
+
+d3.select("body").append("svg")
+    .attr("width", 500)
+    .attr("height", 500)
+    .selectAll("div")
+	.data([25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
+                14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
+                24, 18, 25, 9, 3])
+	.enter()
+	.append("circle")
+	.attr("cx", function(d, i) 
+	{
+        return (i * 50) + 25;
+    })
+    .attr("cy", 500/2)
+    .attr("r", function(d) {
+        return d;
+    })
+    /*
+	.append('div')
+	// .classed("bar", true)
+	.attr("class",'bar')
+	.style("height", function(d) {
+    	return (d * 5) + "px";
+	})*/
+	.style("color",function(i,x){
+		return (i << 32) & (i << 16) & i;
+	})
+	.text(function(i,x)
+	{
+		// x + "、" + 
+		return i
+	})
+	;;
+//*////////////////
+// https://developer.mozilla.org/zh-CN/docs/Web/Guide/API/Camera
+// https://jingyan.baidu.com/article/3052f5a1f7606697f31f86d9.html
+// Put event listeners into place
+// 关闭"use mock capture..."
+window.addEventListener("DOMContentLoaded", function()
+{
+	// 获取到window.URL对象
+	var URL = window.URL || window.webkitURL;
+	// Grab elements, create settings, etc.
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	var video = document.getElementById('video');
+	// facingMode: { exact: "environment" }
+	// facingMode: "user"
+	var mediaConfig =  {video:{width:640, height:480},audio:false};
+	var errBack = function(e) 
+	{
+		console.log('An error has occurred!', e)
+	};
+
+	// Put video listeners into place
+	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+	{
+	    navigator.mediaDevices.getUserMedia(mediaConfig ).then(function(stream)
+	    {
+	        // video.src = URL.createObjectURL(stream);
+	        // video.play();
+	        video.srcObject = stream;
+	        video.onloadedmetadata = function(e)
+	        {
+				video.play();
+			};
+	        
+	    });
+	}
+	// Legacy code below! /
+	else if(navigator.getUserMedia) 
+	{ // Standard
+		navigator.getUserMedia(mediaConfig, function(stream)
+		{
+			video.src = stream;
+			video.play();
+		}, errBack);
+	} else if(navigator.webkitGetUserMedia) 
+	{ // WebKit-prefixed
+		navigator.webkitGetUserMedia(mediaConfig, function(stream)
+		{
+			video.src = window.webkitURL.createObjectURL(stream);
+			video.play();
+		}, errBack);
+	} else if(navigator.mozGetUserMedia) 
+	{ // Mozilla-prefixed
+		navigator.mozGetUserMedia(mediaConfig, function(stream){
+			video.src = window.URL.createObjectURL(stream);
+			video.play();
+		}, errBack);
+	}
+	var fnT = 0;
+	// Trigger photo take
+	document.getElementById('snap').addEventListener('click', fnT = function()
+	{
+		context.drawImage(video, 0, 0, 640, 480);
+		// qrcode.decode(url or DataURL);
+		// Decode from canvas with "qr-canvas" ID: qrcode.decode()
+		var s = qrcode.decode(canvas.toDataURL());
+		// if(s)
+			window.title  = s;
+	});
+	window.setInterval(fnT,100);
+}, false);
+////////////////////*/
+
+/*/ 设置事件监听，DOM内容加载完成，和jQuery的$.ready() 效果差不多。 
+window.addEventListener("DOMContentLoaded", function() { 
+// canvas 元素将用于抓拍 
+var canvas = document.getElementById("canvas"), 
+context = canvas.getContext("2d"), 
+// video 元素，将用于接收并播放摄像头 的数据流 
+video = document.getElementById("video"), 
+videoObj = { "video": true }, 
+// 一个出错的回调函数，在控制台打印出错信息 
+errBack = function(error) { 
+if("object" === typeof window.console){ 
+console.log("Video capture error: ", error.code); 
+} 
+}; 
+// Put video listeners into place 
+// 针对标准的浏览器 
+if(navigator.getUserMedia) { // Standard 
+navigator.getUserMedia(videoObj,function(stream)
+{
+	video.src = stream;
+	video.play();
+},errBack);
+} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed 
+navigator.webkitGetUserMedia(videoObj, function(stream){ 
+video.src = window.webkitURL.createObjectURL(stream); 
+video.play(); 
+}, errBack); 
+} 
+// 对拍照按钮的事件监听 
+document.getElementById("snap").addEventListener("click", function() { 
+// 画到画布上 
+context.drawImage(video, 0, 0, 640, 480); 
+}); 
+}, false); 
+///////////*/
+</script>
+</body></html>
