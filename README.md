@@ -2,12 +2,13 @@
 # 巅狼安全 团队倾情奉献
 # 安装支持环境
 ## 安装
+```
 brew install node
 mkdir ~/safe && cd ~/safe
 git clone https://github.com/hktalent/weblogic_java_des  mtx_jfxl
 ./install.sh
 myhktools
-
+```
 # 使用
 ```
 
