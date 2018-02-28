@@ -16,11 +16,11 @@
 </head>
 <body>
 <div id="tt" class="easyui-tabs" style="width:100%;height:650px;">
-    <div title="风险图" style="padding:0;">
+    <div title="风险图" style="padding:2px 0 0 0;">
            <div id="main" style="height:800px; draggable:true;"></div>  
     </div>
-    <div title="网络数据监控" style="overflow:auto;padding:0;display:none;">
-        <table id="myNet" class="easyui-treegrid" style="width:100%;height:300px"
+    <div title="网络数据监控" style="overflow:auto;padding:2px 0 0 0;display:none;">
+        <table id="myNet" class="easyui-treegrid" style="width:100%;height:100%"
             rownumbers="true"
             idField="id" treeField="mac" lines="true">
         <thead>
@@ -33,12 +33,12 @@
         </thead>
         </table>
     </div>
-    <div title="在线渗透" style="overflow:auto;padding:0;display:none;">
-        <div style="padding:2px 0 2px 0;">
+    <div title="在线渗透" style="overflow:auto;padding:2px 0 0 0;display:none;">
+        <div style="padding:0 0 2px 0;">
             <input id='doUrl' class="easyui-textbox" style='width:80%'>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:30px" onclick='fnMySubmitDoUrl()'></a>
          </div>
-        <table id="myTb" class="easyui-treegrid" style="width:100%;height:300px"
+        <table id="myTb" class="easyui-treegrid" style="width:100%;height:100%"
             rownumbers="true"
             idField="id" treeField="name" lines="true">
         <thead>
