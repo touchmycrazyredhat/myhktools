@@ -10,6 +10,7 @@ git clone https://github.com/hktalent/weblogic_java_des  mtx_jfxl
 myhktools
 ```
 # 使用
+node checkUrl.js -h
 ```
 
 Usage: checkUrl [options]
