@@ -1,5 +1,5 @@
 rm ins.tmp
-find . -name "*.js" -exec grep -h -R  -Eo "require\(['\"]([^'\"\.\/]+?)['\"]\)" {} \; >>ins.tmp
+find . -name "*.js" -exec grep -h -R  -Eo "require\(['\"]([^\.][^'\"\/]+?)['\"]\)" {} \; >>ins.tmp
 grep -Eo  "['\"]([^'\"\.\/]+?)['\"]" ins.tmp |sed 's/"//g'|sed "s/'//g"|sort|uniq >>ins1.tmp
 rm ins.tmp
 cat ins1.tmp | awk '{print "npm i -g "$1}' > install.sh

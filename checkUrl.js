@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// find . -name "*.js" -exec grep -h -R  -Eo "require\(['\"]([^'\"\.\/]+?)['\"]\)" {} \;
 require('./lib/core.js');
 program.version(szMyName)
 	.option('-u, --url [value]', 'check url, no default')
@@ -40,15 +39,7 @@ if(-1 == g_szUrl.indexOf("http"))
 // 生成安装包信息：package.json
 if(program.install)
 {
-	var aI,szT = fs.readFileSync(__filename),
-		r2 = /require\(['"]([^'"]+)['"]\)/gmi,szPkg = __dirname + "/package.json",
-		oPkg = JSON.parse(fs.readFileSync(szPkg));
-	while(aI = r2.exec(szT))
-	{
-		oPkg["dependencies"][aI[1]] = "";
-		console.log(aI[1] + " = " + oPkg["dependencies"][aI[1]]);
-	}
-	fs.writeFileSync(szPkg,JSON.stringify(oPkg));
+	console.log("请允许\n./install.sh");
 	process.exit(0);
 }
 
