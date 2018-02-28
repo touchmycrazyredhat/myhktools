@@ -1,4 +1,5 @@
 // XSS 绕过 编码
+// 在线编码: http://patriciopalladino.com/files/hieroglyphy/
 ;(function (global, undefined) {
 /*jshint sub:true, evil:true */
     "use strict";

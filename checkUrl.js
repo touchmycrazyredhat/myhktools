@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// find . -name "*.js" -exec grep -h -R  -Eo "require\(['\"]([^'\"\.\/]+?)['\"]\)" {} \;
 require('./lib/core.js');
 program.version(szMyName)
 	.option('-u, --url [value]', 'check url, no default')
