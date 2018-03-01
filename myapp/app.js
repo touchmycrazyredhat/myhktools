@@ -8,6 +8,7 @@ brew services list
 ////////////////////*/
 var express = require('express'),
     os = require('os'),
+    constants = require('constants'),
     fs = require('fs'),
     path = require('path'),
     favicon = require('serve-favicon'),
@@ -35,6 +36,7 @@ function getRandom(nMax)
   return String((Math.random() * 1000000000) % nMax).replace(/\..*?$/gmi,'');
 }
 
+/*
 // 加密
 function encryptStringWithRsaPublicKey(toEncrypt, relativeOrAbsolutePathToPublicKey)
 {
@@ -43,7 +45,11 @@ function encryptStringWithRsaPublicKey(toEncrypt, relativeOrAbsolutePathToPublic
   if(fs.existsSync(absolutePath))
     publicKey = fs.readFileSync(absolutePath, "utf8");
   var buffer = new Buffer(toEncrypt);
-  var encrypted = crypto.publicEncrypt(publicKey, buffer);
+  var encrypted = crypto.publicEncrypt(
+    {
+      'key':publicKey,
+      'padding': constants.RSA_NO_PADDING
+    }, buffer);
   return encrypted.toString("base64");
 }
 // 解密
@@ -53,7 +59,9 @@ function decryptStringWithRsaPrivateKey(toDecrypt, relativeOrAbsolutePathtoPriva
     if(fs.existsSync(absolutePath))
       privateKey = fs.readFileSync(absolutePath, "utf8");
     var buffer = new Buffer(toDecrypt, "base64");
-    var decrypted = crypto.privateDecrypt(privateKey, buffer);
+    var decrypted = crypto.privateDecrypt({
+      'key':privateKey,
+      'padding':constants.RSA_NO_PADDING}, buffer);
     return decrypted.toString("utf8");
 };
 // 生成key
@@ -61,10 +69,18 @@ function fnGenPubPriKey(n)
 { // diffHell.generateKeys('base64');
   var prime_length = n || 512;
   var diffHell = crypto.createDiffieHellman(prime_length);
-  diffHell.generateKeys('base64');
-  return {pub:diffHell.getPublicKey('base64'),pri:diffHell.getPrivateKey('base64')};
+  // 'binary', 'hex', or 'base64'
+  diffHell.generateKeys('binary');
+  var s1 = ["-----BEGIN RSA PRIVATE KEY-----\n","\n-----END RSA PRIVATE KEY-----",
+     "-----BEGIN RSA PUBLIC KEY-----\n","\n-----END RSA PUBLIC KEY-----"
+  ];
+  s1 = ['','','',''];
+  return {
+    "pub": (s1[2] + diffHell.getPublicKey('base64') + s1[3]),
+    "pri": (s1[0] + diffHell.getPrivateKey('base64') + s1[1])
+  };
 }
-/*
+
 var  k = fnGenPubPriKey();
 // console.log(k);
 var s1 = encryptStringWithRsaPublicKey("xiatian是等了好久生日好久", k.pub);
@@ -157,6 +173,21 @@ app.use(compress({
 }));
 // 禁止x-powered-by
 app.disable(xpb);
+
+app.use("/netM",function(req,res,next)
+{
+  var oIp = getIp(req);
+  var data = '';
+  req.on('data', function(chunk){
+    data += chunk;
+  });
+  req.on('end', function() {
+    req.rawBody = data;
+    console.log(new Buffer(data,"base64").toString());
+  });
+  res.end('');
+});
+
 // 安全头信息设置太高导致的反馈信息接收
 app.post("/rptv",function(req,res){
         if(req.body)

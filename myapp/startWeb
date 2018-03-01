@@ -2,9 +2,15 @@
 /**
  * Module dependencies.
  */
-var app = require('./app');
-var debug = require('debug')('myapp:server');
-var http = require('http');
+var app = require('./app'),
+    debug = require('debug')('myapp:server'),
+    http = require('http'),
+    fs = require('fs'),
+    https = require('https'),
+    options = {
+      key: fs.readFileSync('./ca/key.pem', 'utf8'),
+      cert: fs.readFileSync('./ca/csr.pem', 'utf8')
+};
 /**
  * Get port from environment and store in Express.
  */
@@ -14,7 +20,9 @@ app.set('port', port);
  * Create HTTP server.
  30秒
  */
-var server = http.createServer(app),nPI = 30000;
+var server = http.createServer(app),nPI = 30000
+    // ,servers = https.createServer(options, app)
+    ;
 var io = require('socket.io')(server,{
   pingInterval: nPI,
   pingTimeout: nPI*1.3});

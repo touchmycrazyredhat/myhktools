@@ -6,5 +6,5 @@ cat ins1.tmp | awk '{print "npm i -g "$1}' > install.sh
 rm ins1.tmp
 chmod 555 install.sh
 git add install.sh
-git commit -m "update install.sh" install.sh
+git commit -m "update install.sh" .
 
