@@ -1,256 +1,264 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
-	<meta charset="UTF-8">
-	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-	<title>巅狼(M.T.X.)渗透online平台</title>
-	<style>
-	*{margin:0;padding:0;}
-	</style>
-<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
-<link rel="stylesheet" type="text/css" href="easyui/themes/color.css">
-<script type="text/javascript" src="easyui/jquery.min.js"></script>
-<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>网络监控、渗透、服务平台</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+    <link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/color.css">
+    <script type="text/javascript" src="easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
+
 <body>
-<div id="tt" class="easyui-tabs" style="width:100%;height:650px;">
-    <div title="风险图" style="padding:2px 0 0 0;">
-           <div id="main" style="height:800px; draggable:true;"></div>  
+    <div id="tt" class="easyui-tabs" style="width:100%;height:750px;">
+        <div title="风险定位、监控" style="padding:2px 0 0 0;">
+            <div class="easyui-layout" style="width:100%;height:100%;">
+                <div id="main" data-options="region:'north',split:true" style="height:300px; draggable:true;">
+                    <!-- 地图 -->
+                </div>
+                <div data-options="region:'center'" style="height:400px; draggable:true;">
+                    <div class="easyui-layout" style="width:100%;height:100%;">
+                        <div data-options="region:'east',split:true" style="width:50%;">
+                            <table id="myNet" class="easyui-treegrid" style="width:100%;height:100%" rownumbers="true" idField="id" treeField="mac" lines="true">
+                                <thead>
+                                    <tr>
+                                        <th field="macSrc" width="100" title="mac ip date">MacSrc</th>
+                                        <th field="toMac" width="100">toMac</th>
+                                        <th field="toIp" width="100">toIp</th>
+                                        <th field="time" width="100">time</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div data-options="region:'center'" style="width:50%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div title="网络监控" style="overflow:auto;padding:2px 0 0 0;display:none;">
+        </div>
+        <div title="安全渗透检测" style="overflow:auto;padding:2px 0 0 0;display:none;">
+            <div style="padding:0 0 2px 0;">
+                <input id='doUrl' class="easyui-textbox" style='width:80%'>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:30px" onclick='fnMySubmitDoUrl()'></a>
+            </div>
+            <table id="myTb" class="easyui-treegrid" style="width:100%;height:100%" rownumbers="true" idField="id" treeField="name" lines="true">
+                <thead>
+                    <tr>
+                        <th field="name" width="250">Name</th>
+                        <th field="quantity" width="100" align="right">Quantity</th>
+                        <th field="price" width="150" align="right">Price</th>
+                        <th field="total" width="150" align="right">Total</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-    <div title="网络数据监控" style="overflow:auto;padding:2px 0 0 0;display:none;">
-        <table id="myNet" class="easyui-treegrid" style="width:100%;height:100%"
-            rownumbers="true"
-            idField="id" treeField="mac" lines="true">
-        <thead>
-            <tr>
-                <th field="mac" width="250">Name</th>
-                <th field="quantity" width="100" align="right">Quantity</th>
-                <th field="price" width="150" align="right" >Price</th>
-                <th field="total" width="150" align="right">Total</th>
-            </tr>
-        </thead>
-        </table>
-    </div>
-    <div title="在线渗透" style="overflow:auto;padding:2px 0 0 0;display:none;">
-        <div style="padding:0 0 2px 0;">
-            <input id='doUrl' class="easyui-textbox" style='width:80%'>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:30px" onclick='fnMySubmitDoUrl()'></a>
-         </div>
-        <table id="myTb" class="easyui-treegrid" style="width:100%;height:100%"
-            rownumbers="true"
-            idField="id" treeField="name" lines="true">
-        <thead>
-            <tr>
-                <th field="name" width="250">Name</th>
-                <th field="quantity" width="100" align="right">Quantity</th>
-                <th field="price" width="150" align="right" >Price</th>
-                <th field="total" width="150" align="right">Total</th>
-            </tr>
-        </thead>
-        </table>
-    </div>
-</div>
-<script src="echarts.js"></script>
-<script type="text/javascript">
-var s = location.href,socket = io.connect(s.substr(0,s.lastIndexOf('/')));
-function fnMySubmitDoUrl()
-{
-    var s = $("#doUrl").val();
-    socket.emit("rDo",{t:"doUrl",d:s});
-}
+    <script src="echarts.js"></script>
+    <script type="text/javascript">
+    var s = location.href,
+        socket = io.connect(s.substr(0, s.lastIndexOf('/')));
 
-    socket.on('news', function (data)
-    {
-        $("#myTb").treegrid("append",{parent:0,data:[{id:1,name:'343',quantity:345,price:453,total:546}]});
+    function fnMySubmitDoUrl() {
+        var s = $("#doUrl").val();
+        socket.emit("rDo", { t: "doUrl", d: s });
+    }
+    // $("#myTb").treegrid().height($("body").height());
+    socket.on('news', function(data) {
+        $("#myTb").treegrid("append", { parent: 0, data: [{ id: 1, name: '343', quantity: 345, price: 453, total: 546 }] });
         var i = 9;
-        $("#myTb").treegrid("append",{parent:1,data:[{id:i++,name:'343',quantity:345,price:453,total:546}]});
+        $("#myTb").treegrid("append", { parent: 1, data: [{ id: i++, name: '343', quantity: 345, price: 453, total: 546 }] });
 
-        $("#myTb").treegrid("append",{parent:1,data:[{id:i++,name:'343',quantity:345,price:453,total:546}]});
-        $("#myTb").treegrid("append",{parent:1,data:[{id:i++,name:'343',quantity:345,price:453,total:546}]});
-        $("#myTb").treegrid("append",{parent:1,data:[{id:i++,name:'343',quantity:345,price:453,total:546}]});
-        $("#myTb").treegrid("append",{parent:1,data:[{id:i++,name:'343',quantity:345,price:453,total:546}]});
+        $("#myTb").treegrid("append", { parent: 1, data: [{ id: i++, name: '343', quantity: 345, price: 453, total: 546 }] });
+        $("#myTb").treegrid("append", { parent: 1, data: [{ id: i++, name: '343', quantity: 345, price: 453, total: 546 }] });
+        $("#myTb").treegrid("append", { parent: 1, data: [{ id: i++, name: '343', quantity: 345, price: 453, total: 546 }] });
+        $("#myTb").treegrid("append", { parent: 1, data: [{ id: i++, name: '343', quantity: 345, price: 453, total: 546 }] });
         // alert(data.hello);
         // 发送消息
         // socket.emit('my other event', { my: 'data' });
     });
 
-	var myChart = echarts.init(document.getElementById('main')),
-        cR = '#fff'/*红色*/,
+    var myChart = echarts.init(document.getElementById('main')),
+        cR = '#fff' /*红色*/ ,
         oMarkLineEffect = {
-                    show: true,
-                    scaleSize: 1,
-                    period: 30,
-                    color: cR,
-                    shadowBlur: 10
-                },
+            show: true,
+            scaleSize: 1,
+            period: 30,
+            color: cR,
+            shadowBlur: 10
+        },
         oMarkLineItemStyle = {
+            normal: {
+                color: cR,
+                borderWidth: 1,
+                borderColor: 'rgba(30,144,255,0.5)',
+                // 控制动态游走光效
+                lineStyle: {
+                    type: 'solid',
+                    shadowBlur: 10
+                }
+            }
+        },
+        option = {
+            backgroundColor: '#000044',
+            color: ['gold', 'aqua', 'lime'],
+            tooltip: {
+                trigger: 'item',
+                formatter: "<div style=color:red>{b}</div>" //function(a){var s = JSON.stringify(a,null," ");return "<pre>" + s + "</pre>"}//'{a},{b},{c},{d}'
+            },
+            /*/ top图示数据
+            legend: 
+            {
+                orient: 'vertical',
+                x:'left',
+                data:['北京 Top10', '上海 Top10', '广州 Top10'],
+                textStyle : {
+                    color: cR
+                }
+            },//////////////*/
+            // 控制显示哪个区域的数据
+            dataRange: {
+                min: 0,
+                max: 100,
+                calculable: true,
+                color: ['#ff3333', 'orange', 'yellow', 'lime', 'aqua'],
+                textStyle: {
+                    color: cR
+                }
+            },
+            // 系列里第一个数据是定义一个区域，或一个图层
+            series: [{
+                name: '全国',
+                type: 'map',
+                roam: true,
+                hoverable: 0, // 是否鼠标上去显示区域背景填充
+                mapType: 'world', //china
+                itemStyle: {
                     normal: {
-                        color:cR,
-                        borderWidth:1,
-                        borderColor:'rgba(30,144,255,0.5)',
-                        // 控制动态游走光效
-                        lineStyle: {
-                            type: 'solid',
-                            shadowBlur: 10
+                        borderColor: 'rgba(100,149,237,1)',
+                        borderWidth: 0.5,
+                        areaStyle: {
+                            color: 'transparent' // 地图颜色
                         }
                     }
                 },
-	option = 
+                data: []
+            }]
+        };
+
+    var opt = { notMerge: false, lazyUpdate: true };
+    // myChart.setSeries
+    myChart.setOption(option, opt);
+
+
+
+    /*
+    [{name:'上海'},{name:'包头',value:95}],
+    */
+    function fnMakeLine(o) {
+        return o.ml || [];
+    }
+    /*
     {
-        backgroundColor: '#000044',
-        color: ['gold','aqua','lime'],
-        tooltip : {
-            trigger: 'item',
-            formatter: "<div style=color:red>{b}</div>"//function(a){var s = JSON.stringify(a,null," ");return "<pre>" + s + "</pre>"}//'{a},{b},{c},{d}'
-        },
-        /*/ top图示数据
-        legend: 
-        {
-            orient: 'vertical',
-            x:'left',
-            data:['北京 Top10', '上海 Top10', '广州 Top10'],
-            textStyle : {
-                color: cR
-            }
-        },//////////////*/
-        // 控制显示哪个区域的数据
-        dataRange: 
-        {
-            min : 0,
-            max : 100,
-            calculable : true,
-            color: ['#ff3333', 'orange', 'yellow','lime','aqua'],
-            textStyle:{
-                color:cR
-            }
-        },
-    // 系列里第一个数据是定义一个区域，或一个图层
-    series : [
-        {
-            name: '全国',
-            type: 'map',
-            roam: true,
-            hoverable: 0,// 是否鼠标上去显示区域背景填充
-            mapType: 'world',//china
-            itemStyle:
-            {
-                normal:{
-                    borderColor:'rgba(100,149,237,1)',
-                    borderWidth:0.5,
-                    areaStyle:{
-                        color: 'transparent' // 地图颜色
-                    }
-                }
-            },
-            data:[]
-        }
-    ]
-};
+        '阳泉': [113.4778,38.0951],
+    }
+    */
+    function fnMkGeoCoord(o) {
+        return o.gc || {};
+    }
+    /*
+    {name:'包头',value:95},
+    */
+    function fnMakeMarkPoint(o) {
+        return o.mp || [];
+    }
 
-var opt = {notMerge:false,lazyUpdate:true};
-// myChart.setSeries
-myChart.setOption(option,opt);
-
-
-
-/*
-[{name:'上海'},{name:'包头',value:95}],
-*/
-function fnMakeLine(o)
-{
-    return o.ml || [];
-}
-/*
-{
-    '阳泉': [113.4778,38.0951],
-}
-*/
-function fnMkGeoCoord(o)
-{
-    return o.gc || {};
-}
-/*
-{name:'包头',value:95},
-*/
-function fnMakeMarkPoint(o)
-{
-    return o.mp || [];
-}
-
-function addMapData(o)
-{
-    var oD = [{
+    function addMapData(o) {
+        var oD = [{
             name: o.name,
             type: 'map',
             mapType: 'world',
-            data:[],
-            geoCoord:fnMkGeoCoord(o),
-            markLine : {
-                smooth:true,
-                effect : oMarkLineEffect,
-                itemStyle : oMarkLineItemStyle,
-                data : fnMakeLine(o)
+            data: [],
+            geoCoord: fnMkGeoCoord(o),
+            markLine: {
+                smooth: true,
+                effect: oMarkLineEffect,
+                itemStyle: oMarkLineItemStyle,
+                data: fnMakeLine(o)
             },
-            markPoint : {
-                symbol:'emptyCircle',
-                symbolSize : function (v){
-                    return 10 + v/10
+            markPoint: {
+                symbol: 'emptyCircle',
+                symbolSize: function(v) {
+                    return 10 + v / 10
                 },
-                effect : {
+                effect: {
                     show: true,
-                    shadowBlur : 0
+                    shadowBlur: 0
                 },
-                itemStyle:{
-                    normal:{
-                        label:{show:false}
+                itemStyle: {
+                    normal: {
+                        label: { show: false }
                     },
                     emphasis: {
-                        label:{position:'top'}
+                        label: { position: 'top' }
                     }
                 },
-                data : fnMakeMarkPoint(o)
+                data: fnMakeMarkPoint(o)
             }
         }];
-    myChart.setSeries(oD);
-}
+        myChart.setSeries(oD);
+    }
 
-addMapData({name:'xxx',mp:[
-                    {name:'上海',value:95},
-                    {name:'广州',value:90},
-                    {name:'大连',value:80},
-                    {name:'南宁',value:70},
-                    {name:'南昌',value:60},
-                    {name:'拉萨',value:50},
-                    {name:'长春',value:40},
-                    {name:'包头',value:30},
-                    {name:'重庆',value:20},
-                    {name:'常州',value:10}
-                ],ml:[
-                    [{name:'北京'}, {name:'上海',value:95}],
-                    [{name:'北京'}, {name:'广州',value:90}],
-                    [{name:'北京'}, {name:'大连',value:80}],
-                    [{name:'北京'}, {name:'南宁',value:70}],
-                    [{name:'北京'}, {name:'拉萨',value:50}],
-                    [{name:'北京'}, {name:'长春',value:40}],
-                    [{name:'北京'}, {name:'包头',value:30}],
-                    [{name:'北京'}, {name:'重庆',value:20}],
-                    [{name:'北京'}, {name:'常州',value:10}]
-                ],
-                gc:{
-                    '广州': [113.5107,23.2196],
-                    '包头': [110.3467,41.4899],
-                    '北京': [116.4551,40.2539],
-                    '上海': [121.4648,31.2891],
-                    '大连': [122.2229,39.4409],
-                    '南宁': [108.479,23.1152],
-                    '南昌': [116.0046,28.6633],
-                    '拉萨': [91.1865,30.1465],
-                    '长春': [125.8154,44.2584],
-                    '重庆': [107.7539,30.1904],
-                    '常州': [119.4543,31.5582]
-                }});
+    addMapData({
+        name: 'xxx',
+        mp: [
+            { name: '上海', value: 95 },
+            { name: '广州', value: 90 },
+            { name: '大连', value: 80 },
+            { name: '南宁', value: 70 },
+            { name: '南昌', value: 60 },
+            { name: '拉萨', value: 50 },
+            { name: '长春', value: 40 },
+            { name: '包头', value: 30 },
+            { name: '重庆', value: 20 },
+            { name: '常州', value: 10 }
+        ],
+        ml: [
+            [{ name: '北京' }, { name: '上海', value: 95 }],
+            [{ name: '北京' }, { name: '广州', value: 90 }],
+            [{ name: '北京' }, { name: '大连', value: 80 }],
+            [{ name: '北京' }, { name: '南宁', value: 70 }],
+            [{ name: '北京' }, { name: '拉萨', value: 50 }],
+            [{ name: '北京' }, { name: '长春', value: 40 }],
+            [{ name: '北京' }, { name: '包头', value: 30 }],
+            [{ name: '北京' }, { name: '重庆', value: 20 }],
+            [{ name: '北京' }, { name: '常州', value: 10 }]
+        ],
+        gc: {
+            '广州': [113.5107, 23.2196],
+            '包头': [110.3467, 41.4899],
+            '北京': [116.4551, 40.2539],
+            '上海': [121.4648, 31.2891],
+            '大连': [122.2229, 39.4409],
+            '南宁': [108.479, 23.1152],
+            '南昌': [116.0046, 28.6633],
+            '拉萨': [91.1865, 30.1465],
+            '长春': [125.8154, 44.2584],
+            '重庆': [107.7539, 30.1904],
+            '常州': [119.4543, 31.5582]
+        }
+    });
+    </script>
+</body>
 
-</script>
-</body></html>
+</html>

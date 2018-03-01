@@ -12,11 +12,12 @@ var port = normalizePort(process.env.PORT || '8088');
 app.set('port', port);
 /**
  * Create HTTP server.
+ 30秒
  */
-var server = http.createServer(app);
-var io = require('socket.io')(server/*,{
-  pingInterval: 1000,
-  pingTimeout: 5000}*/);
+var server = http.createServer(app),nPI = 30000;
+var io = require('socket.io')(server,{
+  pingInterval: nPI,
+  pingTimeout: nPI*1.3});
 // io.emit('xx',fn);// 发送消息给所有client
 global.g_socketIO = io;
 io.on('connection', function (socket)

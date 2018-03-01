@@ -8,6 +8,7 @@ brew services list
 ////////////////////*/
 var express = require('express'),
     os = require('os'),
+    fs = require('fs'),
     path = require('path'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
@@ -17,6 +18,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     // bodyParser = require('body-parser'),
     xpb = 'x-powered-by',
+    crypto = require("crypto"),
     client = require('redis').createClient(),
     nMaxConn = 100,
     uuid  = require('node-uuid'),
@@ -32,6 +34,42 @@ function getRandom(nMax)
 {
   return String((Math.random() * 1000000000) % nMax).replace(/\..*?$/gmi,'');
 }
+
+// 加密
+function encryptStringWithRsaPublicKey(toEncrypt, relativeOrAbsolutePathToPublicKey)
+{
+  var absolutePath = fs.existsSync(relativeOrAbsolutePathToPublicKey) ? relativeOrAbsolutePathToPublicKey: path.resolve(relativeOrAbsolutePathToPublicKey);
+  var publicKey = relativeOrAbsolutePathToPublicKey;
+  if(fs.existsSync(absolutePath))
+    publicKey = fs.readFileSync(absolutePath, "utf8");
+  var buffer = new Buffer(toEncrypt);
+  var encrypted = crypto.publicEncrypt(publicKey, buffer);
+  return encrypted.toString("base64");
+}
+// 解密
+function decryptStringWithRsaPrivateKey(toDecrypt, relativeOrAbsolutePathtoPrivateKey) {
+    var absolutePath = fs.existsSync(relativeOrAbsolutePathtoPrivateKey) ? relativeOrAbsolutePathtoPrivateKey:path.resolve(relativeOrAbsolutePathtoPrivateKey);
+    var privateKey = relativeOrAbsolutePathtoPrivateKey;
+    if(fs.existsSync(absolutePath))
+      privateKey = fs.readFileSync(absolutePath, "utf8");
+    var buffer = new Buffer(toDecrypt, "base64");
+    var decrypted = crypto.privateDecrypt(privateKey, buffer);
+    return decrypted.toString("utf8");
+};
+// 生成key
+function fnGenPubPriKey(n)
+{ // diffHell.generateKeys('base64');
+  var prime_length = n || 512;
+  var diffHell = crypto.createDiffieHellman(prime_length);
+  diffHell.generateKeys('base64');
+  return {pub:diffHell.getPublicKey('base64'),pri:diffHell.getPrivateKey('base64')};
+}
+/*
+var  k = fnGenPubPriKey();
+// console.log(k);
+var s1 = encryptStringWithRsaPublicKey("xiatian是等了好久生日好久", k.pub);
+console.log(decryptStringWithRsaPrivateKey(s1,k.pri));
+//////////*/
 //*////////////
 var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
 var aSName = String.fromCharCode('a'.charCodeAt(0) + getRandom(26),'A'.charCodeAt(0) + getRandom(26));
