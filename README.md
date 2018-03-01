@@ -6,6 +6,8 @@
 brew install node
 mkdir ~/safe && cd ~/safe
 git clone https://github.com/hktalent/weblogic_java_des  mtx_jfxl
+git clone https://github.com/hktalent/myhktools.git
+cd myhktools
 ./install.sh
 myhktools
 ```
