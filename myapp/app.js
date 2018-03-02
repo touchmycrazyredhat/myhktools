@@ -183,7 +183,11 @@ app.use("/netM",function(req,res,next)
   });
   req.on('end', function() {
     req.rawBody = data;
-    console.log(new Buffer(data,"base64").toString());
+    if(global.g_socketIO)
+    {
+      global.g_socketIO.emit("netData",new Buffer(data,"base64").toString());
+    }
+    // console.log();
   });
   res.end('');
 });

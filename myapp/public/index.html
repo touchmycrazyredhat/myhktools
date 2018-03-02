@@ -28,19 +28,20 @@
                 </div>
                 <div data-options="region:'center'" style="height:400px; draggable:true;">
                     <div class="easyui-layout" style="width:100%;height:100%;">
-                        <div data-options="region:'east',split:true" style="width:50%;">
-                            <table id="myNet" class="easyui-treegrid" style="width:100%;height:100%" rownumbers="true" idField="id" treeField="mac" lines="true">
+                        <div data-options="region:'east',split:true" style="width:70%;">
+                            <table  editable="true" id="myNet" class="easyui-treegrid" style="width:100%;height:100%" rownumbers="true" idField="id" treeField="macSrc" lines="true">
                                 <thead>
                                     <tr>
                                         <th field="macSrc" width="100" title="mac ip date">MacSrc</th>
                                         <th field="toMac" width="100">toMac</th>
                                         <th field="toIp" width="100">toIp</th>
+                                        <th data-options="field:'req',width:100" formatter='fnMyFormatter'>req</th>
                                         <th field="time" width="100">time</th>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                        <div data-options="region:'center'" style="width:50%;"></div>
+                        <div data-options="region:'center'" style="width:30%;"></div>
                     </div>
                 </div>
             </div>
@@ -66,13 +67,64 @@
     </div>
     <script src="echarts.js"></script>
     <script type="text/javascript">
-    var s = location.href,
+    var s = location.href,g_nId = 10000,g_nPid = 1,g_oD = {},
         socket = io.connect(s.substr(0, s.lastIndexOf('/')));
-
-    function fnMySubmitDoUrl() {
+    function fnMyFormatter(v,r,i)
+    {
+        return v && ("<pre>" +v+ "</pre>") || "";
+    }
+    // 提交渗透测试的url
+    function fnMySubmitDoUrl()
+    {
         var s = $("#doUrl").val();
         socket.emit("rDo", { t: "doUrl", d: s });
     }
+
+    // 添加节点数据
+    function fnAddTbKey(szTbId, k,name,nPid,v,o1)
+    {
+        var o = $("#" + szTbId),s = k;
+        if(!g_oD[s])
+        {
+            g_oD[s] = g_nPid;
+            var oT = {'parent':nPid,
+                data: [{'id':g_nPid}]};
+            var o2 = oT.data[0];
+            o2[name] = v;
+            if(o1)
+            for(var k in o1)
+            {
+                o2[k] = o1[k];
+            }
+            o.treegrid("append",oT);
+            g_nPid++;
+        }
+    }
+
+    // 添加节点数据
+    function fnAddTb(szTbId, a)
+    {
+        var o = $("#" + szTbId),nCurId = ++g_nId,s = a[0] + "(" + a[2] + ")",
+        nPid = 0,s2 = s + a[1];
+        fnAddTbKey(szTbId,s, 'macSrc',0,s);
+        // toMac
+        nPid = g_oD[s];
+        fnAddTbKey(szTbId, s2, 'toMac',nPid,a[1],{'macSrc': s});
+        nPid = g_oD[s2];
+        // toIp
+        s2 += a[3];
+        fnAddTbKey(szTbId, s2, 'toIp',nPid,a[3],{'macSrc': s,toMac: a[1]});
+        nPid = g_oD[s2];
+        // host
+        o.treegrid("append",{'parent':nPid,
+            data: [{'id':nCurId,'macSrc':s,'toMac':a[1], 'toIp': a[3],req:a[4],time:'32:33'}]});
+    }
+    
+    socket.on('netData', function(data)
+    {
+        var a = eval(data);
+        fnAddTb('myNet',a);
+    });
     // $("#myTb").treegrid().height($("body").height());
     socket.on('news', function(data) {
         $("#myTb").treegrid("append", { parent: 0, data: [{ id: 1, name: '343', quantity: 345, price: 453, total: 546 }] });
