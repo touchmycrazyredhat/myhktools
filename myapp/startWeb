@@ -31,7 +31,7 @@ global.g_socketIO = io;
 io.on('connection', function (socket)
 {
   // console.log(socket);
-  socket.emit('news', { hello: 'world' });
+  // socket.emit('news', { hello: 'world' });
   socket.on('rDo', function(data)
   {
     if(data)

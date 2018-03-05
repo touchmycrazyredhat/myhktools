@@ -36,56 +36,6 @@ function getRandom(nMax)
   return String((Math.random() * 1000000000) % nMax).replace(/\..*?$/gmi,'');
 }
 
-/*
-// 加密
-function encryptStringWithRsaPublicKey(toEncrypt, relativeOrAbsolutePathToPublicKey)
-{
-  var absolutePath = fs.existsSync(relativeOrAbsolutePathToPublicKey) ? relativeOrAbsolutePathToPublicKey: path.resolve(relativeOrAbsolutePathToPublicKey);
-  var publicKey = relativeOrAbsolutePathToPublicKey;
-  if(fs.existsSync(absolutePath))
-    publicKey = fs.readFileSync(absolutePath, "utf8");
-  var buffer = new Buffer(toEncrypt);
-  var encrypted = crypto.publicEncrypt(
-    {
-      'key':publicKey,
-      'padding': constants.RSA_NO_PADDING
-    }, buffer);
-  return encrypted.toString("base64");
-}
-// 解密
-function decryptStringWithRsaPrivateKey(toDecrypt, relativeOrAbsolutePathtoPrivateKey) {
-    var absolutePath = fs.existsSync(relativeOrAbsolutePathtoPrivateKey) ? relativeOrAbsolutePathtoPrivateKey:path.resolve(relativeOrAbsolutePathtoPrivateKey);
-    var privateKey = relativeOrAbsolutePathtoPrivateKey;
-    if(fs.existsSync(absolutePath))
-      privateKey = fs.readFileSync(absolutePath, "utf8");
-    var buffer = new Buffer(toDecrypt, "base64");
-    var decrypted = crypto.privateDecrypt({
-      'key':privateKey,
-      'padding':constants.RSA_NO_PADDING}, buffer);
-    return decrypted.toString("utf8");
-};
-// 生成key
-function fnGenPubPriKey(n)
-{ // diffHell.generateKeys('base64');
-  var prime_length = n || 512;
-  var diffHell = crypto.createDiffieHellman(prime_length);
-  // 'binary', 'hex', or 'base64'
-  diffHell.generateKeys('binary');
-  var s1 = ["-----BEGIN RSA PRIVATE KEY-----\n","\n-----END RSA PRIVATE KEY-----",
-     "-----BEGIN RSA PUBLIC KEY-----\n","\n-----END RSA PUBLIC KEY-----"
-  ];
-  s1 = ['','','',''];
-  return {
-    "pub": (s1[2] + diffHell.getPublicKey('base64') + s1[3]),
-    "pri": (s1[0] + diffHell.getPrivateKey('base64') + s1[1])
-  };
-}
-
-var  k = fnGenPubPriKey();
-// console.log(k);
-var s1 = encryptStringWithRsaPublicKey("xiatian是等了好久生日好久", k.pub);
-console.log(decryptStringWithRsaPrivateKey(s1,k.pri));
-//////////*/
 //*////////////
 var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
 var aSName = String.fromCharCode('a'.charCodeAt(0) + getRandom(26),'A'.charCodeAt(0) + getRandom(26));
@@ -174,6 +124,7 @@ app.use(compress({
 // 禁止x-powered-by
 app.disable(xpb);
 
+// 监听网络数据包
 app.use("/netM",function(req,res,next)
 {
   var oIp = getIp(req);
@@ -185,7 +136,17 @@ app.use("/netM",function(req,res,next)
     req.rawBody = data;
     if(global.g_socketIO)
     {
-      global.g_socketIO.emit("netData",new Buffer(data,"base64").toString());
+      var sTmp = JSON.parse(new Buffer(data,"base64").toString());
+      // 需要解决重复数据问题
+      global.g_socketIO.emit("netData", JSON.stringify(sTmp));
+      // 内网、外网识别
+      var aIps = [fnGetIpInfo(sTmp[2]),fnGetIpInfo(sTmp[3])];
+      
+      if(aIps[1]["city"])
+      {
+        console.log(aIps);
+      }
+      
     }
     // console.log();
   });
@@ -264,41 +225,60 @@ function isExists(t)
   return fs.existsSync( mypath+ t);
 }
 
-// 获取ip信息
-function getIp(req)
+// 获得ip经纬度信息
+function fnGetIpInfo(ip,req)
 {
-  var ip = req.headers['x-real-ip'] || String(req.connection.remoteAddress), o = {},odip = ip, ipRg = /^(\d{1,3}\.){3}\d{1,3}$/g;
+  var odip = ip;
   ip = ip.replace(/.*?ffff:/gmi,'');
+  // 历史文件的名称修复
   if(isExists(odip) && odip != ip)
     fs.rename(mypath + odip, mypath + ip,function(e){});
+
   if(isExists(ip))
   {
     o = JSON.parse(fs.readFileSync(mypath + ip));
   }
-  // 确保没有注入攻击,排除内网ip
-  // 172.16.0.0～172.31.255.255
-  else if(ipRg.exec(ip) && !/^(192\.168|127\.0|10|172)\..*/.exec(ip))
+  else
   {
-    o = JSON.parse(child_process.execSync("curl ipinfo.io/" + ip));
-  }
-  // 更新ua
-  if(req.headers)
-  {
-    var a = "x-forwarded-for,user-agent,x-real-ip".split(/[;,]/);
-    for(var k in a)
+    var ipRg = /^(\d{1,3}\.){3}\d{1,3}$/g,o = {};
+    // 确保没有注入攻击,排除内网ip
+    // 172.16.0.0～172.31.255.255
+    if(ipRg.exec(ip) && !/^(192\.168|127\.0|10|172)\..*/.exec(ip))
     {
-      if(!!req.headers[a[k]])
-         o[a[k]] = req.headers[a[k]];
+      o = JSON.parse(child_process.execSync("curl ipinfo.io/" + ip));
     }
   }
-  if(!o.url)o.url = [req.url];
-  else if("string" == typeof o.url)o.url = [o.url,req.url];
-  else if(-1 == o.url.indexOf(req.url)) o.url.push(req.url);
-
-  if(!o.referer && req.headers['referer'])o.referer = req.headers['referer'];
-  
   o.date = require('moment')(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss');
+
+  if(req)
+  {
+    // 更新ua
+    if(req.headers)
+    {
+      var a = "x-forwarded-for,user-agent,x-real-ip".split(/[;,]/);
+      for(var k in a)
+      {
+        if(!!req.headers[a[k]])
+           o[a[k]] = req.headers[a[k]];
+      }
+      if(!o.url)o.url = [req.url];
+      else if("string" == typeof o.url)o.url = [o.url,req.url];
+      else if(-1 == o.url.indexOf(req.url)) o.url.push(req.url);
+
+      if(!o.referer && req.headers['referer'])o.referer = req.headers['referer'];
+    }
+  }
+
   fs.writeFileSync(mypath + ip,JSON.stringify(o));
+
+  return o;
+}
+
+// 获取ip信息
+function getIp(req)
+{
+  var ip = req.headers['x-real-ip'] || String(req.connection.remoteAddress), o;
+  o = fnGetIpInfo(ip,req);
   return o;
 }
 

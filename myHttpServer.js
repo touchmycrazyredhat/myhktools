@@ -29,11 +29,19 @@ function fnWt(ip,s)
 {
 	fs.appendFileSync("data/" + ip + ".txt", s + "\n");
 	try{
-		var a = s.split(/\t/),szName = /\/([^\/]+)\//gmi.exec(s)[1],szFn = "data/nmap/" + szName + ".xml ";
-		if(-1 < szName.indexOf(".jsp") 
+		var a = s.split(/\t/),szName = /\/([^\/]+)\//gmi.exec(s);
+		if(szName && 1 < szName.length)
+			szName = szName[1];
+		szName = String(szName);
+		var szFn = "data/nmap/" + szName + ".xml ";
+		if(!szName || -1 < szName.indexOf(".jsp") 
 			|| -1 < szName.indexOf("%20") 
 			|| -1 < szName.indexOf(",")
+			||  szName == "1"
+			|| -1 < szName.indexOf("Nmap")
+			|| -1 < szName.indexOf("null")
 			|| -1 < szName.indexOf("'")
+			|| -1 < szName.indexOf("Mozilla")
 			|| -1 < szName.indexOf("\"")
 			|| "127.0.0.1" == ip)
 			return;
@@ -71,7 +79,7 @@ function fnHttpServer(options)
 		if(-1 == req.url.indexOf("hook.js"))
 		fnWt(ip,[moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss'),req.url,req.headers["user-agent"]].join("\t"));
 		// console.log([moment(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss'), ip,req.url,req.headers["user-agent"]]);
-		resp.end();
+		resp.end("");
 	});
 	server.on('clientError', (err, socket) => 
 	{
