@@ -11,6 +11,21 @@ cd myhktools
 ./install.sh
 myhktools
 ```
+#更新现有node js组件
+vi ~/npm-upgrade.sh 
+```
+#!/bin/sh
+set -e
+#set -x
+for package in $(npm -g outdated --parseable --depth=0 | cut -d: -f2)
+do
+    npm -g install "$package"
+done
+```
+运行
+```
+sh ~/npm-upgrade.sh 
+```
 # 使用
 node checkUrl.js -h
 ```

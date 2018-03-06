@@ -46,11 +46,12 @@ def doPack(pkt):
             # pkt.show()
             s1 = str(pkt[TCP].payload)
             #  or -1 < s1.find("POST ")
-            if -1 < s1.find(" HTTP/") and -1 == s1.find("secclientgw.alipay.com") and -1 < s1.find("Cookie:"):
+            #  and -1 < s1.find("Cookie:")
+            if -1 < s1.find(" HTTP/") and -1 == s1.find("secclientgw.alipay.com"):
                 a += [s1]
                 szJson = json.dumps(a,sort_keys=True, indent=2, separators=(',', ':'))
-                requests.post("http://127.0.0.1:8088/netM",data=base64.b64encode(szJson));
                 print szJson
+                requests.post("http://127.0.0.1:8088/netM",data=base64.b64encode(szJson));
         #elif not b:
         #    pkt.show()
     except Exception, e:
