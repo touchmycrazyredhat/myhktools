@@ -1,5 +1,5 @@
 // 信箱若口令测试
-// node testPop3.js 125.71.203.220 110 /Users/xiatian/Desktop/mytels.txt
+// node testYhLeaks.js 125.171.203.220
 var pp = require('./pop3'),fs = require('fs'),Buffer = require('Buffer');
 
 process.setMaxListeners(0);
