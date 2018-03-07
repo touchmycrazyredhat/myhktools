@@ -34,7 +34,7 @@ var host = "125.71.203.220", port = 110;
 function fnKg(n,s)
 {
 	var k = new Buffer(s,'utf8');
-	n -= k.length;
+	n = n - s.length - s.length % 16;//k.length;
 	var a = [];
 	while(0 < n--)
 	{
@@ -47,8 +47,11 @@ for(var i = 0; i < a.length; i++)
 {
 	var aX = a[i].split("@"),sTmp = g_oNm[aX[0]];
 	if(sTmp)
-		console.log(sTmp + fnKg(16,sTmp) + a[i]);
-	// if(true)continue;
+	{
+		sTmp = sTmp.replace(/（/g, ".").replace(/）/g, "");
+		console.log(sTmp + fnKg(28,sTmp) + a[i]);
+	}
+	if(true)continue;
 	+function(s)
 	{
 		var x = s.split(":");
