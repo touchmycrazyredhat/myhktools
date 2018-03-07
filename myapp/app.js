@@ -40,7 +40,7 @@ function getRandom(nMax)
 var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
 var aSName = String.fromCharCode('a'.charCodeAt(0) + getRandom(26),'A'.charCodeAt(0) + getRandom(26));
 app.use(session({
-  "secret" : 'x',
+  "secret" : 'secret',
   resave: false,
   saveUninitialized: true,
   "httpOnly": true,
@@ -210,7 +210,7 @@ app.use(helmet.contentSecurityPolicy(
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 // cookie解析
-// app.use(cookieParser());
+app.use(cookieParser());
 // 静态资源转发
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(/.*\/zsm\.htm.*$/,function (req, res, next)

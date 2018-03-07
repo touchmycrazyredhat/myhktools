@@ -53,7 +53,7 @@ function getUrls(szAddUrls)
 }
 // 存储目录
 var g_svnDataPath = "./data/svn/";
-var indexAll = "data/svn/indexAll.txt", 
+var indexAll = "./data/svn/indexAll.txt", 
 	allSvnInfo = g_svnDataPath + 'allSvnInfo.txt',g_oSvnAll = {},g_oSvnInfo = {};
 function fnGetHds(resp,o)
 {
@@ -160,7 +160,7 @@ process.on('exit', (code) =>
 	if(g_bDownload)
 	{
 		updateSvnIndexAll();
-		console.log(g_oSvnInfo);
+		console.log(g_oSvnInfo);		
 	}
 	// else console.log(g_oSvnAll);
 	// var ss = JSON.stringify(g_oSvnAll,null,' ');
@@ -180,7 +180,7 @@ if(g_bDownload)
 			if(k)
 			{
 				g_oSvnAll = JSON.parse(k);
-				console.log("成功加载: " + indexAll);
+				// console.log("成功加载: " + indexAll);
 			}
 		}
 
@@ -190,13 +190,14 @@ if(g_bDownload)
 			if(k)
 			{
 				g_oSvnInfo = JSON.parse(k);
-				console.log("成功加载: " + allSvnInfo);
+				// console.log("成功加载: " + allSvnInfo);
 			}
 		}
 		
 		// 2、梳理本地可用信息
 		doFile({"filename":"./data",fnCbk:function(s)
 		{
+			// console.log(s);
 			k = fs.readFileSync(s).toString();
 			var a,re = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s+\/([^\s\/]+)\/([^\s\/]+)\s+Mozilla/gmi, bHv = false,
 			    re1;

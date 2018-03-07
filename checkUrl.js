@@ -557,7 +557,7 @@ function testWeblogic(url,fnCbk)
 	// console.log(s)
 	request(fnOptHeader({method:"GET",uri:s}),function(e,r,b)
 	{
-		if(b && 200 == r.statusCode && -1 < b.indexOf("weblogic.uddi.client"))
+		if(b && 200 == r.statusCode && -1 < b.indexOf("weblogic.uddi.client") && -1 == b.indexOf("IO Exception on sendMessage"))
 		{
 			g_oRst.weblogic = {uddiexplorer:"发现uddiexplorer可访问，且存在SSRF漏洞，建议将/uddiexplorer加入访问黑名单中"};
 		}
