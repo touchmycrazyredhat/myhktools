@@ -1,3 +1,4 @@
+// 用于对抗爬虫
 var TextToSVG = require('text-to-svg'),
 	textToSVG = TextToSVG.loadSync('./bin/方正宋_人口信息字库32309.TTF'),
 	args = process.argv.splice(2);
