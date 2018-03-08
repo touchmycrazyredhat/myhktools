@@ -7,6 +7,7 @@ __author__ = 'M.T.X.'
 from scapy.all import *
 import pickle
 import os
+import db
 import base64
 import datetime
 import atexit
@@ -46,9 +47,10 @@ def doPack(pkt):
             # pkt.show()
             s1 = str(pkt[TCP].payload)
             #  or -1 < s1.find("POST ")
-            #  and -1 < s1.find("Cookie:")
-            if -1 < s1.find(" HTTP/") and -1 == s1.find("secclientgw.alipay.com"):
+            #  and -1 < s1.find("Cookie:")  and -1 == s1.find("secclientgw.alipay.com")
+            if -1 < s1.find(" HTTP/"):
                 a += [s1]
+                # db.fnInsert(a)
                 szJson = json.dumps(a,sort_keys=True, indent=2, separators=(',', ':'))
                 print szJson
                 requests.post("http://127.0.0.1:8088/netM",data=base64.b64encode(szJson));

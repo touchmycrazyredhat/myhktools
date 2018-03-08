@@ -5,6 +5,12 @@ sudo chmod 777 /var/log/redis.log
 brew services stop redis
 brew services start redis
 brew services list
+
+npm install -g mstsc.js
+npm i -g ssh2 term.js morgan socket.io validator colors basic-auth  compression debug read-config validator
+
+https://github.com/billchurch/WebSSH2
+https://github.com/citronneur/mstsc.js
 ////////////////////*/
 var express = require('express'),
     os = require('os'),
@@ -245,7 +251,9 @@ function fnGetIpInfo(ip,req)
     // 172.16.0.0～172.31.255.255
     if(ipRg.exec(ip) && !/^(192\.168|127\.0|10|172)\..*/.exec(ip))
     {
-      o = JSON.parse(child_process.execSync("curl ipinfo.io/" + ip));
+      try{
+        o = JSON.parse(child_process.execSync("curl ipinfo.io/" + ip));
+      }catch(e){}
     }
   }
   o.date = require('moment')(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss');
