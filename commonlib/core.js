@@ -35,6 +35,17 @@ copyO2O({szMyName:'巅狼团队M.T.X._2017-06-08 1.0',
 	fs:require('fs'),
 	http:require("http"),
 	iconv:require("iconv-lite"),
+// 头信息的处理
+fnRequest:function(req)
+{
+	if(req && req.headers)
+	{
+		var h = req.headers;
+		h["accept-language"] = 'zh-cn';
+		h["user-agent"] = g_szUa;
+	}
+	return req;
+},
 	/*
 生成密码
 */
