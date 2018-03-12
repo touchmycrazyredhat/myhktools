@@ -103,7 +103,7 @@ function fnCheckUa(req,res)
   var ua = useragent.is(req.headers['user-agent'] || ""), 
       bFlg = ua.opera || ua.webkit || ua.ie || ua.chrome || ua.safari || ua.mobile_safari || ua.firefox || ua.mozilla || ua.android;
   if(bFlg)return true;
-  // console.log('直接关闭连接');
+  console.log('直接关闭连接:' + req.headers['user-agent']);
   req.connection.destroy();
   return false;
 }
@@ -130,21 +130,24 @@ app.use(compress({
 // 禁止x-powered-by
 app.disable(xpb);
 
-// 监听网络数据包
+// 监听 mNetData.py 请求的网络数据包，并分发给监视的所有客户端
 app.use("/netM",function(req,res,next)
 {
   var oIp = getIp(req);
-  var data = '';
-  req.on('data', function(chunk){
-    data += chunk;
+  var data = [],io;
+  req.on('data', function(chunk)
+  {
+    data.push(chunk);
   });
   req.on('end', function() {
-    req.rawBody = data;
-    if(global.g_socketIO)
+    req.rawBody = data.join('');
+    // 分发给sockes.io客户
+    if(io = global.g_socketIO)
     {
-      var sTmp = JSON.parse(new Buffer(data,"base64").toString());
+      // 解码或解密
+      var sTmp = JSON.parse(new Buffer(req.rawBody,"base64").toString());
       // 需要解决重复数据问题
-      global.g_socketIO.emit("netData", JSON.stringify(sTmp));
+      io.emit("netData", JSON.stringify(sTmp));
       // 内网、外网识别
       var aIps = [fnGetIpInfo(sTmp[2]),fnGetIpInfo(sTmp[3])];
       
@@ -152,22 +155,21 @@ app.use("/netM",function(req,res,next)
       {
         console.log(aIps);
       }
-      
     }
-    // console.log();
   });
   res.end('');
 });
 
 // 安全头信息设置太高导致的反馈信息接收
-app.post("/rptv",function(req,res){
-        if(req.body)
-        {
-            // console.log(req.body);
-        }
-        // res.status(204).end();
-        res.end();
-    });
+app.post("/rptv",function(req,res)
+{
+  if(req.body)
+  {
+      // console.log(req.body);
+  }
+  // res.status(204).end();
+  res.end();
+});
 
 // nonce 的生成
 app.use(function (req, res, next)
