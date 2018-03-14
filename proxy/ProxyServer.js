@@ -1,10 +1,18 @@
 // 校验http、https 代理是否可用
 // node checkProxy.js ~/C/ip_log.txt 
+/*
+npm install -g socks-proxy-agent
+curl -v --proxy http://127.0.0.1:8880 http://ip.cn
+这样kali就可以使用vps的代理了
+vi /etc/apt/apt.conf.d/auto-apt-proxy.conf 
+Acquire::http::Proxy "http://192.168.24.10:8880";
+*/
 var fs  = require("fs"),
 	http = require("http"),
 	a = process.argv.splice(2),
     request = require("request"),
     g_aProxy = null,
+    SocksProxyAgent = require('socks-proxy-agent'),
     nPort = 8880,
     g_szUA = "CaptiveNetworkSupport-355.30.1 wispr",
     szIp = "0.0.0.0";
@@ -28,6 +36,9 @@ function fnWathProxyFile(s)
 		}
 	});
 }
+
+var proxy = process.env.socks_proxy || 'socks://127.0.0.1:1086';
+var agent = new SocksProxyAgent(proxy);
 
 // 设置二级代理并返回request对象
 function getRequest()
@@ -148,9 +159,14 @@ function fnCreateProxyServer()
 				)
 			//////////////*/
 			{
-				req.headers["user-agent"] = g_szUA;
+				// console.log(req.method.toLowerCase());
+				// req.headers["user-agent"] = g_szUA;
 				var r = request,// getRequest(),// 获取动态代理
-					x = r[req.method.toLowerCase()]({"uri":req.url,"timeout":nTimeout});
+					x = r[req.method.toLowerCase()](
+						{
+							// "agent":agent,
+							"uri":req.url,
+							"timeout":nTimeout});
 					console.log(req.headers)
 				req.pipe(x);
 				// fnFilterFunc(resp);
@@ -233,6 +249,7 @@ function fnCreateProxyServer()
 	server.setTimeout(nTimeout);
 	server.timeout = nTimeout;
 	server.keepAliveTimeout = nTimeout;
+
 }
 // 启动多个
 // pm2 start ProxyServer.js -i max
