@@ -1,3 +1,4 @@
+// 后渗透中用来压缩文件夹
 // node zipFolder.js youpath xxx.zip
 var zipFolder = require('zip-folder');
 var a = process.argv.splice(2);

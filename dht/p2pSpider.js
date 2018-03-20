@@ -10,8 +10,11 @@
   infohash: 'aa90f027d5d0c0063df99c2c9ec8a168b727e12b',
   magnet: 'magnet:?xt=urn:btih:aa90f027d5d0c0063df99c2c9ec8a168b727e12b' }
 */
-var p2pspider = require('p2pspider');
+var p2pspider = require('p2pspider'),fs = require('fs');
 p2pspider(function(data){
-    console.log(data); //获取到的信息 
+    delete data.pieces;
+    var ss = '';
+    fs.appendFileSync("myMagnetsInfo.txt",(ss = JSON.stringify(data)) + "\n\n");
+    console.log(ss); //获取到的信息 
 });
 
