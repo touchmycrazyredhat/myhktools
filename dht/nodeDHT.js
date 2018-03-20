@@ -1,23 +1,29 @@
-// nodeDHT.js
+/* nodeDHT.js
 // 别忘记了，很多泄露的数据，重要的数据都在通过dht传输
 // 收集这些数据，基于bt torrent 种子，大数据分析，可以获得意想不到的收获
+CREATE TABLE mytorrents(
+	id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,   
+	key VARCHAR(400),
+	peers BIGINT,
+	title VARCHAR(200),
+	body TEXT,
+	FULLTEXT(title,body)
+	);   
+*/
 'use strict'
 
-var dgram = require('dgram');
-var crypto = require('crypto');
-
-var bencode = require('bencode');
-
-var BOOTSTRAP_NODES = [
+var dgram = require('dgram'),fs = require('fs'),
+	crypto = require('crypto'),
+	bencode = require('bencode'),
+	BOOTSTRAP_NODES = [
     ['router.bittorrent.com', 6881],
     ['dht.transmissionbt.com', 6881],
-    ['router.bitcomet.com', 6881],
     ['dht.aelitis.com', 6881],
     ['dht.libtorrent.org', 25401],
     ['router.utorrent.com',6881]
 ];
 var TID_LENGTH = 4;
-var NODES_MAX_SIZE = 200;
+var NODES_MAX_SIZE = 500;
 var TOKEN_LENGTH = 2;
 
 var randomID = function() {
@@ -170,8 +176,14 @@ DHTSpider.prototype.onAnnouncePeerRequest = function(msg, rinfo) {
             id: genNeighborID(nid, this.ktable.nid)
         }
     }, rinfo);
+    // console.log(infohash);
+    // console.log(rinfo);
+    // console.log(msg);
+
     // 得到一个魔术连信息
-    console.log("magnet:?xt=urn:btih:%s from %s:%s", infohash.toString("hex"), rinfo.address, rinfo.port);
+    var s1 = "magnet:?xt=urn:btih:" + infohash.toString("hex") + "&ip=" + rinfo.address + ":" + rinfo.port;
+    fs.appendFileSync("myMagnets.txt",s1 + "\n");
+    console.log(s1);
 };
 
 DHTSpider.prototype.onMessage = function(msg, rinfo) {
@@ -187,8 +199,7 @@ DHTSpider.prototype.onMessage = function(msg, rinfo) {
             this.onAnnouncePeerRequest(msg, rinfo);
         }
     }
-    catch (err) {
-    }
+    catch (err){}
 };
 
 DHTSpider.prototype.start = function() {

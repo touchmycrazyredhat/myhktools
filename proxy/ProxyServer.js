@@ -164,7 +164,7 @@ function fnCreateProxyServer()
 				var r = request,// getRequest(),// 获取动态代理
 					x = r[req.method.toLowerCase()](
 						{
-							// "agent":agent,
+							"agent":agent,
 							"uri":req.url,
 							"timeout":nTimeout});
 					console.log(req.headers)

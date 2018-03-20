@@ -300,13 +300,14 @@ function rcip(req,res,next)
   {
     s = fs.readFileSync(mypath + a[1]).toString();
     res.end(s);
-    console.log(43);
+    // console.log(43);
   }
   else
   {
     var s = getIp(req);
     
     res.setHeader("Content-Type", "text/json");
+    delete s.url;delete s.referer;
     res.json(s);
     res.end("");
   }

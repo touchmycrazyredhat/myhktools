@@ -4,6 +4,26 @@
 	<head>
 	    <meta charset="utf-8">
 	    <title>二维码识别</title>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<style>
+div.bar {
+    display: inline-block;
+    width: 20px;
+    height: 75px;
+    background-color: teal;
+    margin-right: 2px;
+}
+.link {
+  stroke: #999;
+}
+.node {
+  fill: #000;
+}
+</style>
+	</head>
+<body>
+	<div id="myDivId"></div>
+<!--
 <script type="text/javascript" src="mtx/jsqrcode/src/grid.js"></script>
 <script type="text/javascript" src="mtx/jsqrcode/src/version.js"></script>
 <script type="text/javascript" src="mtx/jsqrcode/src/detector.js"></script>
@@ -22,57 +42,153 @@
 <script type="text/javascript" src="mtx/jsqrcode/src/alignpat.js"></script>
 <script type="text/javascript" src="mtx/jsqrcode/src/databr.js"></script>
 
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<style>
-div.bar {
-    display: inline-block;
-    width: 20px;
-    height: 75px;   /* We'll override this later */
-    background-color: teal;
-    margin-right: 2px;
-}
-</style>
-	</head>
-<body>
 <video id="video" width="640" height="480" autoplay></video>
 <button id="snap" class="sexyButton">Snap Photo</button>
 <canvas id="canvas" width="640" height="480"></canvas>
+-->
 <script>
+/*
+fnLoadD3({
+	tagNameId:"#myDivId",
+	width:600,height:600,
+	data:{
+	  "nodes":[
+			{"name":"node1","group":1},
+			{"name":"node2","group":2},
+			{"name":"node3","group":2},
+			{"name":"node4","group":3}
+		],
+		"links":[
+			{"source":2,"target":1,"weight":1},
+			{"source":0,"target":2,"weight":3}
+		]
+	}
+});
+*/
+var g_svg = null,g_aData = null,g_oNodes = null,g_oLinks = null,g_oForce = null;
+function fnLoadD3(o)
+{
+	o || (o = {});
+	o.tagNameId || (o.tagNameId = "body");
+	var w = 600, h = 500;
+	if(!g_aData)g_aData = o.data;
+    else
+    {
+     	g_aData.nodes = g_aData.nodes.concat(o.data.nodes);
+     	g_aData.links = g_aData.links.concat(o.data.links);
+ 	}
+ 	g_aData = o.data;
+    var json = g_aData;
+	
+	if("function" == typeof window["$"])
+	{
+		var oT = $(o.tagNameId);
+		if(oT && oT.width())
+		{
+			w = parseInt(oT.width());
+			h = parseInt(oT.height());
+		}
+	}
+	o.width || (o.width = w);
+	o.height || (o.height = h);
+	var svg = d3.select(o.tagNameId);
+	// alert(svg.select("svg").length)
+	// svg = svg.select("svg");
+	
+	g_svg = svg = g_svg || svg.append("svg")
+    .attr("width", o.width)
+    .attr("height", o.height),
+    // 动态效果初始化
+    force = g_oForce || d3.layout.force()
+    .gravity(.05)
+    .distance(100)
+    .charge(-100)
+    .size([o.width, o.height]);
+    
+    if(!g_oForce)
+    {
+    	g_oForce = force;
+        force.on("tick", function()
+	    {
+	      link.attr("x1", function(d) { return d.source.x})
+	        .attr("y1", function(d) { return d.source.y})
+	        .attr("x2", function(d) { return d.target.x})
+	        .attr("y2", function(d) { return d.target.y});
+	      node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	    });
+	}
+    force.nodes(json.nodes).links(json.links);
+	var link = g_oLinks || svg.selectAll(".link");
+	g_oLinks = link;
 
-d3.select("body").append("svg")
-    .attr("width", 500)
-    .attr("height", 500)
-    .selectAll("div")
-	.data([25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
-                14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
-                24, 18, 25, 9, 3])
-	.enter()
-	.append("circle")
-	.attr("cx", function(d, i) 
+	var links = json.links,nodes = json.nodes;
+	links.forEach(function(d)
 	{
-        return (i * 50) + 25;
-    })
-    .attr("cy", 500/2)
-    .attr("r", function(d) {
-        return d;
-    })
-    /*
-	.append('div')
-	// .classed("bar", true)
-	.attr("class",'bar')
-	.style("height", function(d) {
-    	return (d * 5) + "px";
-	})*/
-	.style("color",function(i,x){
-		return (i << 32) & (i << 16) & i;
-	})
-	.text(function(i,x)
-	{
-		// x + "、" + 
-		return i
-	})
-	;;
-//*////////////////
+	    if (typeof d.source == "number") { d.source = nodes[d.source]; }
+	    if (typeof d.target == "number") { d.target = nodes[d.target]; }
+	});console.log(links);
+
+
+	link = link.data(links);
+	link.enter().insert("line", ".node")
+	    .attr("class", "link")
+	    .style("stroke-width", function(d) { return 5; });
+	link.exit().remove();// 先清除
+
+  var node = g_oNodes || svg.selectAll(".node");
+     g_oNodes = node;
+     node = node.data(json.nodes);
+     node.exit().remove();// 先清除
+    
+    node.enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  node.append("circle")
+      .attr("r","5");
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  force.start();
+}
+
+fnLoadD3({
+	tagNameId:"#myDivId",
+	width:600,height:600,
+	data:{
+	  "nodes":[
+			{"name":"node1","group":1},
+			{"name":"node2","group":2},
+			{"name":"node3","group":2},
+			{"name":"node4","group":3}
+		],
+		"links":[
+			{"source":1,"target":0,"weight":1},
+			{"source":0,"target":2,"weight":3}
+		]
+	}
+});
+
+fnLoadD3({
+	tagNameId:"#myDivId",
+	width:600,height:600,
+	data:{
+	  "nodes":[
+			{"name":"node7","group":4},
+			{"name":"node8","group":5}
+		],
+		"links":[
+			{"source":3,"target":4,"weight":3},
+			{"source":2,"target":5,"weight":3},
+			{"source":5,"target":3,"weight":3},
+		]
+	}
+});
+
+/*////////////////
 // https://developer.mozilla.org/zh-CN/docs/Web/Guide/API/Camera
 // https://jingyan.baidu.com/article/3052f5a1f7606697f31f86d9.html
 // Put event listeners into place

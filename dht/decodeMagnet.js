@@ -1,3 +1,7 @@
+/*
+magnet:?xt=urn:btih:abcdef...&tr=http://example.com/announce&tr=udp://example.net:1234/announce&tr=...
+
+*/
 var a = process.argv.splice(2);
 
 var  magnet_uri = require('magnet-uri');
