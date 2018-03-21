@@ -42,8 +42,21 @@ function fnQuery(szK)
 	  }
 	  nC++;fnCbk();
 	});
-	
 }
+
+/*
+connection.query('INSERT INTO posts SET ?', {title: 'test'}, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results.insertId);
+});
+
+var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+*/
+
 /*
 connection.query(
 		"SELECT * from info a limit 1,4"

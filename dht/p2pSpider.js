@@ -17,4 +17,3 @@ p2pspider(function(data){
     fs.appendFileSync("myMagnetsInfo.txt",(ss = JSON.stringify(data)) + "\n\n");
     console.log(ss); //获取到的信息 
 });
-
