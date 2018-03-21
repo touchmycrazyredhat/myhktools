@@ -12,36 +12,46 @@ connection.connect(function(err)
   // console.log("Connected!");
 });
 
+function fnDoRst(szK,a,results,oTmp,fnCbk)
+{
+	for(var i = 0; i < results.length; i++)
+	{
+		var ss1 = results[i]["xx"];
+		if(ss1.length - szK.length < 4)continue;
+		if(!oTmp[ss1])
+			oTmp[ss1]=1,a.push(ss1);
+	}
+	fnCbk();
+}
+
+function fnDoQuery(sql,szK,a,oTmp,fnCbk)
+{
+	connection.query(
+		sql
+		, function (error, results, fields) {
+	  if (error) throw error;
+	  fnDoRst(szK,a,results,oTmp,fnCbk);
+	});
+}
 // count qqun 218777
 //    ac01 1152,8172
 //    qq 484894 全文检索
 // WHERE MATCH (title,body) AGAINST ('database')
 function fnQuery(szK)
 {
-	var a = [],nC = 0,fnCbk = function()
-	{
-		if(1 == nC)console.log(a);
-	};
-	connection.query(
-		"SELECT concat_ws(',',a.AAC003,a.AAC002,a.AAE004,a.AAE005,a.AAE006) as xx from ac01 a where aac003='" + szK + "'"
-		, function (error, results, fields) {
-	  if (error) throw error;
-	  for(var i = 0; i < results.length; i++)
-	  {
-	  	a.push(results[i]["xx"]);
-	  }
-	  nC++;fnCbk();
-	});
-	connection.query(
+	var a = [],nC = 0, oTmp = {},aSql = [
+		"SELECT concat_ws(',',a.AAC003,a.AAC002,a.AAE004,a.AAE005,a.AAE006) as xx from ac01 a where aac003='" + szK + "'",
 		"SELECT concat_ws(',',YHXM,DHHM,YHDZ) as xx from cdgrzfxx where yhxm='" + szK + "'"
-		, function (error, results, fields) {
-	  if (error) throw error;
-	  for(var i = 0; i < results.length; i++)
-	  {
-	  	a.push(results[i]["xx"]);
-	  }
-	  nC++;fnCbk();
-	});
+	],fnCbk = function()
+	{
+		nC++;
+		if(aSql.length == nC)console.log(a.join("\n"));
+	};
+	for(var i = 0; i < aSql.length; i++)
+	{
+		fnDoQuery(aSql[i],szK,a,oTmp,fnCbk);
+	}
+	
 }
 
 /*
