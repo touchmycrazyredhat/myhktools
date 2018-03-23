@@ -12,11 +12,16 @@ var fs  = require("fs"),
 	a = process.argv.splice(2),
     request = require("request"),
     g_aProxy = null,
+    program = require('commander'),
     SocksProxyAgent = require('socks-proxy-agent'),
     nPort = 8880,
     g_szUA = "CaptiveNetworkSupport-355.30.1 wispr",
     szIp = "0.0.0.0";
 
+program.version("动态代理")
+	.option('-u, --useHttp', '使用动态http代理')
+	.option('-x, --proxy', 'socks://127.0.0.1:1086, or process.env.socks_proxy')
+	.parse(process.argv);
 process.on('uncaughtException', function(e){});
 process.on('unhandledRejection', function(e){});
 
@@ -37,17 +42,22 @@ function fnWathProxyFile(s)
 	});
 }
 
-var proxy = process.env.socks_proxy || 'socks://127.0.0.1:1086';
-var agent = new SocksProxyAgent(proxy);
+var proxy = program.proxy||process.env.socks_proxy, agent = null;
+if(proxy)
+	agent = new SocksProxyAgent(proxy);
 
 // 设置二级代理并返回request对象
 function getRequest()
 {
-	// if(1)return request;
+	if(!program.useHttp)return request;
 	var szAutoProxyIps = __dirname + "/" + (process.env["autoProxy"] || "autoProxy.txt");
 	
 	fnWathProxyFile(szAutoProxyIps);
-	if(!g_aProxy)return request;
+	if(!g_aProxy)
+	{
+		console.log("g_aProxy 没有数据");
+		return request;
+	}
 
 	// 随机获得代理
 	// HTTP,ip,port
@@ -161,13 +171,15 @@ function fnCreateProxyServer()
 			{
 				// console.log(req.method.toLowerCase());
 				// req.headers["user-agent"] = g_szUA;
-				var r = request,// getRequest(),// 获取动态代理
+				// request,// 
+				// console.log(req.url);
+				var r = getRequest(),// 获取动态代理
 					x = r[req.method.toLowerCase()](
 						{
 							"agent":agent,
 							"uri":req.url,
 							"timeout":nTimeout});
-					console.log(req.headers)
+					// console.log(req.headers)
 				req.pipe(x);
 				// fnFilterFunc(resp);
 		    	resp = x.pipe(resp);
@@ -223,19 +235,22 @@ function fnCreateProxyServer()
 		console.log([socket.remoteFamily,socket.remoteAddress,socket.remotePort])
 	  // socket.end();
 	});
-	
+	/*
 	server.on('request', (request,response) => {
 		let body = [];
+		
 		request.on('data', (chunk) => {
 		  body.push(chunk);
 		}).on('end', () => {
-		  body = Buffer.concat(body);
-		  var fs = require("fs");
-		  fs.writeFileSync("testAmf.bin",body);
+		  // body = Buffer.concat(body);
+		  // var fs = require("fs");
+		  // fs.writeFileSync("testAmf.bin",body);
 		  console.log(body.toString());
 		  // at this point, `body` has the entire request body stored in it as a string
 		});
+
 	});
+	*/
 	server.on('upgrade', (request, socket,headBuffer) => {
 		//socket.end();
 	});
