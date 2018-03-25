@@ -9,7 +9,6 @@ Acquire::http::Proxy "http://192.168.24.10:8880";
 */
 var fs  = require("fs"),
 	http = require("http"),
-	a = process.argv.splice(2),
     request = require("request"),
     g_aProxy = null,
     program = require('commander'),
@@ -20,7 +19,7 @@ var fs  = require("fs"),
 
 program.version("动态代理")
 	.option('-u, --useHttp', '使用动态http代理')
-	.option('-x, --proxy', 'socks://127.0.0.1:1086, or process.env.socks_proxy')
+	.option('-x, --proxy [value]', 'socks://127.0.0.1:1086, or process.env.socks_proxy')
 	.parse(process.argv);
 process.on('uncaughtException', function(e){});
 process.on('unhandledRejection', function(e){});
@@ -44,7 +43,10 @@ function fnWathProxyFile(s)
 
 var proxy = program.proxy||process.env.socks_proxy, agent = null;
 if(proxy)
+{
 	agent = new SocksProxyAgent(proxy);
+	console.log("启用了代理:" + proxy);
+}
 
 // 设置二级代理并返回request对象
 function getRequest()
@@ -173,6 +175,7 @@ function fnCreateProxyServer()
 				// req.headers["user-agent"] = g_szUA;
 				// request,// 
 				// console.log(req.url);
+				console.log(agent);
 				var r = getRequest(),// 获取动态代理
 					x = r[req.method.toLowerCase()](
 						{

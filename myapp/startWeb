@@ -6,7 +6,7 @@ openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out server.crt
 https://127.0.0.1:8088/
 2、命令访问测试
 curl -v -k -H "User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36" https://127.0.0.1:8088/
- */
+*/
 var app = require(__dirname + '/app'),
     debug = require('debug')('myapp:server'),
     http = require('http'),

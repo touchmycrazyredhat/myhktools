@@ -75,6 +75,33 @@ connection.query(
 	  console.log(results);
 	});
 ///////////////*/
+
+/*
+/usr/local/mysql-5.6.13-osx10.7-x86_64/data/dht
+connection.query(
+		"create database if not exists dht"
+		, function (error, results, fields) {
+	  if (error) throw error;
+	  console.log(results);
+	});
+
+
+
+connection.query(
+		"create table hash_info(hash varchar(40), info varchar(100),primary key(hash))"
+		, function (error, results, fields) {
+	  if (error) throw error;
+	  console.log(results);
+	});
+
+connection.query(
+		"create table peerIP(ip varchar(40), info varchar(100),primary key(ip))"
+		, function (error, results, fields) {
+	  if (error) throw error;
+	  console.log(results);
+	});
+
+*/
 if(0 < a.length)
 	fnQuery(a[0]);
 connection.end();
