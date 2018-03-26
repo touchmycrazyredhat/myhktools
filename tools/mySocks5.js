@@ -1,8 +1,21 @@
-// node tools/mySocks5.js --user mtxuser --password sldfjsljf -p 5533
+/*
+node tools/mySocks5.js --user mtxuser --password Wr90,_x*d -p 5533
+node proxy/ProxyServer.js --proxy 'socks://mtxuser:Wr90,_x*d@127.0.0.1:5533'
+curl -x "http://127.0.0.1:8880" http://ip.cn
+*/
 var socks = require('socksv5'),
 	program = require('commander'),
-	srv = socks.createServer(function(info, accept, deny) {
-  accept();
+	srv = socks.createServer(function(info, accept, deny)
+{
+	/*
+	{ cmd: 'connect',
+  srcAddr: '127.0.0.1',
+  srcPort: 56597,
+  dstAddr: 'ip.cn',
+  dstPort: 80 }
+	*/
+	accept();
+	// 黑名单：deny();
 });
 program.version("socks5代理")
 	.option('-p, --port [value]', '端口')

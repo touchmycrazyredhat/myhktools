@@ -1,6 +1,11 @@
 // 校验http、https 代理是否可用
 // node checkProxy.js ~/C/ip_log.txt 
 /*
+node proxy/ProxyServer.js --proxy socks://127.0.0.1:5533
+
+node proxy/ProxyServer.js --proxy 'socks://mtxuser:sldfjsljf@127.0.0.1:5533'
+curl -x "http://127.0.0.1:8880" http://ip.cn
+
 npm install -g socks-proxy-agent
 curl -v --proxy http://127.0.0.1:8880 http://ip.cn
 这样kali就可以使用vps的代理了
@@ -175,7 +180,7 @@ function fnCreateProxyServer()
 				// req.headers["user-agent"] = g_szUA;
 				// request,// 
 				// console.log(req.url);
-				console.log(agent);
+				// console.log(agent);
 				var r = getRequest(),// 获取动态代理
 					x = r[req.method.toLowerCase()](
 						{
