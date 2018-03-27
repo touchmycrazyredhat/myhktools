@@ -1,6 +1,6 @@
 /*
-node tools/mySocks5.js --user mtxuser --password Wr90,_x*d -p 5533
-node proxy/ProxyServer.js --proxy 'socks://mtxuser:Wr90,_x*d@127.0.0.1:5533'
+node tools/mySocks5.js --user mtxuser --password Wr90,_x*d -p 15533
+node proxy/ProxyServer.js --proxy 'socks://mtxuser:Wr90,_x*d@127.0.0.1:15533'
 curl -x "http://127.0.0.1:8880" http://ip.cn
 */
 var socks = require('socksv5'),
@@ -18,7 +18,7 @@ var socks = require('socksv5'),
 	// 黑名单：deny();
 });
 program.version("socks5代理")
-	.option('-p, --port [value]', '端口')
+	.option('-p, --port [value]', '端口,默认 15533')
 	.option('-h, --host [value]', '绑定的ip，默认0.0.0.0')
 	.option('-u, --user [value]', '用户名, 默认：mtx')
 	.option('-p, --password [value]', "密码, 默认：`!';/.;l'Qgdf097")
@@ -26,7 +26,7 @@ program.version("socks5代理")
 process.on('uncaughtException', function(e){});
 process.on('unhandledRejection', function(e){});
 
-srv.listen(program.port||1080, program.host||'0.0.0.0', function()
+srv.listen(program.port||15533, program.host||'0.0.0.0', function()
 {
 	console.log('SOCKS server listening...' + this._connectionKey);
 });

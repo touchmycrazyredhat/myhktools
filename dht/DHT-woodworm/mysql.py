@@ -1,5 +1,9 @@
 #-*- coding:utf-8 -*-
 # /usr/local/mysql-5.6.13-osx10.7-x86_64/data/dht
+'''
+brew install mysql-connector-c
+pip install mysql-python
+'''
 import MySQLdb
 import os
 

@@ -29,6 +29,7 @@ function fnCheck(a,fnCbk)
 					r.get(
 						{
 							uri:"http://ipinfo.io/" + aT2[1],
+							//headers:{"user-agent":"curl/7.0"},
 							"timeout":5000
 						},
 					function(e,r,b)
