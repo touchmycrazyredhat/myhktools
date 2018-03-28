@@ -16,8 +16,26 @@ program.version("远程命令执行")
 process.on('uncaughtException', function(e){});
 process.on('unhandledRejection', function(e){});
 
-// 经纬度分析
-
+// ip转换为数字
+// "16802816","16803071","JP","Japan","Shimane","Izumo","35.367000","132.767000"
+function ipStringToLong(szIp)
+{
+    var octets = szIp.split('.');
+    if (octets.length !== 4)
+    {
+        throw new Error("Invalid format -- expecting a.b.c.d");
+    }
+    var ip = 0;
+    for (var i = 0; i < octets.length; ++i)
+    {
+        var octet = parseInt(octets[i], 10);
+        if (Number.isNaN(octet) || octet < 0 || octet > 255) {
+            throw new Error("Each octet must be between 0 and 255");   
+        }
+        ip |= octet << ((octets.length - i) * 8);
+    }
+    return ip;
+}
 // 文件存在判断
 function isExists(t)
 {
@@ -170,9 +188,7 @@ else
 {
   var a = [
   
-  /////*/
   ];
-
 
   for(var k in a)
   {
