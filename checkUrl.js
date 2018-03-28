@@ -720,8 +720,9 @@ function fnTestStruts2(szUrl2, obj)
 	runChecks(szUrl2,"weblogic");
 	// doStruts2_020(g_szUrl);
 	// doStruts2_052(szUrl2);
-	if(-1 == szUrl2.indexOf("login.jsp"))
+	if(-1 == szUrl2.indexOf("login.jsp") && -1 == szUrl2.indexOf(".jsp"))
 		fnTestStruts2(szUrl2 + "/login.jsp",obj);
+	else runChecks(szUrl2,"struts2");
 	// if(!(/\/$/g.test(szUrl2)))fnTestStruts2(szUrl2 + "/");
 }
 

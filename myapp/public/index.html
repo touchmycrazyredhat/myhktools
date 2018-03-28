@@ -65,7 +65,7 @@
     </div>
     <script src="echarts.js"></script>
     <script type="text/javascript">
-    var s = location.href,g_nId = 10000,g_nPid = 1,g_oD = {}, g_amyNet = [],
+    var s = location.href,g_nId = 10000, g_nPid = 1, g_oD = {}, g_amyNet = [],
         socket = io.connect(s.substr(0, s.lastIndexOf('/')));
     function fnMyFormatter(v,r,i)
     {
@@ -315,7 +315,7 @@
                 data: fnMakeMarkPoint(o)
             }
         }];
-        myChart.setSeries(oD,false);
+        myChart.setSeries(oD,true);
     }
 /*
     addMapData({
