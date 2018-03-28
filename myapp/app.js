@@ -22,7 +22,7 @@ var express = require('express'),
     useragent = require('useragent'),
     session = require('express-session'),
     compress = require('compression'),
-    cookieParser = require('cookie-parser'),
+    // cookieParser = require('cookie-parser'),
     // bodyParser = require('body-parser'),
     xpb = 'x-powered-by',
     crypto = require("crypto"),
@@ -33,7 +33,6 @@ var express = require('express'),
     helmet = require('helmet'),
     juicer = require("juicer"),
     app = express();
-
 // cookie start
 app.set('trust proxy', 1);
 // 获取随机数

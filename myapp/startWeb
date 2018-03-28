@@ -11,7 +11,7 @@ var app = require(__dirname + '/app'),
     debug = require('debug')('myapp:server'),
     http = require('http'),
     fs = require('fs'),
-    https = require('https'),
+    https = require('https'),// http,//
     options = {
       key: fs.readFileSync(__dirname + '/ca/key.pem', 'utf8'),
       // 必须用server.crt,否则报错
@@ -25,9 +25,11 @@ var port = normalizePort(process.env.PORT || '8088');
 app.set('port', port);
 /**
  * Create HTTP server. 30秒
- server = http.createServer(app),// 普通http
+ 
  */
-var server = https.createServer(options, app),nPI = 30000,
+var // server = http.createServer(app),// 普通http
+    server = https.createServer(options, app),
+    nPI = 30000,
     io = require('socket.io')(server,{pingInterval: nPI,
     pingTimeout: nPI * 1.3});
 // io.emit('xx',fn);// 发送消息给所有client
