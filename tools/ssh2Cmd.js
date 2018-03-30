@@ -2,9 +2,11 @@
 var Client = require('ssh2').Client,
   fs = require('fs'),
   ci = require(__dirname + '/../commonlib/ci.js'),
+  mysql = require(__dirname + '/../myapp/lib/myMysql.js'),
   os = require('os'),
   child_process = require('child_process'),
   mypath = os.homedir() + '/mtx/db/',
+  ipInt = require('ip-to-int'),
   program = require('commander');
 program.version("远程命令执行")
   .option('-p, --port [value]', '端口,默认 22')
@@ -20,21 +22,7 @@ process.on('unhandledRejection', function(e){});
 // "16802816","16803071","JP","Japan","Shimane","Izumo","35.367000","132.767000"
 function ipStringToLong(szIp)
 {
-    var octets = szIp.split('.');
-    if (octets.length !== 4)
-    {
-        throw new Error("Invalid format -- expecting a.b.c.d");
-    }
-    var ip = 0;
-    for (var i = 0; i < octets.length; ++i)
-    {
-        var octet = parseInt(octets[i], 10);
-        if (Number.isNaN(octet) || octet < 0 || octet > 255) {
-            throw new Error("Each octet must be between 0 and 255");   
-        }
-        ip |= octet << ((octets.length - i) * 8);
-    }
-    return ip;
+    return ipInt(szIp).toInt();
 }
 // 文件存在判断
 function isExists(t)
@@ -43,63 +31,9 @@ function isExists(t)
 }
 
 // 获得ip经纬度信息
-function fnGetIpInfo(ip)
+function fnGetIpInfo(ip,fnCbk)
 {
-  var odip = ip,o = {},s;
-  ip = ip.replace(/.*?ffff:/gmi,'');
-  // 历史文件的名称修复
-  if(isExists(odip) && odip != ip)
-    fs.rename(mypath + odip, mypath + ip,function(e){});
-
-  if(isExists(ip))
-  {
-    s = fs.readFileSync(mypath + ip).toString();
-    if(s)
-      o = JSON.parse(s);
-    if(!o.loc)
-    {
-      console.log("删除：" + ip);
-      fs.unlinkSync(mypath + ip);
-    }
-  }
-  if(!o.loc)
-  {
-    var ipRg = /^(\d{1,3}\.){3}\d{1,3}$/g,o = {};
-    // 确保没有注入攻击,排除内网ip
-    // 172.16.0.0～172.31.255.255
-    if(ipRg.exec(ip) && !/^(192\.168|127\.0|10|172)\..*/.exec(ip))
-    {
-      try{
-        // -k -x 'http://127.0.0.1:1086' 
-        console.log("start:" + ip);
-        var ss1 = '';
-        o = JSON.parse(ss1 = child_process.execSync("curl -s -k  http://ipinfo.io/" + ip));
-        if(o.loc)
-        {
-          fs.writeFileSync(mypath + ip,JSON.stringify(o));
-        }
-        if(o.country)
-          o.country = ci[o.country]||o.country;
-        if(o.loc)console.log(o);
-      }catch(e)
-      {
-        console.log(ip);
-        console.log(ss1);
-        console.log(e);
-      }
-    }
-  }
-  o.date = require('moment')(new Date().getTime()).format('YYYY-MM-DD HH:mm:ss');
-  o.ip = ip;
-  delete o.url;
-  delete o['user-agent'];
-  delete o.referer;
-  delete o['x-forwarded-for'];
-  if(o.country)
-    o.country = ci[o.country]||o.country;
-  // if(o.loc)console.log(o);
-// console.log(ip);
-  return o;
+  mysql.fnGetIpInfo(ip,fnCbk);
 }
 // ip连接分析
 function fnGetIps(s,myCurIp,fnCbk)
@@ -118,31 +52,21 @@ function fnGetIps(s,myCurIp,fnCbk)
         (myCurIp == a[1] && a[1] == a[2]))
       continue;
     oT[szTT] = 1;
-    // if(!fnCbk)
-      // console.log([a[1],a[2]]);
 
-      console.log(a[2]);
-      /*
-      if(isExists(a[2]))
-      {
-        s = fs.readFileSync(mypath + a[2]).toString();
-        if(s)
-        {
-          o = JSON.parse(s);
-          if(o.loc)
-          {
-            console.log(o);
-          }
-          else console.log(a[2]);
-        }
-      }
-      else console.log(a[2]);
-      */
-    // x.push([a[1],fnGetIpInfo(a[2])]);
-    x.push([a[1],a[2]]);
-    
+    fnGetIpInfo(a[2],function(o)
+    {
+      // console.log("start .. " + o.ip);
+      
+      if("中国CN" != o.o.ctj)
+        console.log("=========注意，发现了国外的ip=========");
+      console.log([o.ip, o.ctj,o.ctq,o.city,o.loc1,o.loc2].join(", "));
+      if(fnCbk)fnCbk(o);
+      // if("中国CN" != o.o.ctj)
+        // console.log([o.ip, o.ctj,o.ctq,o.city,o.loc1,o.loc2].join(", "));
+    });
+    // x.push(a[2]);
   }
-  if(fnCbk)fnCbk(x);
+  if(fnCbk)fnCbk(null);
 }
 
 function fnMySsh(prm,fnCbk)
@@ -183,26 +107,37 @@ function fnMySsh(prm,fnCbk)
 if(program && program.host)
   fnMySsh(program);
 
-
 else
 {
   var a = [
-  
-  ];
 
+  ];
+  var sxPa = __dirname + "/ips/" + require('moment')(new Date().getTime()).format('YYYY-MM-DD');
+  if (!fs.existsSync(sxPa))
+    fs.mkdirSync(sxPa);
   for(var k in a)
   {
-    +function(o){
+    +function(o)
+    {
+      var aR = [];
       fnMySsh(o,function(x)
       {
-        if(0 < x.length)
+        if(x)aR.push(x);
+        else
         {
-          console.log(o.host + " 发现的ip数量:" + x.length);
-          // appendFileSync
-          fs.writeFileSync("ips/" + o.host,JSON.stringify(x));
-          console.log(x);
+          if(0 < aR.length)
+            console.log(o.host + " 发现的ip数量:" + aR.length),
+            console.log(aR),
+            // appendFileSync
+            fs.writeFileSync(sxPa + "/" + o.host,JSON.stringify(aR));
+          // mysql.fnEnd();
         }
       });
     }({host:a[k][2],username:a[k][0],password:a[k][1]});
   }
 }
+
+process.on('exit', (code) => 
+{
+  mysql.fnEnd();
+});

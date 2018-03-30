@@ -1,5 +1,30 @@
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
+/*
+drop table ipInfo;
+create table ipInfo(ips BIGINT, ipe BIGINT,ctj varchar(20), sf varchar(150),ctq varchar(150),city varchar(150),loc1 varchar(30),loc2 varchar(30),primary key(ips,ipe));
+
+create index i2 on ipInfo(ctq);
+create index i3 on ipInfo(sf);
+create index i4 on ipInfo(city);
+
+select count(1) from ipInfo; 
+
+load data infile '/Users/xiatian/Desktop/untitled\ folder/ip2location-lite-db5.csv/IP2LOCATION-LITE-DB5.CSV' into table ipInfo  fields terminated by ',' enclosed by '"'  lines terminated by '\n';
+
+SHOW VARIABLES LIKE "secure_file_priv";
+
+/usr/local/opt/mysql//.bottle/etc/my.cnf
+brew services list
+brew services restart mysql
+brew services start mysql
+SELECT @@global.secure_file_priv;
+
+/Library/LaunchDaemons
+com.oracle.oss.mysql.mysqld.plist
+*/
+var mysql      = require('mysql'),
+	ci = require(__dirname + '/../../commonlib/ci.js'),
+	ipInt = require('ip-to-int'),
+	connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'root',
@@ -106,6 +131,122 @@ connection.query(
 	});
 
 */
+
+/*////////导入经纬度信息////////
+var readline = require('readline'),fs = require('fs');
+rl = readline.createInterface({
+  input: fs.createReadStream('/Users/xiatian/Desktop/untitled folder/ip2location-lite-db5.csv/IP2LOCATION-LITE-DB5.CSV'),
+  crlfDelay: Infinity
+});
+
+var x = 0,g_a = [];
+rl.on('line', (line) => 
+{
+	x++;
+	// if(3300000 > x)return;
+	var a = String(line).replace(/(^\s*")|(\s*"\s*$)/gmi,'').split(/"\s*,\s*"/);
+	if(8 != a.length)
+	{
+		console.log(line);
+		throw line;
+		return;
+	}
+	a[0] = parseInt(a[0]);
+	a[1] = parseInt(a[1]);
+	
+	g_a.push(a);
+
+	if(0 == x % 500 && 0 < g_a.length)
+	{
+		var sql = "INSERT INTO ipInfo(ips,ipe,ctj,sf,ctq,city,loc1,loc2) VALUES ?", aT = g_a;
+		g_a=[];
+		var i = 0;
+		// try{
+	  	connection.query(
+			sql,[aT]
+			,function (error, results, fields) {
+		  if (error)
+		  {if( error.sqlState == '23000'||error.sqlMessage.indexOf("Duplicate entry")); //throw error;
+		   else console.log(error);
+		   }
+		});
+	  	
+  	}
+});
+
+rl.on('close',function()
+{
+	if(0 < g_a.length){
+	var sql = "INSERT INTO ipInfo(ips,ipe,ctj,sf,ctq,city,loc1,loc2) VALUES ?", aT = g_a;
+		g_a=[];
+		var i = 0;
+		// try{
+	  	connection.query(
+			sql,[aT]
+			,function (error, results, fields) {
+		  // if (error) throw error;
+		  // console.log(error);
+		  connection.end();
+		});
+	 }
+});
+///////////////*/
+
+function fnGetMuIps(ips)
+{
+	var a = ips.split(/[;,]/), x = [],n;
+	
+	for(var i = 0; i < a.length; i++)
+	{
+		n = ipInt(a[i]).toInt();
+		x.push("(ips <= " + n + " and ipe >= " + n + ")");
+	}
+	return x.join(" or ");
+}
+
+function fnGetObj(o)
+{
+	var x = {};
+	if(o)
+	for(var k in o)
+	{
+		if(o[k])x[k]= o[k];
+	}
+	delete x.ips;delete x.ipe;
+	return x;
+}
+
+function fnGetIpInfo(ip,fnCbk)
+{
+	var n = fnGetMuIps(ip);
+	// console.log(n);
+	connection.query(
+	// city='Kunming'"//
+		"select * from ipInfo where " + n
+		, function (error, results, fields) {
+	  if (error) throw error;
+	  var o = fnGetObj(results[0]);
+	  o.ip = ip;
+	  o['ctj'] = (ci[o['ctj']] || '') + o['ctj'];
+
+	  fnCbk(o);
+	});
+}
+function fnEnd()
+{
+	connection.end();
+}
+
 if(0 < a.length)
+{
 	fnQuery(a[0]);
-connection.end();
+	fnEnd();
+}
+module.exports ={"fnGetIpInfo":fnGetIpInfo,"fnEnd":fnEnd,"fnQuery":fnQuery}
+/*/
+fnGetIpInfo('116.52.138.104',function(o)
+{
+	console.log(o);
+	fnEnd()
+});
+//*/

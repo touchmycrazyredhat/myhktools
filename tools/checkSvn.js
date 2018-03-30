@@ -1,6 +1,6 @@
 // svn 弱密码检测 2017-01-22 M.T.X
 // node checkSvn.js http://192.168.10.70:8090/svn/ userName Pswd
-require(__dirname + './../commonlib/core.js');
+require(__dirname + '/../commonlib/core.js');
 var g_bDownload = true,
 	g_aDownloadUrls = [];
 	reFilter = /(jar|java|exe|cab|jsp|xml|zip|war|ear)$/gmi
@@ -52,8 +52,8 @@ function getUrls(szAddUrls)
 	fnT();
 }
 // 存储目录
-var g_svnDataPath = __dirname + "./../data/svn/";
-var indexAll = __dirname + "./../data/svn/indexAll.txt", 
+var g_svnDataPath = __dirname + "/../data/svn/";
+var indexAll = __dirname + "/../data/svn/indexAll.txt", 
 	allSvnInfo = g_svnDataPath + 'allSvnInfo.txt',g_oSvnAll = {},g_oSvnInfo = {};
 function fnGetHds(resp,o)
 {
@@ -110,7 +110,7 @@ function fnGetAllUrls(u,p,url,s,resp)
 */
 function fnCheckAll(u,user,pswd)
 {
-	var url = u, a = fs.readFileSync(__dirname + "./../urls/yhxm.txt").toString().split(/\n/gmi);
+	var url = u, a = fs.readFileSync(__dirname + "/../urls/yhxm.txt").toString().split(/\n/gmi);
 	console.log("检查 " + a.length + "个项目.... ");
 	// 并发5个线程 : 5189
 	async.mapLimit(a,133,function(s,fnCbk)
@@ -176,7 +176,7 @@ if(g_bDownload)
 		var k = "";
 		if(fs.existsSync(indexAll))
 		{
-			k = fs.readFileSync(indexAll);
+			k = fs.readFileSync(indexAll).toString();
 			if(k)
 			{
 				g_oSvnAll = JSON.parse(k);
@@ -195,9 +195,8 @@ if(g_bDownload)
 		}
 		
 		// 2、梳理本地可用信息
-		doFile({"filename":"./data",fnCbk:function(s)
+		doFile({"filename":__dirname + "/../data",fnCbk:function(s)
 		{
-			// console.log(s);
 			k = fs.readFileSync(s).toString();
 			var a,re = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s+\/([^\s\/]+)\/([^\s\/]+)\s+Mozilla/gmi, bHv = false,
 			    re1;
@@ -237,12 +236,13 @@ if(g_bDownload)
 			}
 		}
 		////////////////////////*/
-		/*
+		//*
 		var y = g_oSvnAll;
+
 		for(var k in y)
 		{
 		    var oT = y[k];
-		    if('linsen' != k)continue;
+		    if('ligang' != k)continue;
 		    if(oT['svns'])
 		    {
 		    	// console.log([k,oT.pwd[0]]);

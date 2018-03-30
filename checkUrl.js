@@ -172,7 +172,7 @@ function fnTest(s)
 	    fnOptHeader({ method: s ||'PUT'
 	    ,"uri": g_szUrl//.substr(0,url.lastIndexOf("/"))
 	    ,headers:{'Access-Control-Request-Method':'GET,HEAD,POST,PUT,DELETE,CONNECT,OPTIONS,TRACE,PATCH'}
-	    , multipart:'HEAD' == s|| 'OPTIONS' == s? null:
+	    ,multipart:'HEAD' == s|| 'OPTIONS' == s? null:
 	      [ { 'content-type': 'application/json'
 	        ,  body: JSON.stringify({foo: 'bar', _attachments: {'test.jsp': {follows: true, length: 18, 'content_type': 'text/plain' }}})
 	        }
