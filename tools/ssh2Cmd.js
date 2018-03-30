@@ -2,21 +2,24 @@
 var Client = require('ssh2').Client,
   fs = require('fs'),
   ci = require(__dirname + '/../commonlib/ci.js'),
-  mysql = require(__dirname + '/../myapp/lib/myMysql.js'),
   os = require('os'),
   child_process = require('child_process'),
   mypath = os.homedir() + '/mtx/db/',
+  moment = require('moment'),
   ipInt = require('ip-to-int'),
   program = require('commander');
 program.version("远程命令执行")
   .option('-p, --port [value]', '端口,默认 22')
   .option('-h, --host [value]', '访问主机的ip')
+  .option('-f, --fileName [value]', 'ip信息文件，转化，获取其经纬度信息，格式：["ip1","ip2"]')
   .option('-u, --username [value]', '用户名, 默认：root')
   .option('-s, --password [value]', "密码")
   .option('-c, --cmd [value]', "命令")
   .parse(process.argv);
-process.on('uncaughtException', function(e){});
-process.on('unhandledRejection', function(e){});
+// 必须放在program后面
+var mysql = require(__dirname + '/../myapp/lib/myMysql.js');
+
+process.on('uncaughtException', function(e){});process.on('unhandledRejection', function(e){});
 
 // ip转换为数字
 // "16802816","16803071","JP","Japan","Shimane","Izumo","35.367000","132.767000"
@@ -35,6 +38,7 @@ function fnGetIpInfo(ip,fnCbk)
 {
   mysql.fnGetIpInfo(ip,fnCbk);
 }
+var g_nCnt = 0;
 // ip连接分析
 function fnGetIps(s,myCurIp,fnCbk)
 {
@@ -53,20 +57,23 @@ function fnGetIps(s,myCurIp,fnCbk)
       continue;
     oT[szTT] = 1;
 
+    // console.log("start .. " + a[2]);
+    //*
     fnGetIpInfo(a[2],function(o)
     {
       // console.log("start .. " + o.ip);
-      
-      if("中国CN" != o.o.ctj)
+      if(o && o.ctj && "中国CN" != o.ctj)
         console.log("=========注意，发现了国外的ip=========");
       console.log([o.ip, o.ctj,o.ctq,o.city,o.loc1,o.loc2].join(", "));
+      ++g_nCnt;
+      if(g_nCnt >= x.length)
+        mysql.fnEnd();
       if(fnCbk)fnCbk(o);
-      // if("中国CN" != o.o.ctj)
-        // console.log([o.ip, o.ctj,o.ctq,o.city,o.loc1,o.loc2].join(", "));
-    });
-    // x.push(a[2]);
+    });//*/
+    
+    x.push(a[2]);
   }
-  if(fnCbk)fnCbk(null);
+  if(fnCbk)fnCbk(null,x);
 }
 
 function fnMySsh(prm,fnCbk)
@@ -92,7 +99,7 @@ function fnMySsh(prm,fnCbk)
       {
         a.push(data);
       });
-      stream.end((prm.cmd || 'netstat -antlp\n') + '\nexit\n');
+      stream.end((prm.cmd || 'netstat -antlp\n') + '\nhistory -c\nexit\n');
     });
   }).connect(
   {
@@ -104,38 +111,64 @@ function fnMySsh(prm,fnCbk)
   });
 }
 
-if(program && program.host)
-  fnMySsh(program);
+function fnCvtIps(s)
+{
+  var a = "string" == typeof(s) && JSON.parse(fs.readFileSync(s)) || s,j = 0;
+  for(var i = 0; i < a.length; i++)
+  {
+     fnGetIpInfo(a[i],function(o)
+      {
+        // console.log("start .. " + o.ip);
+        if(o && o.ctj && "中国CN" != o.ctj)
+          console.log("=========注意，发现了国外的ip=========");
+        console.log([o.ip, o.ctj,o.ctq,o.city,o.loc1,o.loc2].join(", "));
+        j++;
+        
+        if(j >= a.length)mysql.fnEnd();
+        // if(fnCbk)fnCbk(o);
+        // if("中国CN" != o.ctj)
+      });//*/
+  }
+}
 
+// ip信息查询
+if(program && program.fileName)
+  fnCvtIps(program.fileName);
+
+var aR = [];
+var fTmpCbk = function(x,a)
+{
+  if(x)aR.push(x);
+  else
+  {
+    // if(0 == aR.length && a)aR = a;
+    if(0 < aR.length)
+      console.log(o.host + " 发现的ip数量:" + aR.length),
+      console.log(aR),
+      // appendFileSync
+      fs.writeFileSync(sxPa + "/" + o.host,JSON.stringify(aR));
+  }
+};
+if(program && program.host)
+  fnMySsh(program,fTmpCbk);
 else
 {
   var a = [
-
   ];
-  var sxPa = __dirname + "/ips/" + require('moment')(new Date().getTime()).format('YYYY-MM-DD');
+  var sxPa = __dirname + "/ips/" + moment(new Date().getTime()).format('YYYY-MM-DD');
   if (!fs.existsSync(sxPa))
     fs.mkdirSync(sxPa);
+  if(0 < a.length)
   for(var k in a)
   {
     +function(o)
     {
-      var aR = [];
-      fnMySsh(o,function(x)
-      {
-        if(x)aR.push(x);
-        else
-        {
-          if(0 < aR.length)
-            console.log(o.host + " 发现的ip数量:" + aR.length),
-            console.log(aR),
-            // appendFileSync
-            fs.writeFileSync(sxPa + "/" + o.host,JSON.stringify(aR));
-          // mysql.fnEnd();
-        }
-      });
+      fnMySsh(o,fTmpCbk);
     }({host:a[k][2],username:a[k][0],password:a[k][1]});
   }
 }
+
+module.exports ={"fnCvtIps":fnCvtIps}
 
 process.on('exit', (code) => 
 {

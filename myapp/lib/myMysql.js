@@ -22,6 +22,7 @@ SELECT @@global.secure_file_priv;
 com.oracle.oss.mysql.mysqld.plist
 */
 var mysql      = require('mysql'),
+	program = require('commander'),
 	ci = require(__dirname + '/../../commonlib/ci.js'),
 	ipInt = require('ip-to-int'),
 	connection = mysql.createConnection({
@@ -29,7 +30,11 @@ var mysql      = require('mysql'),
   user     : 'root',
   password : 'root',
   database : 'mydb'
-}),a = process.argv.splice(2);
+});
+
+program.version("社工信息查询")
+  .option('-k, --key [value]', '姓名、身份证')
+  .parse(process.argv);
 
 connection.connect(function(err)
 {
@@ -199,7 +204,8 @@ function fnGetMuIps(ips)
 	for(var i = 0; i < a.length; i++)
 	{
 		n = ipInt(a[i]).toInt();
-		x.push("(ips <= " + n + " and ipe >= " + n + ")");
+		// x.push("(ips <= " + n + " and ipe >= " + n + ")");
+		x.push("("+ n + " BETWEEN ips and ipe)");
 	}
 	return x.join(" or ");
 }
@@ -228,7 +234,6 @@ function fnGetIpInfo(ip,fnCbk)
 	  var o = fnGetObj(results[0]);
 	  o.ip = ip;
 	  o['ctj'] = (ci[o['ctj']] || '') + o['ctj'];
-
 	  fnCbk(o);
 	});
 }
@@ -237,9 +242,9 @@ function fnEnd()
 	connection.end();
 }
 
-if(0 < a.length)
+if(program.key)
 {
-	fnQuery(a[0]);
+	fnQuery(program.key);
 	fnEnd();
 }
 module.exports ={"fnGetIpInfo":fnGetIpInfo,"fnEnd":fnEnd,"fnQuery":fnQuery}
