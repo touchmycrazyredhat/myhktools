@@ -151,7 +151,7 @@ var fTmpCbk = function(x,a)
 };
 if(program && program.host)
   fnMySsh(program,fTmpCbk);
-else
+else 
 {
   var a = [
   ];

@@ -2,6 +2,7 @@
 // node checkSvn.js http://192.168.10.70:8090/svn/ userName Pswd
 require(__dirname + '/../commonlib/core.js');
 var g_bDownload = true,
+	async = require('async'),
 	g_aDownloadUrls = [];
 	reFilter = /(jar|java|exe|cab|jsp|xml|zip|war|ear)$/gmi
 	;
@@ -15,14 +16,16 @@ function fnCheckSvn(url,u,p,fnCbk)
 {
 	if(g_oUrls[url])return;
 	g_oUrls[url]=1;
+	var s1 = '';
 	request({method: 'GET',uri:url,headers:
 		{
-			authorization: 'Basic ' + fnMkUp(u,p).replace(/\s/gmi, ''),
+			authorization: s1 = 'Basic ' + fnMkUp(u,p).replace(/\s/gmi, ''),
 			'user-agent':g_szUa
 		}},function(e,r,b)
 	{
 		fnCbk(e,r,b);
 	});
+	console.log("authorization: " + s1 + "\n" + url);
 }
 
 // 从序列化文件加载待下载的文件
@@ -113,7 +116,7 @@ function fnCheckAll(u,user,pswd)
 	var url = u, a = fs.readFileSync(__dirname + "/../urls/yhxm.txt").toString().split(/\n/gmi);
 	console.log("检查 " + a.length + "个项目.... ");
 	// 并发5个线程 : 5189
-	async.mapLimit(a,133,function(s,fnCbk)
+	async.mapLimit(a,3,function(s,fnCbk)
 	{
 		if(0 < (s = s.trim()).length)
 		fnCheckSvn(u + s, user,pswd,function(e,r,b)
@@ -137,7 +140,7 @@ function fnCheckAll(u,user,pswd)
 		 		// console.log(oUser);
 		 		// --accept-regex=
 		 		var sT = '';
-		 		console.log(sT = "wget -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg\" --header=\"authorization:" +
+		 		console.log(sT = "wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg\" --header=\"authorization:" +
 		 			r.request.headers["authorization"]
 		 			+ "\" " + r.request.href + " &");
 		 		// console.log(["svn checkout",u + s,"--username",user,"--password",pswd].join(" "));
@@ -160,7 +163,7 @@ process.on('exit', (code) =>
 	if(g_bDownload)
 	{
 		updateSvnIndexAll();
-		console.log(g_oSvnInfo);		
+		// console.log(g_oSvnInfo);		
 	}
 	// else console.log(g_oSvnAll);
 	// var ss = JSON.stringify(g_oSvnAll,null,' ');
@@ -222,11 +225,16 @@ if(g_bDownload)
 			return /(192|10)\.\d{1,3}\.\d{1,3}\.\d{1,3}\.txt$/gmi.test(s);	
 		}});
 		/*//////////检查所有人的svn权限:需要考虑线程问题///////////////
+		var ix = 0;
 		for(var k in g_oSvnAll)
 		{
 			var o = g_oSvnAll[k];
 			if(o.pwd)
 			{
+				ix++;
+				console.log([k,o.pwd]);
+				// if(3 < ix)
+
 				for(var i = 0; i < o.pwd.length; i++)
 				{
 					fnCheckAll("http://18.12.88.08:8090/svn/"
@@ -236,19 +244,20 @@ if(g_bDownload)
 			}
 		}
 		////////////////////////*/
-		//*
+		/*
 		var y = g_oSvnAll;
 
 		for(var k in y)
 		{
 		    var oT = y[k];
-		    if('ligang' != k)continue;
+		    // console.log(k);
+		    // if('xxxx' != k)continue;
 		    if(oT['svns'])
 		    {
 		    	// console.log([k,oT.pwd[0]]);
 		    	var t = oT['svns'];
 		    	for(var x in t)
-		    	console.log(sT = "wget -x -c -nH --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg,java,jar,xml\" --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --header=\"authorization: Basic " +
+		    	console.log(sT = "wget -x -c -nH --remote-encoding=UTF8 --accept=\"html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg,java,jar,xml\" --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --header=\"authorization: Basic " +
 		 			fnMkUp(k,oT.pwd[0])
 		 			+ "\" http://18.12.88.08:8090/svn/" 
 		 			+ t[x] + "/ &");

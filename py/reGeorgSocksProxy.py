@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+use:
+python ./reGeorgSocksProxy.py -p 8081 -u  http://119.6.84.89:8115/xxx/x.jsp
+'''
 
 import logging
 import argparse

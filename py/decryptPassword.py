@@ -2,7 +2,7 @@
 # This Script decrypt WebLogic passwords
 #  解密weblogic连接池密码
 # https://serverfault.com/questions/208328/recover-password-for-datasource-in-weblogic
-# 
+# https://github.com/NetSPI/WebLogicPasswordDecryptor 
 # Usage: 
 #      wlst decryptPassword.py <DOMAIN_HOME> <ENCRYPTED_PASSWORD>
 #

@@ -32,6 +32,18 @@ var express = require('express'),
     // 安全头信息
     helmet = require('helmet'),
     juicer = require("juicer"),
+    parseFile = function(file, req) {
+      var parsedFile = path.parse(file),
+      fullUrl = req.protocol + '://' + req.get('host') + '/uploads/';
+
+      return {
+            name: parsedFile.name,
+            base: parsedFile.base,
+            extension: parsedFile.ext.substring(1),
+            url: fullUrl + parsedFile.base,
+            size: bytes(fs.statSync(file).size)
+          };
+    },
     app = express();
 // cookie start
 app.set('trust proxy', 1);
@@ -57,6 +69,58 @@ app.use(session({
   })
 );
 ///////////*/
+
+// 多文件上传 下载 start
+// required for accessing req.files object
+app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp'})); 
+app.post('/uploadFiles', function (req, res)
+{
+  var newPath = null,
+      uploadedFileNames = [],
+      uploadedImages,
+      uploadedImagesCounter = 0;
+      
+  if(req.files && req.files.uploadedImages) {
+    uploadedImages = Array.isArray(req.files.uploadedImages) ? req.files.uploadedImages : [req.files.uploadedImages];
+
+    uploadedImages.forEach(function (value)
+    {
+      newPath = __dirname + "/public/uploads/" + path.parse(value.path).base;
+      fs.renameSync(value.path, newPath);
+
+      uploadedFileNames.push(parseFile(newPath, req));
+    });
+
+    res.type('application/json');
+    res.send(JSON.parse(JSON.stringify({"uploadedFileNames": uploadedFileNames})));
+
+  }
+});
+app.get('/files', function (req, res) 
+{
+  var dirPath = path.normalize('./public/uploads/'); 
+  fs.readdir(dirPath, function (err, files) 
+  {
+      if (err) {
+          throw err;
+          res.send(500, {})
+      }
+
+      var uploadedFiles = files.filter(function (file)
+      {
+          return file !== '.gitignore';
+      }).map(function (file) {
+          return path.join(dirPath, file);
+      }).filter(function (file) {
+          return fs.statSync(file).isFile();
+      }).map(function (file) {
+          return parseFile(file, req);
+      });
+      res.type('application/json');
+      res.send(uploadedFiles);
+  });
+});
+// 多文件上传 下载 end ===
 /*
 app.use(require('cookie-session')({
   "name": aSName,
