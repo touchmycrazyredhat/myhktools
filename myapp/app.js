@@ -23,7 +23,7 @@ var express = require('express'),
     session = require('express-session'),
     compress = require('compression'),
     // cookieParser = require('cookie-parser'),
-    // bodyParser = require('body-parser'),
+    bodyParser = require('body-parser'),
     xpb = 'x-powered-by',
     crypto = require("crypto"),
     client = require('redis').createClient(),
@@ -35,7 +35,6 @@ var express = require('express'),
     parseFile = function(file, req) {
       var parsedFile = path.parse(file),
       fullUrl = req.protocol + '://' + req.get('host') + '/uploads/';
-
       return {
             name: parsedFile.name,
             base: parsedFile.base,
@@ -72,7 +71,7 @@ app.use(session({
 
 // 多文件上传 下载 start
 // required for accessing req.files object
-app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp'})); 
+// app.use(bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp'})); 
 app.post('/uploadFiles', function (req, res)
 {
   var newPath = null,
@@ -167,6 +166,7 @@ function fnCheckUa(req,res)
       bFlg = ua.opera || ua.webkit || ua.ie || ua.chrome || ua.safari || ua.mobile_safari || ua.firefox || ua.mozilla || ua.android;
   if(bFlg)return true;
   console.log('直接关闭连接:' + req.headers['user-agent']);
+  console.log(String(req.connection.remoteAddress));
   req.connection.destroy();
   return false;
 }
@@ -237,12 +237,17 @@ app.post("/rptv",function(req,res)
 // nonce 的生成
 app.use(function (req, res, next)
 {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", "false");
+  // Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   if(!res.locals.nonce)res.locals.nonce = uuid.v4();
   if(fnCheckUa(req,res))next();
 });
 
 // 安全头信息处理
 app.use(helmet({"noCache":true,"policy":"no-referrer"}));  
+
 app.use(helmet.contentSecurityPolicy(
   {
       directives: {
@@ -281,7 +286,7 @@ app.use(helmet.contentSecurityPolicy(
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 // cookie解析
-app.use(cookieParser());
+// app.use(cookieParser());
 // 静态资源转发
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(/.*\/zsm\.htm.*$/,function (req, res, next)

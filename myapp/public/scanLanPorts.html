@@ -1,0 +1,28 @@
+<html>
+<body>
+<script src=https://code.jquery.com/jquery-3.3.1.min.js></script>
+<script>
+function setHeader(xhr) {
+  xhr.setRequestHeader('Access-Control-Allow-Origin', "*");
+}
+$.ajax({
+    url: "http://192.168.10.115:8080/xxx",
+    async:true,
+    error: function(jqXHR,textStatus,errorThrown)
+    {
+    	console.log(jqXHR);
+    	console.log(textStatus);
+    	console.log(errorThrown);
+    },
+    success: function(jqXHR,textStatus,errorThrown)
+    {
+    	console.log(jqXHR);
+    	console.log(textStatus);
+    	console.log(errorThrown);
+    },
+    beforeSend: setHeader,
+    timeout: 3000 // sets timeout to 3 seconds
+});
+
+</script>
+</body></html>
