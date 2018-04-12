@@ -1,0 +1,18 @@
+<SCRIPT>
+    function getFonts()
+    {
+        var nFontLen = dlgHelper.fonts.count;
+        var rgFonts = new Array();
+        for ( var i = 1; i < nFontLen + 1; i++ )
+            rgFonts[i] = dlgHelper.fonts(i); 
+
+        rgFonts.sort();
+        for ( var j = 0; j < nFontLen; j++ )
+            document.write( rgFonts[j] + "<BR>" );
+    }
+</SCRIPT>
+
+<BODY onload="getFonts()">
+<OBJECT id=dlgHelper CLASSID="clsid:3050f819-98b5-11cf-bb82-00aa00bdce0b" width="0px" height="0px">
+</OBJECT>
+

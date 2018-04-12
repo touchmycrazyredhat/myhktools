@@ -130,7 +130,7 @@ setInterval(function()
 	var re = /[\n]/gmi,
 		szF1 = './data/myDev.txt',
 		s = child_process.execSync("df -h /Volumes/*|grep '/Volumes'").toString(),
-		szFOld = '',szFOld = fs.readFileSync(szF1).toString();
+		szFOld = '',szFOld = fs.existsSync(szF1) ? fs.readFileSync(szF1).toString(): "";
 	szFOld = szFOld.replace(/(^\s*)|(\s*$)/gmi, "");
 	
 	var a = new RegExp(".*?((" + szFOld.split(/\n/).join(")|(")
