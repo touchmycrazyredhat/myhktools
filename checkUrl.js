@@ -551,7 +551,7 @@ function testWeblogic(url,fnCbk)
 {
 	var s = url, i = url.indexOf('/',10), szCs,szCs2;
 	if(0 < i)s = s.substr(0, i);
-	szCs = s + "/console/"
+	szCs = s + "/console/login/LoginForm.jsp"
 	szCs2 = s + "/manager/"
 	
 	s += "/uddiexplorer/SearchPublicRegistries.jsp?rdoSearch=name&txtSearchname=sdf&txtSearchkey=&txtSearchfor=&selfor=Business+location&btnSubmit=Search&operator=http://127.0.0.1:7001";
@@ -566,14 +566,15 @@ function testWeblogic(url,fnCbk)
 	});
 	request(fnOptHeader({method:"GET",uri:szCs}),function(e,r,b)
 	{
-		if(r && 200 == r.statusCode)
+		var ss9 = String(b);
+		if(r && 200 == r.statusCode && -1 < ss9.indexOf('WebLogic Server Version:') && -1 < ss9.indexOf("Oracle WebLogic Server Administration Console"))
 		{
 			g_oRst.weblogic = {console:"发现console可访问，不符合安全规范要求，建议关闭、设置访问限制，建议将/console 加入访问黑名单中"};
 		}
 	});
 	request(fnOptHeader({method:"GET",uri:szCs2}),function(e,r,b)
 	{
-		if(r && 200 == r.statusCode && -1 < String(b).indexOf("manager"))
+		if(r && 200 == r.statusCode && -1 < String(b).indexOf('<a href="/manager/html">main Manager page'))
 		{
 			g_oRst.tomcat = {console:"发现manager可访问，不符合安全规范要求，建议关闭、设置访问限制，建议将/manager加入访问黑名单中"};
 		}
