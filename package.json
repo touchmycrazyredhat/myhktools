@@ -16,6 +16,7 @@
     "md5": "",
     "moment": "",
     "net": "",
+    "npm": "^5.8.0",
     "p2pspider": "0.0.4",
     "path": "",
     "request": "",
