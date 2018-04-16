@@ -8,7 +8,7 @@ r.on('log',function(s)
 });
 r.on('info',function(s)
 {
-	// console.log(s);
+	console.log(s);
 });
 r.on('error',function(s)
 {
