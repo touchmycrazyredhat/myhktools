@@ -35,15 +35,16 @@ async.mapLimit(a, 2,function(s,fnCbk1)
 	});
 	r.on('error',function(s,t,o)
 	{
+		console.log('==================');
+		console.log(s);
 		s = String(s);
 		if(-1 < s.indexOf('ping -c 1'))
 		{
-			r.g_szError += url + "\n";
+			r.g_szError += o.url + "\n";
 			r.fs.writeFileSync(r.szErrorPath, r.g_szError);
 		}
-		if(o)console.log(o.url);
+		if(o && o.url)console.log(o.url);
 		console.log('==================');
-		console.log(s);
 	});
 	r.on('vul',function(v,t,s)
 	{
