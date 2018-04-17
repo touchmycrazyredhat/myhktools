@@ -25,6 +25,7 @@ var mysql      = require('mysql'),
 	program = require('commander'),
 	ci = require(__dirname + '/../../commonlib/ci.js'),
 	ipInt = require('ip-to-int'),
+	fs = require('fs'),
 	connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -33,7 +34,7 @@ var mysql      = require('mysql'),
 });
 
 program.version("社工信息查询")
-  .option('-k, --key [value]', '姓名、身份证')
+  .option('-k, --key [value]', '姓名、身份证,node ../myapp/lib/myMysql.js -k ips.txt')
   .parse(process.argv);
 
 connection.connect(function(err)
@@ -80,13 +81,67 @@ function fnQuery(szK)
 	],fnCbk = function()
 	{
 		nC++;
-		if(aSql.length == nC)console.log(a.join("\n"));
+		//if(aSql.length == nC)console.log(a.join("\n"));
 	};
 
 	for(var i = 0; i < aSql.length; i++)
 	{
 		fnDoQuery(aSql[i],szK,a,oTmp,fnCbk);
 	}
+
+	var fnT19 =  function(szIp,fnCbk1)
+	{
+		if(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/gmi.exec(szIp))
+		{
+			var fnX = function(o)
+			{
+				o = fnGetObj(o);
+				if('-' == o.ctj)return;
+				delete o.ips;
+				delete o.ipe;
+				if(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/gmi.exec(szIp))
+					o.ip = szIp;
+				o['ctj'] = (ci[o['ctj']] || '') + o['ctj'];
+
+				console.log([o.ip,o.ctj,o.ctq,o.city]);
+				return o;
+			};
+			fnGetIpInfo(szIp,function(o)
+			{
+				if(1 < o.length)
+				{
+					for(var i = 0; i < o.length; i++)
+					{
+						fnX(o[i]);
+						fnCbk1();
+					}
+				}
+				else fnX(o);
+				fnCbk1();
+			});
+		}
+	};
+	// ip text文件
+	// node ../myapp/lib/myMysql.js -k myLogs.txt
+	if(fs.existsSync(szK))
+	{
+		var a = fs.readFileSync(szK).toString().replace(/\r|(^\s*)|(\s*$)/gmi,'').split(/[\n]/),
+			nY = 1,// 20
+		    nX = a.length % nY,
+		    nC1 = a.length;
+		for(var i = 0; i < a.length; i+=nY)
+		{
+			szK = a.splice(i,nY).join(",");
+			fnT19(szK,function()
+			{
+				if(--nC1 <= 0)
+					fnEnd();
+			});
+		}
+		
+		return;
+	}
+	fnT19(szK,fnCbk);
 	
 }
 
@@ -225,12 +280,14 @@ function fnGetObj(o)
 function fnGetIpInfo(ip,fnCbk)
 {
 	var n = fnGetMuIps(ip);
-	// console.log(n);
+	// console.log("select * from ipInfo where " + n);
 	connection.query(
 	// city='Kunming'"//
 		"select * from ipInfo where " + n
 		, function (error, results, fields) {
 	  if (error) throw error;
+	  if(20 < ip.length)return fnCbk(results);
+
 	  var o = fnGetObj(results[0]);
 	  o.ip = ip;
 	  o['ctj'] = (ci[o['ctj']] || '') + o['ctj'];
@@ -245,8 +302,8 @@ function fnEnd()
 if(program.key)
 {
 	fnQuery(program.key);
-	fnEnd();
 }
+process.on('exit',fnEnd);
 module.exports ={"fnGetIpInfo":fnGetIpInfo,"fnEnd":fnEnd,"fnQuery":fnQuery}
 /*/
 fnGetIpInfo('116.52.138.104',function(o)
