@@ -12,7 +12,7 @@ r.on('info',function(s)
 });
 r.on('error',function(s)
 {
-	console.log(s);
+	// console.log(s);
 });
 // 发现安全问题才会进入这里
 r.on('vul',function(v,t,s)

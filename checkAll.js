@@ -7,7 +7,7 @@ var arg = [],//process.argv.splice(2),
     md5 = require('md5'),
     kkk = require('./lib/core_new.js');
 
-async.mapLimit(a, 3,function(s,fnCbk1)
+async.mapLimit(a, 2,function(s,fnCbk1)
 {
 	
 	var sFn = "./data/" + md5(s) + ".txt";
