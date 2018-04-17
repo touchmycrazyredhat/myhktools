@@ -103,7 +103,7 @@ function fnQuery(szK)
 					o.ip = szIp;
 				o['ctj'] = (ci[o['ctj']] || '') + o['ctj'];
 
-				console.log([o.ip,o.ctj,o.ctq,o.city]);
+				console.log([o.ip,o.ctj,o.ctq,o.city,o.loc1,o.loc2]);
 				return o;
 			};
 			fnGetIpInfo(szIp,function(o)
