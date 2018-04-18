@@ -1,6 +1,4 @@
-本工具以mac os x 10.13.3的环境
-# 巅狼安全 团队倾情奉献
-# 安装支持环境
+# penetration tools
 ## how install
 ```
 brew install node
