@@ -86,7 +86,7 @@ def main():
     defNet = netifaces.gateways()['default'][netifaces.AF_INET]
     g_szGateway = defNet[0]
     # g_data = LoadData()
-    sniff(iface='en1',prn=arp_monitor_callback, filter="ip", store=0)
+    sniff(iface='bridge0',prn=arp_monitor_callback, filter="ip", store=0)
 
 if __name__ == '__main__':
     main()

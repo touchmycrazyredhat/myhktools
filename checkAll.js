@@ -1,6 +1,9 @@
+/*
+node checkAll.js --struts2 tomcat
+*/
 var arg = [],//process.argv.splice(2),
-    // s1 = 0 < arg.length ? arg[0] : require('os').homedir() + "/Desktop/untitled\ folder/allurls.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
-    s1 = "/Users/xiatian/Desktop/k/tm.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
+    s1 = 0 < arg.length ? arg[0] : require('os').homedir() + "/Desktop/untitled\ folder/urls.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
+    // s1 = "/Users/xiatian/Desktop/k/tm.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
     , fs = require('fs')
     , a = fs.readFileSync(s1).toString().trim().split("\n"),
     async = require('async'),
@@ -8,10 +11,12 @@ var arg = [],//process.argv.splice(2),
     md5 = require('md5'),
     kkk = require('./lib/core_new.js');
 
-var g_oUrl = {};
-async.mapLimit(a, 2,function(s,fnCbk1)
+var g_oUrl = {},nX = 0;
+async.mapLimit(a, 2000,function(s,fnCbk1)
 {
-	
+	// console.log("node checkUrl.js -v -u '" + s + "' &"),fnCbk1();if(true)return;
+	nX++;
+	// if(50 > nX)return fnCbk1();
 	var sFn = "./data/" + md5(s) + ".txt";
 	var r = new kkk(s);
 	var sFn = r.rstPath + '/' + r.md5(s) + ".txt";

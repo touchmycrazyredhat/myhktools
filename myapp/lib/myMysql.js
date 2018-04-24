@@ -81,7 +81,7 @@ function fnQuery(szK)
 	],fnCbk = function()
 	{
 		nC++;
-		//if(aSql.length == nC)console.log(a.join("\n"));
+		if(aSql.length == nC)fnEnd(),console.log(a.join("\n"));
 	};
 
 	for(var i = 0; i < aSql.length; i++)

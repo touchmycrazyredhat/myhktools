@@ -47,7 +47,7 @@ def doPack(pkt):
     data = str(pkt)
     
     # print data
-    if pkt[IP].dst == '192.168.24.15' and -1 < data.find("GET ") and -1 < data.find("HTTP/1.1") and -1 < data.find("User-Agent"):
+    if pkt[IP].dst == '192.168.24.10' and -1 < data.find("GET ") and -1 < data.find("HTTP/1.1") and -1 < data.find("User-Agent"):
         data = str(pkt.load)
         print [pkt.src,pkt[IP].src, data]
         # pkt.show()

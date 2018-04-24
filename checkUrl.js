@@ -4,15 +4,15 @@ var r = new kkk();
 // -v 参数才会输出
 r.on('log',function(s)
 {
-	if(s)console.log(s);
+	if(s)console.log(s.toString());
 });
 r.on('info',function(s)
 {
-	if(s)console.log(s);
+	if(s)console.log(s.toString());
 });
 r.on('error',function(s)
 {
-	if(s)console.log(s);
+	if(s)console.log(s.toString());
 });
 // 发现安全问题才会进入这里
 r.on('vul',function(v,t,s)
