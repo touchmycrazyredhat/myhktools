@@ -43,7 +43,10 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	r.on('error',function(s,t,o)
 	{
 		console.log('==================');
-		s = String(s);
+		
+		if(s)
+		s = String(s.stdout||s.stderr);
+	console.log(s);
 		if(-1 < s.indexOf('ping -c 1'))
 		{
 			r.g_szError += o.url + "\n";
@@ -51,7 +54,6 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 			return;
 		}
 		if(o && o.url)console.log(o.url);
-		console.log(s);
 		console.log('==================');
 	});
 	r.on('vul',function(v,t,s)
@@ -61,7 +63,7 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 
 	r.on('ready',function()
 	{
-		console.log('准备好了....');
+		console.log('准备好开弄：' + s);
 		// r.runChecks(url,"weblogic,struts2,web");
 	});
 });
