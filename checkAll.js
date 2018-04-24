@@ -18,7 +18,6 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	// console.log("node checkUrl.js -v -u '" + s + "' &"),fnCbk1();if(true)return;
 	nX++;
 	// if(50 > nX)return fnCbk1();
-	var sFn = "./data/" + md5(s) + ".txt";
 	var r = new kkk(s);
 	var sFn = r.rstPath + '/' + r.md5(s) + ".txt";
 	if(fs.existsSync(sFn))
