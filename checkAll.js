@@ -35,6 +35,11 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	{
 		console.log(s);
 	});
+	r.on('vulinfo',function(s)
+	{
+		console.log(s);
+	});
+	
 	r.on('over',function()
 	{
 		console.log(s);
