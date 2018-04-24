@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
 node checkAll.js --struts2 tomcat
 */
