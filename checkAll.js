@@ -6,6 +6,7 @@ var arg = [],//process.argv.splice(2),
     s1 = 0 < arg.length ? arg[0] : require('os').homedir() + "/Desktop/untitled\ folder/urls.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
     // s1 = "/Users/xiatian/Desktop/k/tm.txt"// "db/allUrls.txt"  // "/Volumes/MyWork/zfweb.txt"//0< arg.length arg[0]
     , fs = require('fs')
+    ,colors = require('colors')
     , a = fs.readFileSync(s1).toString().trim().split("\n"),
     async = require('async'),
     child_process = require('child_process'),
@@ -22,7 +23,10 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	var sFn = r.rstPath + '/' + r.md5(s) + ".txt";
 	if(fs.existsSync(sFn))
 	{
-		console.log(fs.readFileSync(sFn).toString());
+		var szT = fs.readFileSync(sFn).toString();
+		if(-1 < szT.indexOf('"vul": true,'))
+			console.log(r.getTimeCur().red + szT.bgYellow.red);
+		else console.log(r.getTimeCur().bgBlue + szT);
 		// console.log("今天已经执行过了，跳过：" + s);
 		if(!g_oUrl[s])g_oUrl[s] = 1,fnCbk1();
 		return;
@@ -64,7 +68,7 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 
 	r.on('ready',function()
 	{
-		console.log('准备好开弄：' + s);
+		r.log('准备好开弄：' + s);
 		// r.runChecks(url,"weblogic,struts2,web");
 	});
 });
