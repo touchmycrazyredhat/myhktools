@@ -23,7 +23,7 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	var sFn = r.rstPath + '/' + r.md5(s) + ".txt";
 	if(fs.existsSync(sFn))
 	{
-		console.log("已经执行过了，跳过：" + s);
+		console.log("今天已经执行过了，跳过：" + s);
 		if(!g_oUrl[s])g_oUrl[s] = 1,fnCbk1();
 		return;
 	}
