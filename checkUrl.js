@@ -22,6 +22,6 @@ r.on('vul',function(v,t,s)
 
 r.on('ready',function()
 {
-	console.log('准备好了....');
+	// console.log('准备好了....');
 	// r.runChecks();
 });
