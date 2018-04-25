@@ -11,9 +11,9 @@ node checkUrl.js -u http://192.168.10.216:8088/S2-029/default.action --struts2 0
 node checkUrl.js -u http://192.168.10.216:8088/s2-032/memoindex.action --struts2 032
 # node checkUrl.js -u http://192.168.10.216:8088/s2-033/ --struts2 033
 # node checkUrl.js -u http://192.168.10.216:8088/s2-037/ --struts2 037
-node checkUrl.js -u http://192.168.10.216:8082/s2-032 --struts2 045
-node checkUrl.js -u http://192.168.10.216:8082/s2-046/doUpload.action --struts2 046
-node checkUrl.js -u http://192.168.10.216:8082/s2-048/integration/saveGangster.action --struts2 048
-# node checkUrl.js -u http://192.168.10.216:8082/s2-052/ --struts2 052
-node checkUrl.js -u http://192.168.10.216:8082/s2-053/ --struts2 053
+node checkUrl.js -u http://192.168.10.216:8088/s2-032 --struts2 045
+node checkUrl.js -u http://192.168.10.216:8088/s2-046/doUpload.action --struts2 046
+node checkUrl.js -u http://192.168.10.216:8088/s2-048/integration/saveGangster.action --struts2 048
+# node checkUrl.js -u http://192.168.10.216:8088/s2-052/ --struts2 052
+node checkUrl.js -u http://192.168.10.216:8088/s2-053/ --struts2 053
 
