@@ -52,11 +52,13 @@ async.mapLimit(a, 2000,function(s,fnCbk1)
 	});
 	r.on('error',function(s,t,o)
 	{
-		console.log('==================');
-		
 		if(s)
-		s = String(s.stdout||s.stderr);
-		console.log(s);
+		{
+			s = String(s.stdout||s.stderr||s);
+			if(-1 == s.indexOf("ESOCKETTIMEDOUT") && -1 == s.indexOf("ETIMEDOUT"))
+				console.log('=================='),console.log(s);
+			else return;
+		}
 		if(-1 < s.indexOf('ping -c 1'))
 		{
 			r.g_szError += o.url + "\n";
