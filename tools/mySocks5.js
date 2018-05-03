@@ -20,6 +20,7 @@ var socks = require('socksv5'),
   dstAddr: 'ip.cn',
   dstPort: 80 }
 	*/
+	// console.log(info)
 	accept();
 	// 黑名单：deny();
 });

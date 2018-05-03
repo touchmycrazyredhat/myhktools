@@ -12,7 +12,7 @@ r.on('info',function(s)
 });
 r.on('error',function(s)
 {
-	if(s)console.log(r.getTimeCur() + s.toString().red);
+	if(s)console.log(s),console.log(s.toString())//console.log(r.getTimeCur() + s.toString().red);
 });
 r.on('vulinfo',function(s)
 {
