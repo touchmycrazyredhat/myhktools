@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var POP3Client = require("poplib");
 // M.T.X 用于pop3密码暴力破解、弱口令测试
 function fnPop3(opt,fncbk)

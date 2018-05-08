@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
 node tools/mySocks5.js --user mtxuser --password Wr90,_x*d -p 15533
 node proxy/ProxyServer.js --proxy 'socks://mtxuser:Wr90,_x*d@127.0.0.1:15533'

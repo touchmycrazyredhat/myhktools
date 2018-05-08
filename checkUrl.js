@@ -10,9 +10,23 @@ r.on('info',function(s)
 {
 	if(s)console.log(s);
 });
-r.on('error',function(s)
+r.on('error',function(s,t,o)
 {
-	if(s)console.log(s),console.log(s.toString())//console.log(r.getTimeCur() + s.toString().red);
+	if(s)
+	{
+		s = String(s.stdout||s.stderr||s);
+		if(-1 == s.indexOf("ESOCKETTIMEDOUT") && -1 == s.indexOf("ETIMEDOUT"))
+			console.log('=================='),console.log(s);
+		else return;
+	}
+	if(-1 < s.indexOf('ping -c 1'))
+	{
+		r.g_szError += o.url + "\n";
+		r.fs.writeFileSync(r.szErrorPath, r.g_szError);
+		return;
+	}
+	if(o && o.url)console.log(o.url);
+	console.log('==================');
 });
 r.on('vulinfo',function(s)
 {
