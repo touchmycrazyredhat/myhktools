@@ -32,6 +32,7 @@ npm i -g iconv-lite
 npm i -g ip-to-int
 npm i -g jsqr
 npm i -g juicer
+npm i -g levelup
 npm i -g magnet-uri
 npm i -g md5
 npm i -g md5-file
@@ -54,6 +55,7 @@ npm i -g serve-favicon
 npm i -g socks-proxy-agent
 npm i -g socksv5
 npm i -g ssh2
+npm i -g system
 npm i -g text-to-svg
 npm i -g url
 npm i -g useragent
