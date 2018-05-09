@@ -1,3 +1,10 @@
+# fork note[Fork注意] 
+If you do not contribute code, please do not fork, fork version will not automatically update the latest version, you will not enjoy the latest version brings you happiness and surprise
+
+如果你不贡献代码，请不要fork，fork后的版本不会自动同步更新最新的版本，你不会享受到最新版本给你带来的快乐和惊喜
+
+Rúguǒ nǐ bù gòngxiàn dàimǎ, qǐng bùyào fork,fork hòu de bǎnběn bù huì zìdòng tóngbù gēngxīn zuìxīn de bǎnběn, nǐ bù huì xiǎngshòu dào zuìxīn bǎnběn gěi nǐ dài lái de kuàilè he jīngxǐ
+
 # penetration tools
 ## how install
 ```
