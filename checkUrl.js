@@ -35,7 +35,7 @@ r.on('vulinfo',function(s)
 // 发现安全问题才会进入这里
 r.on('vul',function(v,t,s)
 {
-	if(v && v.vul)console.log(v);
+	if(r.program.verbose && v && v.vul)console.log(v);
 });
 
 r.on('ready',function()

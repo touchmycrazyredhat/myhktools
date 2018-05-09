@@ -16,4 +16,5 @@ node checkUrl.js -u http://192.168.10.216:8088/s2-046/doUpload.action --struts2 
 node checkUrl.js -u http://192.168.10.216:8088/s2-048/integration/saveGangster.action --struts2 048
 # node checkUrl.js -u http://192.168.10.216:8088/s2-052/ --struts2 052
 node checkUrl.js -u http://192.168.10.216:8088/s2-053/ --struts2 053
+node checkUrl.js -v -u 'http://192.168.10.216:8088/struts2-rest-showcase/orders/new' --struts2 055
 
