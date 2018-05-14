@@ -13,9 +13,35 @@ export xxx = `whoami`
 xcode-select --install
 cd /usr/local/
 mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
-
+```
+### 服务启动、重启
+```
+brew services list 
+brew services restart mongodb
+```
+## 更新修复brew bug
+```
+https://github.com/Homebrew/brew
+cd "$(brew --repo)" && git fetch && git reset --hard origin/master && brew update
 ```
 
+## How to Set a Specific IP Address via Terminal in OS X
+```
+sudo ipconfig set en1 INFORM 192.168.0.150
+sudo ifconfig en1 down ; sudo ifconfig en1 up
+sudo ipconfig set en1 DHCP
+```
+
+## 获取本机ip
+```
+ifconfig | grep inet | grep -v inet6 | cut -d" " -f2 | tail -n1
+ifconfig | grep inet | grep -v inet6 | cut -d" " -f2,3 
+```
+### 文本中获取本机ip
+```
+cat 内网445漏洞主机.txt|grep -E "\.(28|29|31)\." |cut -d" " -f2 |cut -d":" -f1
+cat 内网445漏洞主机.txt |cut -d" " -f2 |cut -d":" -f1
+```
 ## 去除重复文件
 ```
 brew reinstall fdupes
@@ -43,6 +69,7 @@ cat ok.txt|base64
 ## 查看当前ip
 ```
 ipconfig getifaddr en0
+ipconfig getifaddr bridge0
 ```
 ## 显示网络配置
 ```
@@ -63,6 +90,18 @@ otool -L /usr/libexec/rapportd
 ps -ef |grep -i [r]apport
 ps aux | grep rapportd
 lsof -i -P | grep -i rapport
+```
+### 经典的ps命令
+```
+ ps -aeo ruser,ppid,pid,lstart,%cpu,%mem,etime,tty,args --sort -%cpu,-%mem
+```
+## 查看缓存中的ip的mac地址
+```
+arp -a | grep ":" | grep -v "ff:ff:ff" | awk -F ' '  '{print $2 " "  $4}'
+```
+## 列出当前所有目录、子目录大小
+```
+du -h * | awk "{print $2}"
 ```
 
 ## 查看当前可用wi-fi
@@ -85,11 +124,13 @@ diskutil list
 ```
 ## 文件MD5、sha1、sha512摘要
 ```
+brew install openssl
 md5 ysoserial-master.jar 
 openssl md5 ysoserial-master.jar 
 openssl sha1 ysoserial-master.jar
 openssl sha512 ysoserial-master.jar 
 ```
+openssl是个很好的工具哦
 ## 防火墙命令
 ```
 man pfctl
@@ -131,6 +172,13 @@ lsof -n -i:59395
 ```
 ulimit -n 65535
 ```
+## 经典端口扫描
+```
+brew install nmap
+brew install masscan
+sudo port install arp-scan
+```
+
 ## 发现sniffer的人
 ```
 brew install nmap
@@ -346,6 +394,10 @@ env ARCHFLAGS="-arch i386" gem install pg
 env ARCHFLAGS="-arch i386 -arch x86_64" gem install pg
 ```
 # java渗透，安全审计点滴
+## 查找java进程
+```
+lsof -i -P | grep java | grep LISTEN
+```
 ## 找出没有使用SafeGene的java进程、jvm
 ```
 ps -ef | grep java | grep -v SafeGene.jar
@@ -364,7 +416,264 @@ oracle的虚拟机会判断,如果你带上了这些参数,那么会在内部调
 ```
 ps -ef -U root | grep java
 ```
+## 查找动态sql
+```
+find . -type f -name "*.xml" | xargs grep -n -E '\$[^\$]+\$'
+find . -type f -name "*.class" | xargs grep -n -E 'selsql'
+```
 ## 查找使用了javaagent技术的进程
 ```
 ps -ef | grep "\-javaagent"
+```
+
+## 查看ip区域、ip经纬度
+```
+nmap -n --top-ports 1  --script ip-geolocation-geoplugin 123.125.114.144
+curl http://ipinfo.io/123.125.114.144
+curl ipinfo.io/123.125.114.144
+{
+  "ip": "123.125.114.144",
+  "hostname": "No Hostname",
+  "city": "Beijing",
+  "region": "Beijing",
+  "country": "CN",
+  "loc": "39.9289,116.3883",
+  "org": "AS4808 China Unicom Beijing Province Network"
+geoiplookup -d /opt/local/share/GeoIP -v -i -l  123.125.114.144
+nmap -n --top-ports 1 --script ip-geolocation-maxmind --script-args ip-geolocation.maxmind_db=/opt/local/share/GeoIP/GeoLiteCity-Blocks.csv 123.125.114.144
+```
+## 发现抓包模式的机器
+```
+nmap -sV --script=sniffer-detect 192.168.24.10
+Host script results:
+|_ sniffer-detect: Likely in promiscuous mode (tests: "11111111")
+```
+## 用nc进行文件传输
+### 在客户端使用
+```
+nc -nv target_host target_port < file.txt
+```
+### 在服务器端使用
+```
+nc -l port > file.txt
+```
+## 使用默认系统ruby版本
+```
+rvm use system --default
+```
+## 磁盘空间情况
+```
+df -h | grep -v 100%
+```
+
+## 挂载linux系统文件
+```
+sudo sshfs -o allow_other,defer_permissions root@192.168.10.115:/MyWork /usr/local/droplet
+sudo umount /usr/local/droplet
+Z2I|l6b9QGS5*
+sudo umount /usr/local/droplet;sudo sshfs -o allow_other,defer_permissions root@23.105.209.65:/usr/mtx/myapp /usr/local/droplet
+```
+
+## jar溯源、审计
+```
+brew install  dependency-check
+dependency-check --enableExperimental --project "洛阳市住房公积金管理信息系统升级改造项目jar溯源" -o all_jar溯源.html --scan /usr/local/droplet/webapps/lyhf/WEB-INF/lib/
+cd /root/Downloads/dependency-check/
+sh ./bin/dependency-check.sh --enableExperimental --project "All jar risk" -o all_jar.html --scan /MyWork/Project/**/
+```
+## java源码溯源、java源码审计
+```
+$ java -jar lib/findbugs.jar -h
+Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
+edu.umd.cs.findbugs.gui2.Driver [options] [project or analysis results file]
+Options:
+  General FindBugs options:
+    -project <project>                  analyze given project
+    -home <home directory>              specify FindBugs home directory
+    -pluginList <jar1[:jar2...]>        specify list of plugin Jar files to load
+    -effort[:min|less|default|more|max] set analysis effort level
+    -adjustExperimental                 lower priority of experimental Bug Patterns
+    -workHard                           ensure analysis effort is at least 'default'
+    -conserveSpace                      same as -effort:min (for backward compatibility)
+    -f <font size>                      set font size
+    -clear                              clear saved GUI settings and exit
+    -priority <thread priority>         set analysis thread priority
+    -loadBugs <saved analysis results>  load bugs from saved analysis results
+    -d                                  disable docking
+    --nodock                            disable docking
+    -look[:plastic|gtk|native]          set UI look and feel
+
+java -jar /Users/${xxx}/safe/top20/findbugs-3.0.1/lib/findbugs.jar -sortByClass -low -html -output myRst.html .
+
+
+java -jar /Users/${xxx}/safe/top20/findbugs-3.0.1/lib/findbugs.jar -sortByClass -pluginList /Users/${xxx}/safe/top20/findbugs-3.0.1/plugin/findsecbugs-plugin-1.6.0.jar -low -html -output cdsb.html /Volumes/mtx_hktalent/2017/成都三版\ 项目war包/cdsb/WEB-INF/classes 
+java -jar /Users/${xxx}/safe/top20/findbugs-3.0.1/lib/findbugs.jar -sortByClass -low -html -output Ta3.html  /Volumes/mtx_hktalent/2017/成都三版\ 项目war包/sxdy/WEB-INF/lib/ta3*.jar
+```
+
+## 查看历史连接过的wi-fi
+```
+networksetup -listpreferredwirelessnetworks en0
+defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences| sed 's|\./|`pwd`/|g' | sed 's|.plist||g'|grep 'LastConnected' -A 7
+defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences |grep SSIDString
+defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences |grep SSIDString
+```
+
+## 安全审计命令
+```
+vi /usr/local/Cellar/lynis/2.4.0/default.prf 
+lynis audit system
+```
+## go语言环境更新
+```
+/usr/local/opt/go/bin/gopm
+```
+## 一些链接，优化存储空间
+```
+ln -s /Volumes/data/iBooks /Users/${xxx}/Library/Containers/com.apple.BKAgentService/Data/Documents/iBooks
+ln -s /Volumes/data/iBooks /Users/${xxx}/iBooks
+ln -s /Volumes/data/Foxmail /Users/${xxx}/Library/Containers/com.tencent.Foxmail/Data/Library/Foxmail
+```
+## 修复mysql
+```
+cd /usr/local/mysql;sudo chown -R mysql:_mysql  data
+```
+### mysql无法启动修正
+```
+cd /usr/local/mysql
+sudo chown -R _mysql:staff *
+```
+## 查看各磁盘使用情况
+```
+df -h
+```
+## 查找大于1G的文件
+```
+find . -type f -size +1000000k -exec ls -lh {} \;
+```
+## 查找所有连接
+```
+sudo find / -type l -exec ls -la {} \;
+sudo find / -type l -exec ls -la {} \; | grep “/Volumes/”
+```
+
+## web应用慢速DDOS攻击测试
+```
+slowhttptest -v 3 -H -B -R -X -o QIMS.html -c 200 -u http://192.168.24.14:8079/QIMS/login.jsp?test=true -k 10 -g
+```
+## 并发测试
+```
+以苹果系统为例
+brew install wrk
+wrk -t12 -c400 -d30s http://erp.xxx.com:8082
+```
+## linux查看进程
+```
+ ps -ef | grep -v -E "\[" | awk '{print $8;}'|sort|uniq|grep "/"
+ ps -aeo args --sort -%cpu,-%mem | sort|uniq 
+```
+## linux查找可疑连接
+```
+netstat -anlp | grep -v "unix " | grep -v "0.0.0.0:\*" | grep -v ":::\*" | grep -v "/mysqld" | grep -v "/oracle" | grep -v "/ssh"|grep -v "State I-Node" |grep -v "127.0.0.1" |grep -v "Address Foreign Address" | awk '{print $5,$6,$7,$8,$9,$10,$11;}' | grep -v "192.168." | sed 's/::ffff://'| sed 's/ESTABLISHED//'| sed 's/SYN_SENT//'|grep -v "I-Node"| grep -v "Foreign Address" | grep -v "::1:"
+https://github.com/NetSPI/PowerUpSQL
+http://www.freebuf.com/sectool/131550.html
+netstat -anp | grep -v "unix " | grep -v "0.0.0.0:\*" | grep -v ":::\*" | grep -v "/mysqld" | grep -v "/oracle" | grep -v "/ssh"|grep -v "State I-Node" | grep -v "servers and established"  |grep -v "127.0.0.1" | grep -v  established |grep -v "Address Foreign Address" | awk '{print $5,$6,$7,$8,$9,$10,$11;}' | grep -v "192.168." | sed 's/::ffff://'| sed 's/ESTABLISHED//'| sed 's/SYN_SENT//'|grep -v "I-Node"| grep -v "Foreign Address" | grep -v "::1:" | sed 's/FIN_WAIT2 - //' | sed 's/CLOSE_WAIT//'| sed 's/LAST_ACK -//'| sed 's/TIME_WAIT -//'|sort|uniq 
+```
+## 苹果系统查看可疑连接
+```
+netstat -A | grep -E "tcp4|udp4" | grep -E '\d+.\d+.\d+.\d+'
+```
+## 获取所有磁盘信息
+```
+diskutil info -all
+```
+## 映射ntfs磁盘可读写
+```
+mkdir /Users/${xxx}/C
+sudo umount /Users/${xxx}/C
+sudo mount -t ntfs -o nobrowse,rw /dev/disk5s1 /Users/${xxx}/C
+```
+## nessus启动
+```
+sudo /Library/Nessus/run/sbin/nessusd start
+```
+## nessus连接
+```
+/Library/Nessus/run/var/nessus/plugins-code.db
+https://localhost:8834/#/
+```
+
+## 去除重复数据
+```
+cat xiaozu.txt |sort|uniq
+```
+## 查看各磁盘情况
+```
+diskutil list
+```
+## 查看端口的连接
+```
+netstat -na | grep 8080
+netstat -na | grep tcp4 | grep -v "*.*" | grep -v "127.0.0.1" | awk '{print $5;}'
+```
+## 扫描mac地址信息
+```
+sudo arp-scan 192.168.1.0/16 |grep '\d*\.\d*\.\d*\.\d*' | grep -v DUP
+sudo arp-scan --localnet|grep '\d*\.\d*\.\d*\.\d*' | grep -v DUP
+sudo arp-scan --localnet| grep -v DUP | grep -e '\d*\.\d*\.'
+sudo arp-scan 192.168.0.1/16
+sudo arp-scan --interface=en0 --localnet| grep -v DUP | grep -e '\d*\.\d*\.'
+sudo arp-scan 192.168.0.1/16| grep -v DUP | grep -e '\d*\.\d*\.'
+```
+## 启动mysql
+```
+sudo chown -R _mysql:_mysql /usr/local/mysql/data
+/usr/local/mysql/support-files/mysql.server start
+```
+
+## 修改mac地址不需要停网卡
+```
+networksetup -listallhardwareports
+Hardware Port: Wi-Fi
+Device: en0
+Ethernet Address: b8:e8:56:02:4e:8c
+
+Hardware Port: Bluetooth PAN
+Device: en2
+Ethernet Address: b8:e8:56:02:4e:8d
+
+Hardware Port: Thunderbolt 1
+Device: en1
+Ethernet Address: 32:00:17:ff:a0:00
+
+Hardware Port: Thunderbolt Bridge
+Device: bridge0
+Ethernet Address: 32:00:17:ff:a0:00
+手机mac地址54:9F:13:1A:CD:78
+sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
+echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:56:78:88
+echo ${rtpswd} | sudo -S ifconfig en0 ether  28:d2:48:6d:1b:88
+
+sudo ifconfig en0 ether 54:9F:13:1A:CD:78
+sudo ifconfig en0 ether  88:BB:8B:6b:88:86
+
+sudo ifconfig bridge0 ether 8A:73:58:25:66:D5
+sudo ifconfig bridge0 ether AB:CD:78:12:34:56
+
+sudo ifconfig bridge0 inet6  8888::bbbb:6666:555:8888%bridge0 prefixlen 64 secured scopeid 0x6
+sudo ifconfig bridge0 inet6  '8888::bbbb:6666:555:8888%bridge0 prefixlen 64 secured scopeid 0x6'
+```
+
+## 关闭ipv6
+```
+networksetup -setv6off wi-fi
+networksetup -setv6off bridge0
+```
+## 查看IP
+```
+ifconfig en0
+```
+## 批量杀进程
+```
+ ps -ef | grep postgres |grep -v grep|cut -c 6-11|xargs kill -9
+ ps -ef | grep port |grep -v grep|cut -c 6-11|xargs kill -9
 ```
