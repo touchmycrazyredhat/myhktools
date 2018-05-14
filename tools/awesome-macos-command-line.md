@@ -1,10 +1,13 @@
-xxx# mac os 系统完美命令大全
+# mac os 系统完美命令大全
 author: M.T.X. 2018-05-14 hktalent@qq.com 
 <hr>
 ## other awesome-macos-command-line
 https://github.com/hktalent/awesome-macos-command-line
 
-
+### 设置当前用户，后面的命令才更好使用
+```
+export xxx = `whoami`
+```
 ## brew install
 ```
 xcode-select --install
@@ -94,10 +97,10 @@ sudo pfctl -t badhosts -T add 192.168.24.180
 sudo pfctl -t badhosts -T show
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/local/bin/node
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/bin/ruby
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Users/xxx/.rvm/rubies/ruby-2.4.3/bin/ruby
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Users/xxx/.rvm/rubies/ruby-2.4.1/bin/ruby
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Users/${xxx}/.rvm/rubies/ruby-2.4.3/bin/ruby
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Users/${xxx}/.rvm/rubies/ruby-2.4.1/bin/ruby
 
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Users/xxx/.rvm/rubies/ruby-2.4.3/bin/ruby
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Users/${xxx}/.rvm/rubies/ruby-2.4.3/bin/ruby
 ```
 
 ## 磁盘检查
@@ -178,7 +181,7 @@ mv *.zip /Volumes/mtx_hktalent/bak/
 
 ### 这些应用占用的空间非常大
 ```
-/Users/xxx/Library/Containers/com.tencent.Foxmail
+/Users/${xxx}/Library/Containers/com.tencent.Foxmail
 com.tencent.qq
 com.tencent.xinWeChat
 com.tencent.QQMusicMac
@@ -187,7 +190,7 @@ sudo mv /Users/`whoami`/Library/Containers/com.tencent.Foxmail /Volumes/mtx_hkta
 ln -s /Volumes/mtx_hktalent/`whoami`/com.tencent.Foxmail /Users/`whoami`/Library/Containers/com.tencent.Foxmail 
 
 sudo mv /Users/`whoami`/Library/Containers/com.tencent.xinWeChat /Volumes/mtx_hktalent/`whoami`/
-ln -s /Volumes/mtx_hktalent/xxx/com.tencent.xinWeChat /Users/`whoami`/Library/Containers/com.tencent.xinWeChat
+ln -s /Volumes/mtx_hktalent/${xxx}/com.tencent.xinWeChat /Users/`whoami`/Library/Containers/com.tencent.xinWeChat
 
 sudo mv /Users/`whoami`/Library/Containers/com.tencent.qq /Volumes/mtx_hktalent/`whoami`/
 ln -s /Volumes/mtx_hktalent/`whoami`/com.tencent.qq /Users/`whoami`/Library/Containers/com.tencent.qq
@@ -226,7 +229,7 @@ rm -rf "/Users/`whoami`/Library/Developer/Xcode/iOS DeviceSupport/*"
 rm -rf "/Users/`whoami`/Library/Application Support/iPhone Simulator/7.1/tmp/*"
 sudo rm -rf /System/Library/Caches/com.apple.coresymbolicationd/data
 ls -la /opt/local/var/macports
-lrwxr-xr-x  1 xxx  staff  36 Aug  7  2016 /opt/local/var/macports -> /Volumes/BOOK/`whoami`/local/macports
+lrwxr-xr-x  1 ${xxx}  staff  36 Aug  7  2016 /opt/local/var/macports -> /Volumes/BOOK/`whoami`/local/macports
 ln -s ~/macports  /opt/local/var/macports
 rm /opt/local/var/macports
 ln -s /Volumes/BOOK/`whoami`/local/macports /opt/local/var/macports
@@ -243,7 +246,7 @@ sudo proxychains4 -f ~/pc.conf port -d sync
 其中-v表示verbose（冗余），即把信息都显示到Shell上。
 ### 更新metasploit-framework
 ```
-cd /Users/xxx/safe/metasploit-framework;./msfupdate;bundle install;gem update --system;gem update
+cd /Users/${xxx}/safe/metasploit-framework;./msfupdate;bundle install;gem update --system;gem update
 pip3 list --outdated | sed 's/(.*//g' | xargs sudo pip3 install -U --trusted-host pypi.douban.com  -i http://pypi.douban.com/simple
 ```
 ### 更新python anaconda是所有包
@@ -266,7 +269,7 @@ git clone https://github.com/scipag/vulscan.git
 nmap -sV --script=vulscan/vulscan.nse www.example.com
 SQLMap
 
-python /Users/xxx/safe/top20/sqlmap-dev/sqlmap.py --update
+python /Users/${xxx}/safe/top20/sqlmap-dev/sqlmap.py --update
 ```
 ### 更新kali中openvas;更新kali linux
 ```
@@ -276,8 +279,8 @@ apt-get update;apt-get upgrade;apt-get dist-upgrade;apt-get autoclean
 ```
 ### brew自身更新和更新所有软件
 ```
-sudo chown -R xxx:wheel /usr/local/Homebrew
-cd /usr/local && sudo chown -R xxx:staff .
+sudo chown -R ${xxx}:wheel /usr/local/Homebrew
+cd /usr/local && sudo chown -R ${xxx}:staff .
 brew update;brew upgrade
 ```
 ### nessus升级
@@ -291,7 +294,7 @@ sudo /Library/Nessus/run/sbin/nessusd start
 ```
 cd /Volumes/BOOK/安全/project;
 find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
-cd /Users/xxx/safe;
+cd /Users/${xxx}/safe;
 find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
 ```
 ### 批量更新python
@@ -335,10 +338,33 @@ npm update -g;npm -g outdated
 ### 修复metasploit的ruby环境
 ```
 sudo chmod go-w /usr/local/bin;sudo chmod 775 /usr/local;sudo chmod 775 /usr/local/bin;sudo chmod 775 /usr/local/ant;sudo chmod 775 /usr/local/ant/bin
-cd /Users/xxx/safe/metasploit-framework;rvm --default use 2.3.1;./msfupdate
-cd /Users/xxx/safe/metasploit-framework;./msfupdate
+cd /Users/${xxx}/safe/metasploit-framework;rvm --default use 2.3.1;./msfupdate
+cd /Users/${xxx}/safe/metasploit-framework;./msfupdate
 bundle update
 env ARCHFLAGS="-arch x86_64" bundle install
 env ARCHFLAGS="-arch i386" gem install pg
 env ARCHFLAGS="-arch i386 -arch x86_64" gem install pg
+```
+# java渗透，安全审计点滴
+## 找出没有使用SafeGene的java进程、jvm
+```
+ps -ef | grep java | grep -v SafeGene.jar
+```
+## 查找可能存在远程攻击漏洞的进程
+```
+ps -ef | grep jmxremote
+-Dcom.sun.management.jmxremote.port=9999
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+```
+注意：
+oracle的虚拟机会判断,如果你带上了这些参数,那么会在内部调用sun.management.Agent.premain
+属于Java SE的instrumentation技术.
+## 查找root启动的java进程
+```
+ps -ef -U root | grep java
+```
+## 查找使用了javaagent技术的进程
+```
+ps -ef | grep "\-javaagent"
 ```
