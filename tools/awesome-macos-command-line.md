@@ -1,14 +1,16 @@
 # mac os 系统完美命令大全
 author: M.T.X. 2018-05-14 
-<hr>
+
 ## other awesome-macos-command-line
 ```
 https://github.com/hktalent/awesome-macos-command-line
 ```
+
 ### 设置当前用户，后面的命令才更好使用
 ```
 export xxx = `whoami`
 ```
+
 ## brew install
 ```
 xcode-select --install
@@ -16,24 +18,29 @@ cd /usr/local/
 mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
 brew update;brew upgrade
 ```
+
 ### 服务启动、重启
 ```
 brew services list 
 brew services restart mongodb
 ```
+
 ## 更新修复brew bug
 ```
 https://github.com/Homebrew/brew
 cd "$(brew --repo)" && git fetch && git reset --hard origin/master && brew update
 ```
+
 ## 强烈推荐，终端工具	
 ```
 brew install caskroom/cask/iterm2
 ```
+
 ## wget好东西
 ```
 brew install wget
 ```
+
 ### 学习资料抓取
 ```
 wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/ruby/ruby-intro.html
