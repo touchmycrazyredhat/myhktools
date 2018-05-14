@@ -1,9 +1,10 @@
 # mac os 系统完美命令大全
-author: M.T.X. 2018-05-14 hktalent@qq.com 
+author: M.T.X. 2018-05-14 
 <hr>
 ## other awesome-macos-command-line
+```
 https://github.com/hktalent/awesome-macos-command-line
-
+```
 ### 设置当前用户，后面的命令才更好使用
 ```
 export xxx = `whoami`
@@ -13,6 +14,7 @@ export xxx = `whoami`
 xcode-select --install
 cd /usr/local/
 mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+brew update;brew upgrade
 ```
 ### 服务启动、重启
 ```
@@ -533,6 +535,11 @@ ln -s /Volumes/data/iBooks /Users/${xxx}/Library/Containers/com.apple.BKAgentSer
 ln -s /Volumes/data/iBooks /Users/${xxx}/iBooks
 ln -s /Volumes/data/Foxmail /Users/${xxx}/Library/Containers/com.tencent.Foxmail/Data/Library/Foxmail
 ```
+## 命令启动mysql
+```
+ /usr/local/mysql/bin/mysqld --user=_mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --plugin-dir=/usr/local/mysql/lib/plugin --log-error=/usr/local/mysql/data/mysqld.local.err --pid-file=/usr/local/mysql/data/mysqld.local.pid
+```
+
 ## 修复mysql
 ```
 cd /usr/local/mysql;sudo chown -R mysql:_mysql  data
@@ -676,4 +683,35 @@ ifconfig en0
 ```
  ps -ef | grep postgres |grep -v grep|cut -c 6-11|xargs kill -9
  ps -ef | grep port |grep -v grep|cut -c 6-11|xargs kill -9
+```
+## 修复磁盘
+```
+fsck_hfs -fy -x /dev/rdisk2s2
+```
+
+## 关闭ipv6
+```
+networksetup -listnetworkserviceorder
+networksetup -setv6off 'Wi-Fi'
+networksetup -setv6off 'iPhone USB'
+networksetup -setv6off 'Bluetooth PAN'
+networksetup -setv6off 'Thunderbolt'
+```
+## 查找大于1G的文件
+```
+find . -type f -size +100000k -exec ls -lh {} \;
+```
+## 16进制显示
+```
+xxd  ~/C/targets.txt 
+```
+
+## 手机短信存储位置
+```
+/Users/${xxx}/Library/Containers/com.apple.iChat/Data/Library/Messages/Archive
+/Users/${xxx}/Library/Containers/com.apple.iChat/Data/
+```
+## 修复airport
+```
+sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
 ```
