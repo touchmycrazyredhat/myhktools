@@ -30,6 +30,22 @@ cd "$(brew --repo)" && git fetch && git reset --hard origin/master && brew updat
 ```
 brew install caskroom/cask/iterm2
 ```
+## wget好东西
+```
+brew install wget
+```
+### 学习资料抓取
+```
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/ruby/ruby-intro.html
+
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/python
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/python3
+
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" https://www.w3cschool.cn/ruby/
+
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" https://www.w3cschool.cn/python/
+```
+
 ## 文本转语音
 ```
 say -v Ting-Ting -f file.txt -o "output.m4a"
@@ -837,4 +853,51 @@ Explanation:
 	•	-o - logical OR operator
 	•	-iname - like -name, but the match is case insensitive
 
+```
+## 新硬盘格式化bug解决
+```
+问题解决：
+MediaKit reports not enough space on device for requested operation.
+https://mycyberuniverse.com/web/how-fix-mediakit-reports-not-enough-space-on-device.html
+
+1、diskutil list
+
+/dev/disk4 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      GUID_partition_scheme                        *4.0 TB     disk4
+   1:         Microsoft Reserved                         134.2 MB   disk4s1
+   2:       Microsoft Basic Data                         4.0 TB     disk4s2
+
+2、diskutil unmountDisk force disk4
+
+3、sudo dd if=/dev/zero of=/dev/disk4 bs=1024 count=1024
+格式化盘
+4、diskutil partitionDisk disk4 GPT JHFS+ "Elements" 0g
+
+5、用系统的disk utility工具分区
+```
+## 开启wi-fi，查看自己当前ip的经纬度
+```
+https://maps.googleapis.com/maps/api/browserlocation/json?browser=firefox&key=AIzaSyDBgL8fm9bD8RLShATOLI1xKmFcZ4ieMkM&sensor=true
+https://github.com/lypiut/WhereAmI
+$ git clone https://github.com/victor/whereami.git whereami
+$ cd whereami
+$ git checkout swift
+$ git submodule update --init --recursive
+$ xctool install
+https://github.com/BenConstable/where-am-i
+npm install -g --save where-am-i
+var WhereAmI = require('where-am-i')
+  , help = new WhereAmI()
+help.findMe(
+    function (place) {
+        // Located successfully!
+        console.log(place.lat)
+        console.log(place.lng)
+        console.log(place.country.name)
+    }
+  , function (err) {
+        // Could not locate!
+    }
+)
 ```
