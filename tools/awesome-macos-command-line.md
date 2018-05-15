@@ -16,7 +16,7 @@ export xxx = `whoami`
 xcode-select --install
 cd /usr/local/
 mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
-brew update;brew upgrade
+brew update;brew upgrade;brew cleanup
 ```
 
 ### 服务启动、重启
