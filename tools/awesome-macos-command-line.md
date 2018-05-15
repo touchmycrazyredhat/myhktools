@@ -34,6 +34,12 @@ brew reinstall --HEAD --with-rtmpdump --with-openssl --with-nghttp2 --with-libme
 vi ~/.curlrc
 --ciphers DEFAULT
 ```
+### DEF CON China 1资料下载
+
+```
+brew install wget
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg,ppt,pptx,pdf,doc,docx,zip,rar" https://media.defcon.org/DEF%20CON%20China%201/
+```
 
 ### 服务启动、重启
 ```
