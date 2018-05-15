@@ -19,6 +19,22 @@ mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar 
 brew update;brew upgrade;brew cleanup
 ```
 
+## curl 安装最新的
+为了规避在使用proxifier,proxychanis的时候发生
+https://github.com/libressl-portable/portable/issues/369的问题
+
+```
+fatal: unable to access 'https://github.com/Homebrew/homebrew-services/': LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
+
+curl: (35) LibreSSL SSL_connect: SSL_ERROR_SYSCALL
+
+这样的错误
+brew install LibreSSL
+brew reinstall --HEAD --with-rtmpdump --with-openssl --with-nghttp2 --with-libmetalink --with-gssapi --with-c-ares  curl
+vi ~/.curlrc
+--ciphers DEFAULT
+```
+
 ### 服务启动、重启
 ```
 brew services list 
