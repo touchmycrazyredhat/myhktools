@@ -610,15 +610,6 @@ find . -type f -size +100000k -exec ls -lh {} \;
 xxd  ~/C/targets.txt 
 ```
 
-## 手机短信存储位置
-```
-/Users/${xxx}/Library/Containers/com.apple.iChat/Data/Library/Messages/Archive
-/Users/${xxx}/Library/Containers/com.apple.iChat/Data/
-```
-## 修复airport
-```
-sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/local/bin/airport
-```
 ## 批量去除背景
 ```
 Adobe Acrobat Pro DC
@@ -865,13 +856,17 @@ new java.io.ObjectInputStream(new java.util.zip.GZIPInputStream(request.getParam
 
 new java.io.ObjectInputStream(new java.util.zip.DeflaterInputStream(request.getInputStream())).readObject();
 
-2、将【低于、等于commons-collections-3.2.2.jar】版本的放入工程、加载并一起打包发布，或者jre的默认加载目录中
+2、将【低于commons-collections-3.2.2.jar】版本的放入工程、加载并一起打包发布，或者jre的默认加载目录中
 别管他用没有用，神一样的后门就实现了
 如果中间件是root启动，那么，恭喜你，你已经拥有了这台服务器的超级控制权限了
 
 3、这个故事告诉大家：没有用任何api的jar需要删除，或者升级到安全版本
 否则心跳加速、血压升高的故事会跌宕起伏...
 ```
+
+# 一个简单的C语言木马
+注意：这是没有任何恶意代码的，target.c( https://github.com/0x00pf/0x00sec_code)
+
 
 # 各种注入攻击
 ```
@@ -896,3 +891,23 @@ xxx
 
 ```
 
+# 开启arp欺骗
+
+```
+echo ${rtpswd} | sudo -S ettercap -i en0 -TqM ARP:REMOTE ///
+```
+
+# meterpreter后渗透
+## 后渗透常用批量脚本
+https://github.com/npocmaka/batch.scripts
+## 查找大于1G文件
+
+```
+1、查看有哪些磁盘
+show_mount
+2、进入shell
+shell
+3、切换到根目录
+f:
+cd \
+forfiles /S /M * /C "cmd /c if @fsize GEQ 1073741824 echo @path"

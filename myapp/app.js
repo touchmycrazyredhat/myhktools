@@ -252,7 +252,7 @@ app.use(helmet.contentSecurityPolicy(
   {
       directives: {
         // 包含下面注释的默认设置
-        // "defaultSrc": ["'self'"],
+        "defaultSrc": ["'self'"],
         // "frameAncestors":["ALLOW-FROM *"],
         // "frameAncestors":["'127.0.0.1:3000'"],
         /*

@@ -4,6 +4,18 @@
 # Date: 01/24/2014 12:30:18 
 # Keywords: Metadata, Storage, Files 
 # comments: 获取文件信息，从而得到敏感信息Uses the Shell.APplication object to get file metadata 
+# Windows 10	No
+# Windows Server 2012	Yes
+# Windows Server 2012 R2	No
+# Windows Server 2008 R2	Yes
+# Windows Server 2008	Yes
+# Windows Server 2003	Yes
+# Windows Server 2016	No
+# Windows 8	Yes
+# Windows 7	Yes
+# Windows Vista	Yes
+# Windows XP	Yes
+# Windows 2000	No
 # Gets all the metadata and returns a custom PSObject 
 # it is a bit slow right now, because I need to check all 266 fields 
 # for each file, and then create a custom object and emit it. 
