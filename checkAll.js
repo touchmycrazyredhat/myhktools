@@ -3,7 +3,7 @@
 node checkAll.js --struts2 tomcat
 */
 var arg = [],//process.argv.splice(2),
-    s1 = "/Users/xiatian/Desktop/mz.txt"//0 < arg.length ? arg[0] : require('os').homedir() + "/Desktop/untitled\ folder/urls.txt"
+    s1 = "/Users/xiatian/Desktop/untitled folder/hbww.txt"//0 < arg.length ? arg[0] : require('os').homedir() + "/Desktop/untitled\ folder/urls.txt"
     , fs = require('fs')
     ,colors = require('colors')
     , a = fs.readFileSync(s1).toString().trim().split("\n"),

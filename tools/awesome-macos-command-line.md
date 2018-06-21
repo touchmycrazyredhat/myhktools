@@ -1,11 +1,51 @@
 # mac os 系统完美命令大全
 author: M.T.X. 2018-05-14 
+Twitter: @Hktalent3135773
 
 ## other awesome-macos-command-line
 ```
+https://github.com/iCHAIT/awesome-macOS
 https://github.com/herrbischoff/awesome-macos-command-line
+https://github.com/agarrharr/awesome-macos-screensavers
+https://github.com/yenchenlin/awesome-watchos
+```
+## Swiss Army Knife for macOS
+```
+brew install m-cli
 ```
 
+### fish 命令自动补全
+fish is a smart and user-friendly command line
+shell for macOS, Linux, and the rest of the family.
+https://fishshell.com
+
+```
+brew install fish
+```
+
+## 转换pdf为png
+```
+convert -thumbnail x500 2017新年给大家的第一封信.pdf[0] thumb.png
+# 批量转换
+gs -sDEVICE=pngalpha -o file-%03d.png -r144  '2017新年给大家的第一封信.pdf'
+
+gs -sDEVICE=png16m -dTextAlphaBits=4 -r300 -o a.png 'one.pdf'
+
+gs -sDEVICE=jpeg -dTextAlphaBits=4 -r300 -o a.jpg a.pdf
+
+brew cask install inkscape
+inkscape "/Users/`whoami`/Desktop/one.pdf" -z --export-dpi=600 --export-area-drawing --export-png="/Users/`whoami`/Desktop/one.png"
+
+convert  -density 300  -define pdf:use-cropbox=true /Users/`whoami`/Desktop/one.pdf   /Users/`whoami`/Desktop/t.png
+
+# https://stackoverflow.com/questions/653380/converting-a-pdf-to-png
+```
+
+### 合并merge图片文件 images file为一个one image
+```
+convert t-0.png t-1.png t-2.png t-3.png -append group_1.png
+
+```
 ### 设置当前用户，后面的命令才更好使用
 ```
 export xxx = `whoami`
@@ -135,10 +175,18 @@ cat 内网445漏洞主机.txt |cut -d" " -f2 |cut -d":" -f1
 brew reinstall fdupes
 fdupes -d  -N -r  /Volumes/mtx_hktalent/bak/loot
 fdupes -d  -N -r  /Volumes/mtx_hktalent/Awesome
+fdupes -d  -N -s -r  /Volumes/mtx_hktalent/
 -s --symlinks    	follow symlinks
 -H --hardlinks   	normally, when two or more files point to the same
                   	disk area they are treated as non-duplicates; this
                   	option will change this behavior
+```
+# 屏幕截屏为gif
+```
+brew cask install gifcapture
+Drag and resize to specify capture window
+Press Cmd+R to start recording
+Press Cmd+S to stop and save
 ```
 
 ## 查看数据包及路由情况
@@ -183,7 +231,12 @@ networksetup -getmacaddress wi-fi
 ```
 ## 参看特定端口进程、使用情况
 ```
+netstat -lnta|grep LISTEN|grep tcp4
 sudo lsof -i :5432
+lsof -i -P | grep -i rapport
+ps aux | grep rapportd
+ps -ef | grep rapportd
+sudo pkill -9 rapportd;sudo kill -9 rapportd;ps aux | grep rapportd
 ```
 ## 查看进城信息
 ```
@@ -403,7 +456,7 @@ brew
 brew update;brew upgrade
 nmap
 sudo nmap --script-updatedb
-/usr/local/Cellar/nmap/7.60/share/nmap/scripts
+/usr/local/Cellar/nmap/*/share/nmap/scripts
 git clone https://github.com/scipag/vulscan.git
 nmap -sV --script=vulscan/vulscan.nse www.example.com
 SQLMap
@@ -458,15 +511,6 @@ gem update --system
 gem update
 gem install rubygems-update;update_rubygems
 ```
-### jar安全溯源工具更新库
-```
-sudo proxychains4 -f ~/pc.conf dependency-check  --updateonly
-cd /usr/local/Cellar/dependency-check/3.0.1/libexec/data/;
-/usr/local/Cellar/dependency-check/3.0.1/libexec/data/mycp;ls -la;ls -la /Volumes/mtx_hktalent/bak/
-295436288 Dec 27 10:32 dc.h2.db
-which dependency-check 
-/usr/local/bin/dependency-check
-```
 ### nodeJs完全更新
 ```
 npm cache clean --force
@@ -484,70 +528,7 @@ env ARCHFLAGS="-arch x86_64" bundle install
 env ARCHFLAGS="-arch i386" gem install pg
 env ARCHFLAGS="-arch i386 -arch x86_64" gem install pg
 ```
-# java渗透，安全审计点滴
-## 查找java进程
-```
-lsof -i -P | grep java | grep LISTEN
-```
-## 找出没有使用SafeGene的java进程、jvm
-```
-ps -ef | grep java | grep -v SafeGene.jar
-```
-## 查找可能存在远程攻击漏洞的进程
-```
-ps -ef | grep jmxremote
--Dcom.sun.management.jmxremote.port=9999
--Dcom.sun.management.jmxremote.authenticate=false
--Dcom.sun.management.jmxremote.ssl=false
-```
-注意：
-oracle的虚拟机会判断,如果你带上了这些参数,那么会在内部调用sun.management.Agent.premain
-属于Java SE的instrumentation技术.
-## 查找root启动的java进程
-```
-ps -ef -U root | grep java
-```
-## 查找动态sql
-```
-find . -type f -name "*.xml" | xargs grep -n -E '\$[^\$]+\$'
-find . -type f -name "*.class" | xargs grep -n -E 'selsql'
-```
-## 查找使用了javaagent技术的进程
-```
-ps -ef | grep "\-javaagent"
-```
 
-## 查看ip区域、ip经纬度
-```
-nmap -n --top-ports 1  --script ip-geolocation-geoplugin 123.125.114.144
-curl http://ipinfo.io/123.125.114.144
-curl ipinfo.io/123.125.114.144
-{
-  "ip": "123.125.114.144",
-  "hostname": "No Hostname",
-  "city": "Beijing",
-  "region": "Beijing",
-  "country": "CN",
-  "loc": "39.9289,116.3883",
-  "org": "AS4808 China Unicom Beijing Province Network"
-geoiplookup -d /opt/local/share/GeoIP -v -i -l  123.125.114.144
-nmap -n --top-ports 1 --script ip-geolocation-maxmind --script-args ip-geolocation.maxmind_db=/opt/local/share/GeoIP/GeoLiteCity-Blocks.csv 123.125.114.144
-```
-## 发现抓包模式的机器
-```
-nmap -sV --script=sniffer-detect 192.168.24.10
-Host script results:
-|_ sniffer-detect: Likely in promiscuous mode (tests: "11111111")
-```
-## 用nc进行文件传输
-#### 在客户端使用
-```
-nc -nv target_host target_port < file.txt
-```
-#### 在服务器端使用
-```
-nc -l port > file.txt
-```
 #### 使用默认系统ruby版本
 ```
 rvm use system --default
@@ -557,8 +538,10 @@ rvm use system --default
 df -h | grep -v 100%
 ```
 
-## 挂载linux系统文件
+## How To Use SSHFS to Mount Remote File Systems Over SSH 挂载linux系统文件
 ```
+https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh
+download：http://osxfuse.github.io/
 sudo sshfs -o allow_other,defer_permissions root@192.168.10.115:/MyWork /usr/local/droplet
 sudo umount /usr/local/droplet
 Z2I|l6b9QGS5*
@@ -744,9 +727,11 @@ Ethernet Address: 32:00:17:ff:a0:00
 Hardware Port: Thunderbolt Bridge
 Device: bridge0
 Ethernet Address: 32:00:17:ff:a0:00
-手机mac地址54:9F:13:1A:CD:78
+```
+### 修改mac地址
+```
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
-echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:56:78:88
+echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:66:bb:88
 echo ${rtpswd} | sudo -S ifconfig en0 ether  28:d2:48:6d:1b:88
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
@@ -809,6 +794,7 @@ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Curre
 Adobe Acrobat Pro DC
 可以批量处理背景图片哈
 
+http://www.imagemagick.org/script/convert.php
 
 https://www.imagemagick.org/download/binaries/ImageMagick-7.0.7-28-Q16-x64-static.exe
 https://www.imagemagick.org/download/binaries/ImageMagick-7.0.7-28-Q16-x86-static.exe
@@ -873,3 +859,61 @@ https://mycyberuniverse.com/web/how-fix-mediakit-reports-not-enough-space-on-dev
 
 5、用系统的disk utility工具分区
 ```
+
+# 字体文件
+经常丢失的字体文件在这里哦
+
+```
+cp '/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Support/FontSubsets/Kaiti.ttc' /Library/Fonts
+
+cp /System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Support/FontSubsets/*.ttc /Library/Fonts
+
+```
+
+# 很好的日志分析、转视频动态展现软件
+```
+brew install gource
+https://github.com/acaudwell/Gource
+https://github.com/acaudwell/Gource/wiki/Visualizing-Multiple-Repositories
+https://github.com/acaudwell/Gource/wiki/Controls
+https://github.com/acaudwell/Gource/wiki/Videos
+
+```
+<a href="https://youtu.be/InlfK8GQ-kM"><img align="left" width="400" src="https://img.youtube.com/vi/InlfK8GQ-kM/0.jpg" alt="gource video"></a>
+<a href="https://youtu.be/qKLJjZ0TMqA"><img width="400" src="https://img.youtube.com/vi/qKLJjZ0TMqA/0.jpg" alt="gource video"></a>
+
+```
+svn log -r 1:HEAD --xml --verbose --quiet > my-project-log.xml
+gource my-project-log.xml -a 36000 -c 1.0 -s 1 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 -b:a 32k gource.mp4
+
+ffmpeg -i gource.mp4 -r 10 -b:a 32k gource2.mp4
+rm gource.mp4
+
+git
+gource  -a 36000 -c 1.0 -s 1 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 -b:a 32k gource.mp4
+
+```
+
+
+# how save youtube video
+如何下载、保存youtube视频
+
+```
+brew install homebrew/cask/clipgrab
+open /Applications/ClipGrab.app
+```
+
+拷贝粘贴你要下载的url，或者，支持更多的you-get(Twitter、YouTube、)
+
+```
+brew install you-get
+you-get 'https://www.youtube.com/watch?v=jNQXAC9IVRw'
+```
+
+
+# 下载twitter视频、gif
+http://twittervideodownloader.com
+
+# 让更多人在twitter分享
+
+http://twitter.com/share?url=http://twittervideodownloader.com/&text=Download%20Twitter%20Videos%20online%20in%20MP4%20format

