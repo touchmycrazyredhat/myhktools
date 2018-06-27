@@ -434,6 +434,9 @@ $ which port
 sudo proxychains4 -f ~/pc.conf port -v selfupdate
 sudo proxychains4 -f ~/pc.conf port upgrade outdated
 sudo proxychains4 -f ~/pc.conf port -d sync
+sudo port upgrade outdated
+sudo port upgrade outdated
+
 ```
 其中-v表示verbose（冗余），即把信息都显示到Shell上。
 ### 更新metasploit-framework
