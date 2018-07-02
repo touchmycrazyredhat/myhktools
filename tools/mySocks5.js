@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /*
 node tools/mySocks5.js --user mtxuser --password Wr90,_x*d -p 15533
+node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -h en0 -p 15534
+node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -h bridge0 -p 15534
 node proxy/ProxyServer.js --proxy 'socks://mtxuser:Wr90,_x*d@127.0.0.1:15533'
 curl -x "http://127.0.0.1:8880" http://ip.cn
 
@@ -12,6 +14,7 @@ proxychains4 -f ~/safe/`whoami`/proxychains.conf node /Users/`whoami`/safe/myhkt
 */
 var socks = require('socksv5'),
 	program = require('commander'),
+	child_process = require('child_process'),
 	srv = socks.createServer(function(info, accept, deny)
 {
 	/*
@@ -31,10 +34,24 @@ program.version("socks5代理")
 	.option('-u, --user [value]', '用户名')
 	.option('-p, --password [value]', "密码")
 	.parse(process.argv);
-process.on('uncaughtException', function(e){});
-process.on('unhandledRejection', function(e){});
+process.on('uncaughtException', function(e){console.log(e)});
+process.on('unhandledRejection', function(e){console.log(e)});
 
-srv.listen(program.port||15533, program.host||'0.0.0.0', function()
+var szStrIP = program.host ||'';
+if(!(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/g.test(szStrIP)))
+{
+	var bridge0 = 'bridge0',
+		szCmd = 'ipconfig getifaddr ' + ((bridge0 == szStrIP || 'en0' == szStrIP)?szStrIP : bridge0);
+	try{
+		szStrIP = child_process.execSync(szCmd).toString();
+		console.log(szCmd);
+		szStrIP = szStrIP.trim();
+	}catch(e){}
+}
+
+program.host = szStrIP = szStrIP||'0.0.0.0';
+console.log("端口绑定到：" + szStrIP);
+srv.listen(program.port||15533, szStrIP, function()
 {
 	console.log('SOCKS server listening...' + this._connectionKey);
 });

@@ -14,6 +14,30 @@ https://github.com/yenchenlin/awesome-watchos
 brew install m-cli
 ```
 
+## 查看当前机器数据包的发送顺序
+```
+$ip route list
+```
+
+## 获取文件类型、字符集
+```
+# linux
+$file -i tools/gbk2utf8.js
+tools/gbk2utf8.js: text/plain; charset=utf-8
+# macos
+$file -I tools/gbk2utf8.js
+
+f=tools/gbk2utf8.js
+encoding=`file -I $f | cut -f 2 -d";" | cut -f 2 -d=`
+echo $encoding
+
+```
+
+## 查看目录1级深度子目录大小
+```
+du -d 1 -h /usr/local/Cellar/
+```
+
 ### fish 命令自动补全
 fish is a smart and user-friendly command line
 shell for macOS, Linux, and the rest of the family.
@@ -202,6 +226,7 @@ route get google.com
 ```
 ipconfig getifaddr en0
 ipconfig getifaddr bridge0
+ip addr
 ```
 ## 显示网络配置
 ```
@@ -353,6 +378,12 @@ ls -ld /usr/local/lib/node_modules/* | awk '{print $9}'|sed -e 's/\/usr\/local\/
 cat *.log|xxd
 ```
 
+## 一些常用文本处理
+```
+cat mytels.vcf|grep 'TEL;TYPE=CELL:'|sed 's/TEL;TYPE=CELL://g'|sed 's/(-|\s|\t)//g'|sed -e 's/[^0-9]/\
+/g'|sort -u
+```
+
 ## 清除历史信息、一键优化
 ```
 ls ~/.*his*
@@ -392,6 +423,25 @@ ln -s /Volumes/mtx_hktalent/`whoami`/com.tencent.qq /Users/`whoami`/Library/Cont
 sudo port -f uninstall inactive
 sudo port uninstall inactive
 ```
+
+### 卸载所有port安装的软件
+```
+sudo port -f uninstall installed
+sudo port clean all
+sudo rm -rf \
+/opt/local \
+/Applications/DarwinPorts \
+/Applications/MacPorts \
+/Library/LaunchDaemons/org.macports.* \
+/Library/Receipts/DarwinPorts*.pkg \
+/Library/Receipts/MacPorts*.pkg \
+/Library/StartupItems/DarwinPortsStartup \
+/Library/Tcl/darwinports1.0 \
+/Library/Tcl/macports1.0 \
+~/.macports
+
+```
+
 ### 清除编译临时文件
 ```
 sudo port -f clean --all all
