@@ -14,6 +14,16 @@ https://github.com/yenchenlin/awesome-watchos
 brew install m-cli
 ```
 
+## 查看程序质检的依赖关系
+```
+brew deps --installed --tree 
+```
+
+## find and mv
+'''
+find . -name "*.dmg" -exec mv {} /Volumes/mtx_hktalent/tools/ \;
+'''
+
 ## 查看当前机器数据包的发送顺序
 ```
 $ip route list
@@ -205,6 +215,18 @@ fdupes -d  -N -s -r  /Volumes/mtx_hktalent/
                   	disk area they are treated as non-duplicates; this
                   	option will change this behavior
 ```
+
+## 查找删除0字节文件、文件夹
+```
+find $dir -size 0 -type f -delete
+find . -type d -empty -delete
+```
+
+## 关键字查找
+```
+cat ~/Downloads/20180706_095031AllJarName.txt |grep -e '.*spring.*boot.*'
+```
+
 # 屏幕截屏为gif
 ```
 brew cask install gifcapture
@@ -382,6 +404,8 @@ cat *.log|xxd
 ```
 cat mytels.vcf|grep 'TEL;TYPE=CELL:'|sed 's/TEL;TYPE=CELL://g'|sed 's/(-|\s|\t)//g'|sed -e 's/[^0-9]/\
 /g'|sort -u
+
+cat mytels.vcf |grep 'FN:' -A 1|sed 's/.*_//g'|sed 's/\n*N://g'|sed 's/;//g'
 ```
 
 ## 清除历史信息、一键优化
@@ -785,7 +809,7 @@ Ethernet Address: 32:00:17:ff:a0:00
 ```
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
 echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:66:bb:88
-echo ${rtpswd} | sudo -S ifconfig en0 ether  28:d2:48:6d:1b:88
+echo ${rtpswd} | sudo -S ifconfig en0 ether  8a:d2:48:6d:1b:88
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
 sudo ifconfig en0 ether  88:BB:8B:6b:88:86
