@@ -9,6 +9,15 @@ https://github.com/herrbischoff/awesome-macos-command-line
 https://github.com/agarrharr/awesome-macos-screensavers
 https://github.com/yenchenlin/awesome-watchos
 ```
+## set history format 
+```
+vi ~/.bash_profile
+export HISTTIMEFORMAT="%F %T `who -u am i 2>/dev/null| awk '{print $NF}'|sed -e 's/[()]//g'`  `whoami` "
+
+source ~/.bash_profile
+```
+
+
 ## Swiss Army Knife for macOS
 ```
 brew install m-cli
