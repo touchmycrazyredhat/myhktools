@@ -532,6 +532,7 @@ pip3 list --outdated | sed 's/(.*//g' | xargs sudo pip3 install -U --trusted-hos
 conda update -n base conda
 conda upgrade --all
 
+pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 
 python ~/pip2.py list --trusted-host pypi.douban.com  -i http://pypi.douban.com/simple --outdated | sed 's/(.*//g' | xargs sudo python ~/pip2.py install -U --trusted-host pypi.douban.com  -i http://pypi.douban.com/simple
 pip list --trusted-host pypi.douban.com  -i http://pypi.douban.com/simple --outdated | sed 's/(.*//g' | xargs sudo pip install -U --trusted-host pypi.douban.com  -i http://pypi.douban.com/simple
@@ -570,8 +571,6 @@ sudo /Library/Nessus/run/sbin/nessusd start
 ```
 ### 批量git更新工程
 ```
-cd /Volumes/BOOK/安全/project;
-find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
 cd /Users/${xxx}/safe;
 find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
 ```
@@ -590,12 +589,14 @@ searchsploit -u
 ```
 rvm use ruby-2.3.1
 ```
-### 清除旧版本
+### 清除旧版本、更新
 ```
 gem cleanup
 gem update --system
 gem update
 gem install rubygems-update;update_rubygems
+gem update
+gem update --system
 ```
 ### nodeJs完全更新
 ```

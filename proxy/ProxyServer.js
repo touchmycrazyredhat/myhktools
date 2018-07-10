@@ -2,13 +2,12 @@
 // node checkProxy.js ~/C/ip_log.txt 
 /*
 node proxy/ProxyServer.js --proxy socks://127.0.0.1:5533
-
 node proxy/ProxyServer.js --proxy 'socks://mtxuser:sldfjsljf@127.0.0.1:5533'
 curl -x "http://127.0.0.1:8880" http://ip.cn
 
 npm install -g socks-proxy-agent
 curl -v --proxy http://127.0.0.1:8880 http://ip.cn
-这样kali就可以使用vps的代理了
+# 这样kali就可以使用vps的代理了
 vi /etc/apt/apt.conf.d/auto-apt-proxy.conf 
 Acquire::http::Proxy "http://192.168.24.10:8880";
 */
@@ -19,7 +18,7 @@ var fs  = require("fs"),
     program = require('commander'),
     SocksProxyAgent = require('socks-proxy-agent'),
     nPort = 8880,
-    g_szUA = "CaptiveNetworkSupport-355.30.1 wispr",
+    g_szUA = "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540",//"CaptiveNetworkSupport-355.30.1 wispr",
     szIp = "0.0.0.0";
 
 program.version("动态代理")
@@ -69,11 +68,11 @@ function getRequest()
 	// 随机获得代理
 	// HTTP,ip,port
 	var n = parseInt(Math.random() * 2000000000) % g_aProxy.length, aT = g_aProxy[n];
-	if("string" == typeof aT)aT = aT.replace(/\s/gmi, "").split(/[,\|]/);
-	if(3 > aT.length)return request;
-	process.env[aT[0] + "_PROXY"] = aT[1] + ":" + aT[2];
-	console.log("当前代理: " + process.env[aT[0] + "_PROXY"]);
-	return request.defaults({'proxy': aT[0].toLowerCase()+ '://' + aT[1] + ":" + aT[2]});
+
+	
+	process.env["HTTP_PROXY"] = "http://" + aT;
+	console.log("当前代理: " + process.env["HTTP_PROXY"]);
+	return request.defaults({'proxy': process.env["HTTP_PROXY"]});
 }
 
 /* 安全检查：
