@@ -1,5 +1,5 @@
 // 校验http、https 代理是否可用
-// node checkProxy.js ~/C/ip_log.txt 
+// nodest checkProxy.js ~/C/ip_log.txt 
 /*
 node proxy/ProxyServer.js -p 15331 -u
 node proxy/ProxyServer.js --proxy socks://127.0.0.1:5533
@@ -14,11 +14,12 @@ Acquire::http::Proxy "http://192.168.24.10:8880";
 */
 
 var fs  = require("fs"),
+	url = require("url"),
 	http = require("http"),
     request = require("request"),
+    httpProxy = require('http-proxy'),
     g_aProxy = null,
     program = require('commander'),
-    httpProxy = require('http-proxy'),
     nPort = 8880,
     g_szUA = "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540",//"CaptiveNetworkSupport-355.30.1 wispr",
     szIp = "0.0.0.0";
@@ -80,6 +81,7 @@ function fnGetProxy()
 		var n = parseInt(Math.random() * 2000000000) % g_aProxy.length, aT = g_aProxy[n];
 		if(-1 == aT.indexOf('http') && -1 == aT.indexOf('sock'))
 			aT = "http://" + aT;
+		// process.env["HTTP_PROXY"] = aT;
 		console.log("使用代理: " + aT);
 		return {target:aT};
 	}
@@ -92,13 +94,32 @@ process.setMaxListeners(0);
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('events').EventEmitter.defaultMaxListeners = 0;
 
-var proxyW = httpProxy.createProxyServer();
-http.createServer(function (req, res) {
-	// console.log(req.headers)
-	// req.headers['user-agent'] = 'curl/7.58.0';
+var options = {
+				'timeout': 5000,
+				'maxSockets': 500,
+				maxRedirects:10,
+				agentOptions: {
+			      rejectUnauthorized: false
+			    },
+				rejectUnauthorized:false,
+				removeRefererHeader:false,
+				followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
+				followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
+				'headers':{'connection':'close'}
+			};
 
-  // 避免拥塞
-  setTimeout(function () {
-    proxyW.web(req, res, fnGetProxy());
-  }, 1);
+// ,target:'http://127.0.0.1:' + nPort
+var proxyWeb = httpProxy.createProxyServer({});//.listen(1559 + 1);
+
+http.createServer(function(req, res)
+{
+	proxyWeb.web(req, res, {
+		toProxy:fnGetProxy().target,
+		target: req.method.toLowerCase() + '://' +  req.headers['host']
+	});
+	/*
+	res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.write('request successfully proxied!' + '\n' + JSON.stringify(req.headers, true, 2));
+	res.end();
+	*/
 }).listen(nPort);
