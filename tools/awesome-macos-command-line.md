@@ -2,6 +2,12 @@
 author: M.T.X. 2018-05-14 
 Twitter: @Hktalent3135773
 
+## 安全审计
+```
+brew install lynis
+lynis audit system
+```
+
 ## other awesome-macos-command-line
 ```
 https://github.com/iCHAIT/awesome-macOS
