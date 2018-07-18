@@ -1,5 +1,7 @@
 // parse svn authz file
 // node tools/parseSvnAuthz.js -f "./svn_conf/authz" -k slname
+// 查找md5 hash字符串
+// grep 'xxx' ./svn.sql|cut -f 5 -d','
 var fs  = require("fs");
 
 var a = null,
@@ -13,6 +15,7 @@ var a = null,
 program.version("svn配置文件解析")
 	.option('-k, --key [value]', '搜索的人有哪些目录权限')
 	.option('-f, --file [value]', '配置文件')
+	.option('-c, --cmd  [value]', '生成cmd，eg: "wget -x -c -nH --remote-encoding=UTF8 --progress=bar:force:noscroll --tries=0 -N --timeout=3 no-http-keep-alive -r  --header=\'authorization:Basic xxx\'http://xxxx"')
 	.parse(process.argv);
 process.setMaxListeners(0);
 process.on('uncaughtException', function(e){console.log(e)});
@@ -67,7 +70,8 @@ a.forEach(function(i,n)
 
 process.on('exit',function()
 {
-	var szK = '', o1, a = [];
+	var szK = '', o1, a = [],szCmd = '';
+	if(program.cmd)szCmd = program.cmd;
 	if(szK = program.key)
 	{
 		// 分组信息
@@ -80,7 +84,7 @@ process.on('exit',function()
 				{
 					for(var x in oDir)
 					{
-						a.push(x);
+						a.push(szCmd + x);
 					}
 				}
 			}
