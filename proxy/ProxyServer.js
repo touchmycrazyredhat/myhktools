@@ -94,6 +94,9 @@ require('events').EventEmitter.defaultMaxListeners = 0;
 
 var proxyW = httpProxy.createProxyServer();
 http.createServer(function (req, res) {
+	console.log(req.headers)
+	req.headers['user-agent'] = 'curl/7.58.0';
+	
   // 避免拥塞
   setTimeout(function () {
     proxyW.web(req, res, fnGetProxy());
