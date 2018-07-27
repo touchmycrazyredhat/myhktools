@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // parse svn authz file
 // node tools/parseSvnAuthz.js -f "./svn_conf/authz" -k slname
 // 查找md5 hash字符串
@@ -15,13 +16,21 @@ var a = null,
 program.version("svn配置文件解析")
 	.option('-k, --key [value]', '搜索的人有哪些目录权限')
 	.option('-f, --file [value]', '配置文件')
+	.option('-p, --pswd [value]', 'passwd')
 	.option('-c, --cmd  [value]', '生成cmd，eg: "wget -x -c -nH --remote-encoding=UTF8 --progress=bar:force:noscroll --tries=0 -N --timeout=3 no-http-keep-alive -r  --header=\'authorization:Basic xxx\'http://xxxx"')
 	.parse(process.argv);
 process.setMaxListeners(0);
 process.on('uncaughtException', function(e){console.log(e)});
 process.on('unhandledRejection', function(e){console.log(e)});
 
-a = fs.readFileSync(program.file).toString("utf-8").trim().replace(/\r/gmi,'').replace(/\n+/gmi,'\n');
+function fnGet(u,p)
+{
+	return Buffer.from(u + ":" + p).toString("base64").replace(/\s/gmi, '');
+}
+var xxx = '';
+if(program.key && program.pswd)xxx = fnGet(program.key,program.pswd);
+
+a = program.file && fs.readFileSync(program.file).toString("utf-8").trim().replace(/\r/gmi,'').replace(/\n+/gmi,'\n') || '';
 a = a.split(/\n/);
 
 var nLstXm = 0,szLstPath = '';
@@ -72,6 +81,10 @@ process.on('exit',function()
 {
 	var szK = '', o1, a = [],szCmd = '';
 	if(program.cmd)szCmd = program.cmd;
+	if(xxx && szCmd)
+	{
+		szCmd = szCmd.replace(/xxx/gim,xxx);
+	}
 	if(szK = program.key)
 	{
 		// 分组信息
@@ -96,3 +109,31 @@ process.on('exit',function()
 		console.log(a.join('\n'));
 	}else console.log("sorry 没有找到");
 });
+
+// console.log(require("os").userInfo().username);
+/////*
+//// # 用户信息
+// ls -la data/nmap/*.xml|sed 's/.*\///g'|sed 's/\..*$//g'|sort -u
+////# fnTest(); 密码信息
+////node tools/parseSvnAuthz.js
+////# 获取mac地址
+// cat /Users/`whoami`/safe/myhktools/data/nmap/*.xml | grep 'NetBIOS MAC: '|sed 's/.*NetBIOS MAC://g'|sed 's/(.*//'
+// grep -Eo 'NetBIOS MAC: [a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}' /Users/`whoami`/safe/myhktools/data/nmap/*.xml
+// grep -Eo 'Java RMI Registry' /Users/`whoami`/safe/myhktools/data/nmap/*.xml
+////*/
+function fnTest(sN)
+{
+	var s = JSON.parse(fs.readFileSync('/Users/'+ require("os").userInfo().username +'/safe/myhktools/data/svn/indexAll.txt').toString('utf8'));
+	for(var k in s)
+	{
+		a = s[k].pwd;
+		if(!a || /(账号|yh\d*|1|,)/gmi.test(k))continue;
+		//console.log(a);
+		for(var x = 0; x < a.length; x++)
+		{
+			if(sN && sN == k)return a[x];
+			console.log([k, a[x]].join(','));
+		}
+	}
+}
+// fnTest();

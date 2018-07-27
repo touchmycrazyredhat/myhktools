@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // svn 弱密码检测 2017-01-22 M.T.X
 // node checkSvn.js http://192.168.10.70:8090/svn/ userName Pswd
 require(__dirname + '/../commonlib/core.js');
@@ -19,7 +20,7 @@ function fnCheckSvn(url,u,p,fnCbk)
 	var s1 = '';
 	request({method: 'GET',uri:url,headers:
 		{
-			authorization: s1 = 'Basic ' + fnMkUp(u,p).replace(/\s/gmi, ''),
+			authorization: s1 = 'Basic ' + new Buffer(u + ":" + p).toString("base64").replace(/\s/gmi, ''),
 			'user-agent':g_szUa
 		}},function(e,r,b)
 	{

@@ -22,7 +22,7 @@ node decode.js youCode
 ```
 node portForward.js 9000 192.168.10.115 8080
 或者
-node port2IP_Port.js  -p 8080 -v -t 8070 -i 118.112.188.108
+node port2IP_Port.js  -p 8080 -v -t 8070 -i xxxx
 ```
 
 

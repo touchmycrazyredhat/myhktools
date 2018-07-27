@@ -824,8 +824,8 @@ Ethernet Address: 32:00:17:ff:a0:00
 ### 修改mac地址
 ```
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
-echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:66:bb:88
-echo ${rtpswd} | sudo -S ifconfig en0 ether  b8:15:88:6d:b6:88
+echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:b6:bb:b8
+echo ${rtpswd} | sudo -S ifconfig en0 ether  b8:15:18:6d:b6:88
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
 sudo ifconfig en0 ether  88:BB:8B:6b:88:86
