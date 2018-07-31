@@ -93,20 +93,6 @@ process.setMaxListeners(0);
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('events').EventEmitter.defaultMaxListeners = 0;
 
-var options = {
-				'timeout': 5000,
-				'maxSockets': 500,
-				maxRedirects:10,
-				agentOptions: {
-			      rejectUnauthorized: false
-			    },
-				rejectUnauthorized:false,
-				removeRefererHeader:false,
-				followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
-				followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
-				'headers':{'connection':'close'}
-			};
-
 // ,target:'http://127.0.0.1:' + nPort
 var option = 
 {
