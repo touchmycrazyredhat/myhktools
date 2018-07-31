@@ -10,7 +10,7 @@ function doFile(filename)
 {
 	fs.stat(filename,function(e,stats)
 	{
-		if(stats.isFile() && /\.(txt|log|csv|hta|htm|html)/gmi.test(filename) && fs.existsSync(filename))
+		if(stats.isFile() && /\.(txt|log|csv|hta|htm|html|js)/gmi.test(filename) && fs.existsSync(filename))
 		{
 			try{
 				var k = fs.readFileSync(filename);

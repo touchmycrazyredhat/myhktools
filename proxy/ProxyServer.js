@@ -17,7 +17,6 @@ var fs  = require("fs"),
 	url = require("url"),
 	http = require("http"),
     request = require("request"),
-    httpProxy = require('http-proxy'),
     g_aProxy = null,
     program = require('commander'),
     nPort = 8880,
@@ -81,7 +80,7 @@ function fnGetProxy()
 		var n = parseInt(Math.random() * 2000000000) % g_aProxy.length, aT = g_aProxy[n];
 		if(-1 == aT.indexOf('http') && -1 == aT.indexOf('sock'))
 			aT = "http://" + aT;
-		// process.env["HTTP_PROXY"] = aT;
+		process.env["HTTP_PROXY"] = aT;
 		console.log("使用代理: " + aT);
 		return {target:aT};
 	}
@@ -109,17 +108,28 @@ var options = {
 			};
 
 // ,target:'http://127.0.0.1:' + nPort
-var proxyWeb = httpProxy.createProxyServer({});//.listen(1559 + 1);
+var option = 
+{
+	'timeout':20000,
+	'maxSockets':333,
+	maxRedirects:10,
+	agentOptions: {
+      rejectUnauthorized: false
+    },
+	// localAddress:'192.168.24.1',// 指定网卡Local interface to bind for network connections when issuing the request
+	rejectUnauthorized:false,
+	removeRefererHeader:false,
+	followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
+	followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
+	'headers':{'connection':'close'}
+};
 
 http.createServer(function(req, res)
 {
-	proxyWeb.web(req, res, {
-		toProxy:fnGetProxy().target,
-		target: req.method.toLowerCase() + '://' +  req.headers['host']
-	});
-	/*
-	res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.write('request successfully proxied!' + '\n' + JSON.stringify(req.headers, true, 2));
-	res.end();
-	*/
+	option.proxy = fnGetProxy().target;
+	// console.log(req.method.toLowerCase())
+	var r = request.defaults(option);
+
+	req.pipe(r[req.method.toLowerCase()](req.url)).pipe(res)
+	
 }).listen(nPort);
