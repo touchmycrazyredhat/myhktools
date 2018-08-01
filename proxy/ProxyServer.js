@@ -11,9 +11,12 @@ curl -v --proxy http://127.0.0.1:8880 http://ip.cn
 # 这样kali就可以使用vps的代理了
 vi /etc/apt/apt.conf.d/auto-apt-proxy.conf 
 Acquire::http::Proxy "http://192.168.24.10:8880";
+
+cat ssT.txt|sed 's/Socks4/Socks4 /g'|awk '{print $4"://"$1":"$2}'
 */
 
 var fs  = require("fs"),
+	net = require("net"),
 	url = require("url"),
 	http = require("http"),
     request = require("request"),
@@ -93,7 +96,6 @@ process.setMaxListeners(0);
 require('events').EventEmitter.prototype._maxListeners = 0;
 require('events').EventEmitter.defaultMaxListeners = 0;
 
-// ,target:'http://127.0.0.1:' + nPort
 var option = 
 {
 	'timeout':20000,
@@ -110,12 +112,69 @@ var option =
 	'headers':{'connection':'close'}
 };
 
-http.createServer(function(req, res)
+var server = http.createServer(function(req, res)
 {
 	option.proxy = fnGetProxy().target;
+	// console.log([option.proxy,req.url])
 	// console.log(req.method.toLowerCase())
 	var r = request.defaults(option);
-
+	
 	req.pipe(r[req.method.toLowerCase()](req.url)).pipe(res)
 	
 }).listen(nPort);
+
+function request(cReq, cRes) {
+    var u = url.parse(cReq.url);
+
+    var options = {
+        hostname : u.hostname, 
+        port     : u.port || 80,
+        path     : u.path,       
+        method     : cReq.method,
+        headers     : cReq.headers
+    };
+
+    var pReq = http.request(options, function(pRes) {
+        cRes.writeHead(pRes.statusCode, pRes.headers);
+        pRes.pipe(cRes);
+    }).on('error', function(e) {
+        cRes.end();
+    });
+
+    cReq.pipe(pReq);
+}
+
+function connect(cReq, cSock)
+{
+	//*/////////////////////////////
+    var u = url.parse('http://' + cReq.url);
+    console.log(cReq);
+    var pSock = net.connect(u.port, u.hostname, function() {
+        cSock.write('HTTP/1.1 200 Connection Established\r\n\r\n');
+        pSock.pipe(cSock);
+    }).on('error', function(e) {
+        cSock.end();
+    });
+
+    cSock.pipe(pSock);
+    ///////////////////*/
+}
+
+server.on('connect', connect);
+
+/*/////////////////////
+server.on('connection',function(s)
+{
+	var p = fnGetProxy().target;
+	if(p)
+	{
+		var p2 = url.parse(p);
+		
+		const srvSocket = net.connect(p2.port, p2.hostname, () =>
+		{
+			s.pipe(srvSocket);
+			srvSocket.pipe(s);
+		});
+	}
+});
+/////////////////////*/
