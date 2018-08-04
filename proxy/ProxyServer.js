@@ -178,3 +178,30 @@ server.on('connection',function(s)
 	}
 });
 /////////////////////*/
+/*
+const srvSocket = net.connect(p2.port, p2.hostname, () =>
+		{
+			// req.pipe(srvSocket);
+			var host = req.headers['host'];
+		    var szStr = `CONNECT ${host}: HTTP/1.0\r\nHost: ${host}\r\n\r\n`;
+		    console.log([p2.port, p2.hostname,szStr]);
+		    srvSocket.write(szStr);
+		    srvSocket.write(head);
+		    srvSocket.on('data',function(s1)
+		    {
+		    	console.log("=========srvSocket=========");
+		    	console.log(s1.toString('utf-8'));
+		    	console.log("=========srvSocket=========end");
+		    });
+
+		    
+		    cltSocket.write('HTTP/1.1 200 Connection Established\r\n' +
+		                    'Proxy-agent: PwnM.T.X\r\n' +
+		                    '\r\n');
+		    
+		    srvSocket.pipe(cltSocket);
+		    cltSocket.pipe(srvSocket);
+
+		    
+	  });
+*/

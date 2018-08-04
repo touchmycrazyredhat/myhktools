@@ -83,4 +83,3 @@
         out.print("Georg says, 'All seems fine'");  
     }
 %>
-
