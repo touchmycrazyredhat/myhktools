@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+# python oracleTools.py -H 127.0.0.1 -p 1521 -s orcl -u yjfull -P yjfull_use2017
+
 import sys, getopt,os
 import cx_Oracle
 
@@ -13,11 +15,11 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv,"hpsHuP:o:",["port=","sid=","host=","user=","passwd="])
     except getopt.GetoptError:
-        print 'test.py -i <inputfile> -o <outputfile>'
+        print 'oracleTools.py -p <port> -s <sid> -H <host> -u <user> -P <passwd>'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'test.py -p <port> -s <sid> -H <host> -u <user> -P <passwd>'
+            print 'oracleTools.py -p <port> -s <sid> -H <host> -u <user> -P <passwd>'
             sys.exit()
         elif opt in ("-p", "--port"):
             port = arg
@@ -54,4 +56,3 @@ def main(argv):
 
 if __name__ == "__main__":
    main(sys.argv[1:])
-
