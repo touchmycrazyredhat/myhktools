@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# python py/oracleTools.py -x 127.0.0.1 -p 1521 -s orcl -u yjfull -k yjfull_use2017
+# python py/oracleTools.py -x 127.0.0.1 -p 1521 -s orcl -u xxx -k xxx
 
 import sys, getopt,os
 import cx_Oracle
