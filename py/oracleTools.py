@@ -41,12 +41,14 @@ def main(argv):
     cursorObj.prepare(sql)
     r1 = cursorObj.execute(None, {})
 
+    print "SET ECHO OFF"
     print "SET SQLFORMAT CSV"
     path = "/root/mytools/tmp/" + sid + "_" + user  + "/"
     try:
         os.makedirs(path,0755)
     except OSError:
         pass
+    
     for row in cursorObj:
         (TABLE_NAME,NUM_ROWS) = row
         print "SPOOL " + path + TABLE_NAME + ".csv"
