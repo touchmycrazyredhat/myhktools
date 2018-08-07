@@ -14,6 +14,7 @@ from socket import *
 from threading import Thread
 from time import sleep
 
+urllib3.disable_warnings()
 # Constants
 SOCKTIMEOUT = 5
 RESENDTIMEOUT = 300
@@ -377,7 +378,8 @@ def askGeorg(connectString):
     conn = httpScheme(host=httpHost, port=httpPort)
     response = conn.request("GET", httpPath)
     if response.status == 200:
-        if BASICCHECKSTRING == response.data.strip():
+        print response.getheader("ip")
+        if -1 != response.data.strip().find(BASICCHECKSTRING):
             log.info(BASICCHECKSTRING)
             return True
     conn.close()
