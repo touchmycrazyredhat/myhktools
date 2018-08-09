@@ -12,6 +12,9 @@ node tools/mg2File.js -m md5.txt -p pswdfile.txt
 cat md5.txt|grep -E ":.{1,30}$"
 xxName:111111
 
+so,search name
+
+cat md5.txt|grep liuhz
 */
 var fs  = require("fs"),
 	program = require('commander'),

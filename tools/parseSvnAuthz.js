@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // parse svn authz file
-// node tools/parseSvnAuthz.js -f "./svn_conf/authz" -k slname
+// node tools/parseSvnAuthz.js -f "./authz" -k slname
 // 查找md5 hash字符串
 // grep 'xxx' ./svn.sql|cut -f 5 -d','
 var fs  = require("fs");
@@ -16,15 +16,31 @@ var a = null,
 program.version("svn配置文件解析")
 	.option('-k, --key [value]', '搜索的人有哪些目录权限')
 	.option('-f, --file [value]', '配置文件')
-	.option('-p, --pswd [value]', 'passwd')
+	.option('-p, --pswd [value]', 'passwd，or file')
 	.option('-c, --cmd  [value]', '生成cmd，eg: "wget -x -c -nH --remote-encoding=UTF8 --progress=bar:force:noscroll --tries=0 -N --timeout=3 no-http-keep-alive -r  --header=\'authorization:Basic xxx\'http://xxxx"')
 	.parse(process.argv);
 process.setMaxListeners(0);
 process.on('uncaughtException', function(e){console.log(e)});
 process.on('unhandledRejection', function(e){console.log(e)});
 
+
+if(program.pswd)
+{
+	if(fs.existsSync(program.pswd))
+	{
+		var szPswdFl = fs.readFileSync(program.pswd).toString(),re = new RegExp(program.key + ":([^\\n]+)\\n","mgi");
+		szPswdFl = re.exec(szPswdFl);
+		if(szPswdFl)
+		{
+			program.pswd=szPswdFl[1];
+			// console.log(program.pswd);
+		}
+	}
+}
+
 function fnGet(u,p)
 {
+	if("true" == p || true === p)return '';
 	return Buffer.from(u + ":" + p).toString("base64").replace(/\s/gmi, '');
 }
 var xxx = '';
@@ -105,9 +121,9 @@ process.on('exit',function()
 	}
 	if(0 < a.length)
 	{
-		console.log("找到读目录权限：");
+		if(!szCmd)console.log("找到读目录权限：");
 		console.log(a.join('\n'));
-	}else console.log("sorry 没有找到");
+	}else if(!szCmd)console.log("sorry 没有找到");
 });
 
 // console.log(require("os").userInfo().username);

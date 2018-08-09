@@ -360,9 +360,15 @@ class session(Thread):
 def askGeorg(connectString):
     connectString = connectString
     o = urlparse(connectString)
+    
     try:
         httpPort = o.port
     except:
+        if o.scheme == "https":
+            httpPort = 443
+        else:
+            httpPort = 80
+    if httpPort == None:
         if o.scheme == "https":
             httpPort = 443
         else:
@@ -374,12 +380,17 @@ def askGeorg(connectString):
         httpScheme = urllib3.HTTPConnectionPool
     else:
         httpScheme = urllib3.HTTPSConnectionPool
-
+    
+    
     conn = httpScheme(host=httpHost, port=httpPort)
-    response = conn.request("GET", httpPath)
+    # print [httpHost,httpPort,o.scheme,connectString]
+    response = conn.request("GET", httpPath,)
+    
     if response.status == 200:
-        print response.getheader("ip")
-        if -1 != response.data.strip().find(BASICCHECKSTRING):
+        # print response.getheader("ip")
+        sslStr = response.data.strip()
+        print sslStr
+        if -1 != sslStr.find(BASICCHECKSTRING):
             log.info(BASICCHECKSTRING)
             return True
     conn.close()
@@ -418,6 +429,7 @@ if __name__ == '__main__':
     if not askGeorg(args.url):
         log.info("Georg is not ready, please check url")
         exit()
+    log.info("Checking if Georg is ready...........")
     READBUFSIZE = args.read_buff
     servSock = socket(AF_INET, SOCK_STREAM)
     servSock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)

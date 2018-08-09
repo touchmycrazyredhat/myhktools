@@ -2,7 +2,7 @@
 /*
 node tools/lanSsProxy.js -f tmp/sshIps.txt
 cat tmp/sshIps.txt
-192.168.17.98   192.168.17.98    22/tcp (ssh)  root  xxx!@#$         Password
+192.168.22.98   192.168.22.98    22/tcp (ssh)  root  xxx!@#$         Password
 .....
 内网渗透时隐藏ip最终，通过若干ssh建立代理池
 proxychains4 -f ~/safe/`whoami`/proxychains.conf node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -p 15533
