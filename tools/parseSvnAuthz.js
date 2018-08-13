@@ -122,7 +122,7 @@ process.on('exit',function()
 	if(0 < a.length)
 	{
 		if(!szCmd)console.log("找到读目录权限：");
-		console.log(a.join('\n'));
+		console.log(a.join('/\n'));
 	}else if(!szCmd)console.log("sorry 没有找到");
 });
 
