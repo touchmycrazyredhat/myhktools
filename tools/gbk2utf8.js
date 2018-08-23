@@ -10,7 +10,7 @@ function doFile(filename)
 {
 	fs.stat(filename,function(e,stats)
 	{
-		if(stats.isFile() && /\.(txt|log|csv|hta|htm|html|js)/gmi.test(filename) && fs.existsSync(filename))
+		if(stats && stats.isFile() && /\.(txt|log|csv|hta|htm|html|js|sql)/gmi.test(filename) && fs.existsSync(filename))
 		{
 			try{
 				var k = fs.readFileSync(filename);
@@ -24,7 +24,7 @@ function doFile(filename)
 				console.log(k);
 			}catch(e1){console.log(e1);}
 		}
-		else if(stats.isDirectory())
+		else if(stats && stats.isDirectory())
 		{
 			fs.readdir(filename,{},function(e,aF)
 			{

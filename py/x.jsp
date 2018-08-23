@@ -78,7 +78,8 @@
                 socketChannel.socket().close();
             }
         } 
-    } else {
+    } else 
+    {
         try {
         String szIp = "";
             Set<InetAddress> addrs = new HashSet<InetAddress>();
@@ -103,6 +104,6 @@
         }
 
         //PrintWriter o = response.getWriter();  
-        out.print("<!-- Georg says, 'All seems fine' -->");  
+        out.print("<!-- Georg says, 'All seems fine' -->"); 
     }
 %>

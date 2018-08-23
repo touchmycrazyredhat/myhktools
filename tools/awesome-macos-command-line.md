@@ -394,6 +394,7 @@ ulimit -n 65535
 ```
 sudo arp -s 192.168.24.1 84:5b:12:4a:bc:3a
 sudo arp -s 192.168.0.1 CC:34:29:97:1C:CC
+sudo arp -s 192.168.28.1 84:5b:12:4a:bc:3e
 ```
 
 ## 排序、合并文件内容，有时候可能会又字符集问题，该命令可搞定，合并结果
@@ -825,10 +826,10 @@ Ethernet Address: 32:00:17:ff:a0:00
 ```
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
 echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:b6:bb:b8
-echo ${rtpswd} | sudo -S ifconfig en0 ether  b8:15:18:6d:b6:88
+echo ${rtpswd} | sudo -S ifconfig en0 ether  cd:48:b7:77:13:ab
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
-sudo ifconfig en0 ether  88:BB:8B:6b:88:86
+sudo ifconfig en0 ether  87:8B:8B:6b:f3:15
 
 sudo ifconfig bridge0 ether 8A:73:58:25:66:D5
 sudo ifconfig bridge0 ether AB:CD:78:12:34:56
