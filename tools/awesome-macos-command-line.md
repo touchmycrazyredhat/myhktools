@@ -23,6 +23,10 @@ export HISTTIMEFORMAT="%F %T `who -u am i 2>/dev/null| awk '{print $NF}'|sed -e 
 source ~/.bash_profile
 ```
 
+## kill X11
+```
+ps -ef|grep X11|awk '{print $2}'|xargs -I {} sudo kill -9 {}
+```
 
 ## Swiss Army Knife for macOS
 ```
@@ -826,7 +830,7 @@ Ethernet Address: 32:00:17:ff:a0:00
 ```
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
 echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:b6:bb:b8
-echo ${rtpswd} | sudo -S ifconfig en0 ether  cd:48:b7:77:13:ab
+echo ${rtpswd} | sudo -S ifconfig en0 ether  b4:48:b7:77:13:ab
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
 sudo ifconfig en0 ether  87:8B:8B:6b:f3:15

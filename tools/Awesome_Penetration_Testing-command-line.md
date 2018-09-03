@@ -2,7 +2,7 @@
 author: M.T.X. 2018-05-14 
 Twitter: @Hktalent3135773
 
-
+<!--
 ## other awesome-macos-command-line
 ```
 https://github.com/hktalent/tools/awesome-macos-command-line
@@ -2109,3 +2109,4 @@ https://github.com/Arachni/arachni
 shasum -a 256 tor.conf
 openssl sha512 tor.conf
 ```
+-->

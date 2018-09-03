@@ -12,6 +12,7 @@ r.on('info',function(s)
 });
 r.on('error',function(s,t,o)
 {
+	console.log(s)
 	if(s)
 	{
 		s = String(s.stdout||s.stderr||s);
