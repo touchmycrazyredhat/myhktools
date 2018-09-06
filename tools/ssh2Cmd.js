@@ -1,4 +1,4 @@
-// node ssh2Cmd.js --port 29156 --host 192.168.17.74 --username root --password xxx123
+// node ssh2Cmd.js --port 29156 --host 192.168.10.48 --username root --password 'Yinhai!@#$'
 var Client = require('ssh2').Client,
   fs = require('fs'),
   ci = require(__dirname + '/../commonlib/ci.js'),
@@ -17,9 +17,17 @@ program.version("远程命令执行")
   .option('-c, --cmd [value]', "命令")
   .parse(process.argv);
 // 必须放在program后面
-var mysql = require(__dirname + '/../myapp/lib/myMysql.js');
+var mysql = null;
 
-process.on('uncaughtException', function(e){});process.on('unhandledRejection', function(e){});
+if(!program.cmd)
+  mysql = require(__dirname + '/../myapp/lib/myMysql.js');
+
+function fnErr(e)
+{
+  console.log(e);
+}
+process.on('uncaughtException', fnErr);
+process.on('unhandledRejection', fnErr);
 
 // ip转换为数字
 // "16802816","16803071","JP","Japan","Shimane","Izumo","35.367000","132.767000"
@@ -172,5 +180,5 @@ module.exports ={"fnCvtIps":fnCvtIps}
 
 process.on('exit', (code) => 
 {
-  mysql.fnEnd();
+  if(mysql)mysql.fnEnd();
 });

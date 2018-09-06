@@ -1,15 +1,15 @@
-// proxychains4 -f ~/pc.conf  node sendmail.js 
+#!/usr/bin/env node
+// /usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4  -f tmp/proxychains.conf node tools/sendmail.js
 const sendmail = require('sendmail')();
 function fnMySendMail(s,t,b)
 {
 	sendmail({
-	    // from: 'love2000@sougou.com',
-	    from: '119980@qq.com',
+	    from: 'love2000@sougou.com',
 	    // from: s,
 	    to: s,
 	    subject: t,
 	    // 邮件跟踪功能，当对方阅读后，能够从http://23.105.209.65/获取到阅读邮件的ip、user-agent等信息
-	    html: b+'<img src=http://23.105.209.65/' + s + '>'
+	    html: b+"<img height=1 width=1 src='https://162.219.126.11:8080/?k=" + s + "'>"
 	    /*
 	    ,attachments:[
 	    {
