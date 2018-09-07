@@ -11,7 +11,6 @@ curl -v --proxy http://127.0.0.1:8880 http://ip.cn
 # 这样kali就可以使用vps的代理了
 vi /etc/apt/apt.conf.d/auto-apt-proxy.conf 
 Acquire::http::Proxy "http://192.168.24.10:8880";
-
 cat ssT.txt|sed 's/Socks4/Socks4 /g'|awk '{print $4"://"$1":"$2}'
 */
 
