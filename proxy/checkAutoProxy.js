@@ -31,12 +31,12 @@ function fnckip(ip)
 	   		var s = ip.replace(/:.*$/gmi,'');
 	   		b = b.toString();
 	   		if(-1 < b.indexOf(s))
-	    		console.log([new Date().getTime() - nT, ip].join(','));
+	    		console.log(ip);// [new Date().getTime() - nT, ip].join(',')
 	    }
    })
 }
 
-var a = fs.readFileSync('autoProxy.txt').toString().trim().split(/\n/);
+var a = fs.readFileSync('autoProxy.txtbak').toString().trim().split(/\n/);
 
 async.mapLimit(a, 333,function(i,cbk)
 {
