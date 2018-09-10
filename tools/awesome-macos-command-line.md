@@ -579,6 +579,10 @@ brew install proxychains-ng
 sudo proxychains4 -f ~/pc.conf nessuscli update --all
 sudo nessuscli update --plugins-only
 sudo /Library/Nessus/run/sbin/nessusd start
+
+nessuscli update --all
+sudo /Library/Nessus/run/sbin/nessusd start
+https://localhost:8834/#/
 ```
 ### 批量git更新工程
 ```
@@ -833,7 +837,7 @@ echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:b6:bb:b8
 echo ${rtpswd} | sudo -S ifconfig en0 ether  b4:48:b7:77:13:ab
 
 sudo ifconfig en0 ether 54:9F:13:1A:CD:78
-sudo ifconfig en0 ether  87:8B:8B:6b:f3:15
+sudo ifconfig en0 ether 87:8B:8B:6b:13:75
 
 sudo ifconfig bridge0 ether 8A:73:58:25:66:D5
 sudo ifconfig bridge0 ether AB:CD:78:12:34:56
