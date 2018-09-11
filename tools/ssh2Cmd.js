@@ -1,4 +1,8 @@
-// node ssh2Cmd.js --port 29156 --host 192.168.10.48 --username root --password 'Yinhai!@#$'
+/* cat sshIps.txt |awk '{print $1" "$5" "$6}'|xargs -I {} echo {}|xargs -n3 sh ./sshCmd.sh
+
+node ssh2Cmd.js --port 29156 --host 12.8.22.48 --username root --password '#$'
+
+*/
 var Client = require('ssh2').Client,
   fs = require('fs'),
   ci = require(__dirname + '/../commonlib/ci.js'),
@@ -24,7 +28,7 @@ if(!program.cmd)
 
 function fnErr(e)
 {
-  console.log(e);
+  // console.log(e);
 }
 process.on('uncaughtException', fnErr);
 process.on('unhandledRejection', fnErr);
