@@ -1,6 +1,10 @@
 /* cat sshIps.txt |awk '{print $1" "$5" "$6}'|xargs -I {} echo {}|xargs -n3 sh ./sshCmd.sh
 
-node ssh2Cmd.js --port 29156 --host 12.8.22.48 --username root --password '#$'
+cat sshCmd.sh
+echo "$1"
+node ../tools/ssh2Cmd.js --port 22 --host "$1" --username "$2" --password "$3" --cmd "netstat -antp"
+
+# node ssh2Cmd.js --port 29156 --host 12.8.22.48 --username root --password '#$'
 
 */
 var Client = require('ssh2').Client,
