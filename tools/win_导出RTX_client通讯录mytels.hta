@@ -1,5 +1,5 @@
 <body>
-<script>
+<script language="javascript">
 var objApi = new ActiveXObject("RTXClient.RTXAPI");
 var objKernal = objApi.GetObject("KernalRoot");
 var objBuddyManager = objKernal.RTXBuddyManager;
@@ -45,15 +45,15 @@ function fnGetOtherInfo(o)
 // 获取单个用户信息
 function fnGetInfo(UserName)
 {
+
 	  try{
     var objBuddy = objBuddyManager.Buddy(UserName);
 
-    // 已经存在
-    if(g_aTxl[objBuddy.Account] || (8 > String(objBuddy.Telephone).length && 8 > String(objBuddy.Mobile).length))
-{
-
-return;
-}
+  var s1 = "",x = "AVSetInfo,Account,Base64Sign,Buddies,ConnectionInfo,CurrentServerTime,DataCount,ETrunk,Email,EnterpriseInfo,FileName,Gender,GlobalModuleData,Id,IsUseMultiFileServer,Language,License,LoginMode,MDSessionManager,MFCSupport,Mobile,Module,ModuleCollection,MyPresence,Name,NetProxy,NetProxyParam,OutSupServerInfo,Presence,RCAToken,RTXCEventCenter,RTXCExState,RTXCRoot,RTXExtBuddyManager,RTXExtGroupManager,RealName,ServerAddress,ServerIP,ServerInfo,SessionManager,Sign,TCP,Telephone,Token,Type,UIN,UserModuleData,UserRights".split(/[,]/);
+  for(var k in x)
+  {
+    if(objBuddy[x[k]])s1 += x[k] + " = " + objBuddy[x[k]] + ",";
+  }
 
     g_aTxl[objBuddy.Account] = [ "BEGIN:VCARD\nVERSION:3.0",
     "FN:" + objBuddy.name + "_" + objBuddy.Account ,
@@ -62,13 +62,13 @@ return;
     "EMAIL;type=INTERNET;type=WORK;type=pref:" + objBuddy.Email,
     "TEL;TYPE=CELL:" + objBuddy.Mobile,
     "ORG:" + String(objHelper.GetBuddyDept(UserName)).replace(/\\/gm, "_"),
-    "NOTE:" + fnGetOtherInfo(objBuddy),
+    "NOTE:" + fnGetOtherInfo(objBuddy) + s1,
     "CATEGORIES:MTX\nEND:VCARD"
     ];
     
     // out(g_aTxl[objBuddy.name].join("\n"));
   }catch(e){
-  	alert("fnGetInfo: " + UserName + e)
+  	// alert("fnGetInfo: " + UserName + e)
   	}
     x++;
 
