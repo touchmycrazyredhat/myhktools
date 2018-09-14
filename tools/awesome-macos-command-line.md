@@ -8,6 +8,11 @@ brew install lynis
 lynis audit system
 ```
 
+## brew 依赖关系查看
+```
+brew deps --installed
+```
+
 ## other awesome-macos-command-line
 ```
 https://github.com/iCHAIT/awesome-macOS

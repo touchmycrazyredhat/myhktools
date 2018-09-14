@@ -360,6 +360,7 @@ class session(Thread):
 def askGeorg(connectString):
     connectString = connectString
     o = urlparse(connectString)
+    headers = {"X-CMD": "getInfo"}
     
     try:
         httpPort = o.port
@@ -381,11 +382,18 @@ def askGeorg(connectString):
     else:
         httpScheme = urllib3.HTTPSConnectionPool
     
-    
     conn = httpScheme(host=httpHost, port=httpPort)
     # print [httpHost,httpPort,o.scheme,connectString]
-    response = conn.request("GET", httpPath,)
-    
+    # response = conn.request("GET", httpPath,headers=headers)
+    # if response.status == 200:
+    #     # print response.getheader("ip")
+    #     sslStr = response.data.strip()
+    #     print sslStr
+    #     if -1 != sslStr.find(BASICCHECKSTRING):
+    #         log.info(BASICCHECKSTRING)
+    #         return True
+
+    response = conn.request("GET", httpPath)
     if response.status == 200:
         # print response.getheader("ip")
         sslStr = response.data.strip()

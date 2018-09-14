@@ -1,4 +1,6 @@
-/* cat sshIps.txt |awk '{print $1" "$5" "$6}'|xargs -I {} echo {}|xargs -n3 sh ./sshCmd.sh
+/* 
+msfconsole中拷贝，生成sshIps.txt
+cat sshIps.txt |awk '{print $1" "$5" "$6}'|xargs -I {} echo {}|xargs -n3 sh ./sshCmd.sh
 
 cat sshCmd.sh
 echo "$1"
