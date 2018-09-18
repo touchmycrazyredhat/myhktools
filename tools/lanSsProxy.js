@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 /*
-node tools/lanSsProxy.js -f tmp/sshIps.txt
+node tools/lanSsProxy.js -p 127 -f ~/safe/myKali.txt
 cat tmp/sshIps.txt
 192.168.22.98   192.168.22.98    22/tcp (ssh)  root  xxx!@#$         Password
+
+now ssh socks port 8111 to my kali
 .....
 内网渗透时隐藏ip最终，通过若干ssh建立代理池
 proxychains4 -f ~/safe/`whoami`/proxychains.conf node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -p 15533
+
+curl -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v -x 'socks5://127.0.0.1:8111' https://172.17.0.2:8080
 */
 var fs  = require("fs"),
 	program = require('commander'),
@@ -32,20 +36,19 @@ startPort = program.startPort || startPort;
 prefix = program.prefix || prefix;
 youPort = program.youPort || youPort;
 
-
-
 var socks = require('socksv5');
 var Client = require('ssh2').Client;
 
 // 启动监听
-function fnMySSocks5(ip,u,p,port,fnCbk)
+function fnMySSocks5(ip,u,p,port,fnCbk,sshport)
 {
 	var ssh_config = {
 	  host: ip,
-	  "port": 22,
+	  "port": sshport,
 	  username: u,
 	  password: p
 	};
+	// console.log(ssh_config);
 
 	socks.createServer(function(info, accept, deny)
 	{
@@ -57,6 +60,7 @@ function fnMySSocks5(ip,u,p,port,fnCbk)
 	                    info.dstPort,
 	                    function(err, stream) {
 	      if (err) {
+	      	fnE(err);
 	        conn.end();
 	        return deny();
 	      }
@@ -69,10 +73,11 @@ function fnMySSocks5(ip,u,p,port,fnCbk)
 	      } else
 	        conn.end();
 	    });
-	  }).on('error', function(err) {
+	  }).on('error', function(err) {fnE(err);
 	    deny();
 	  }).connect(ssh_config);
-	}).listen(port, 'localhost', function() {
+	}).listen(port, '127.0.0.1', function() {
+		console.log("ssh forwarding listen: " + port);
 		fnCbk(port);
 	  // console.log('SOCKSv5 proxy server started on port '+ port);
 	}).useAuth(socks.auth.None());
@@ -83,11 +88,11 @@ function fnMySSocks5(ip,u,p,port,fnCbk)
 */
 var sAll = child_process.execSync("allListen=`netstat -ant|grep LISTEN|awk '{print $4}'|sed 's/.*[:\.]//g'|sort -u`;echo $allListen").toString('utf-8');
 console.log("本地已经监听的端口，会自动跳过、避免冲突：" + sAll);
-function fnDoIp(ip,u,p,fnCbk)
+function fnDoIp(ip,u,p,fnCbk,sshport)
 {
-	// console.log([ip,u,p]);
+	//console.log([ip,u,p]);
 	while(-1 < sAll.indexOf(String(++startPort)));
-	fnMySSocks5(ip,u,p,startPort,fnCbk);
+	fnMySSocks5(ip,u,p,startPort,fnCbk,sshport);
 }
 
 var szCode = (function(){/*
@@ -109,6 +114,8 @@ function fnGo()
 {
 	var szFileName = path.resolve(process.env.PWD,program.file);
 	a = fs.readFileSync(szFileName).toString().split(/\n/gmi)
+	if(0 == a.length)console.log("没有读取到内容：" + szFileName);
+
 	var i = 0;
 	var nC = 0,c = [""],fnCbk1 = function(n)
 	{
@@ -118,18 +125,26 @@ function fnGo()
 		{
 			var tP = "/tmp/" + Math.random();
 			fs.writeFileSync(tP,szCode.join("\n"));
-			var szCmd = "/usr/local/Cellar/proxychains-ng/4.12_1/bin/proxychains4 -f " + tP + " node /Users/`whoami`/safe/myhktools/tools/mySocks5.js  -h 127.0.0.1 -p " + youPort + " &";
+			var szCmd = "`which proxychains4` -f " + tP + " node /Users/`whoami`/safe/myhktools/tools/mySocks5.js  -h 127.0.0.1 -p " + youPort + " &";
 			console.log("已经启动终结代理端口：" + youPort);
+			console.log("proxychains4 config: " + tP);
 			child_process.execSync(szCmd);
 		}
+		else console.log("注意：服务没有成功开启");
 	};
 	for(; i < a.length; i++)
 	{
-		var t = a[i].trim().split(/\s+/);
-		if(4 > t.length)continue;
+		if(!a[i])continue;
+		var t = a[i].trim().split(/[\s\t]+/);
+		if(4 > t.length)
+		{
+			console.log("格式错误：" + t);
+			continue;
+		}
 		nC++;
-		if(-1 < t[0].indexOf(prefix))fnDoIp(t[0],t[4],t[5],fnCbk1);
-		if(t[0] != t[1] && -1 < t[1].indexOf(prefix))fnDoIp(t[1],t[4],t[5],fnCbk1);
+		var sshport = t[2].split("/")[0];
+		if(-1 < t[0].indexOf(prefix))fnDoIp(t[0],t[4],t[5],fnCbk1,sshport);
+		if(t[0] != t[1] && -1 < t[1].indexOf(prefix))fnDoIp(t[1],t[4],t[5],fnCbk1,sshport);
 	}
 	return (szCode);
 }

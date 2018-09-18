@@ -837,6 +837,11 @@ Ethernet Address: 32:00:17:ff:a0:00
 ```
 ### 修改mac地址
 ```
+vi /usr/local/bin/mymac
+echo ${rtpswd} | sudo -S ifconfig en0 ether $1
+
+chmod +x  /usr/local/bin/mymac
+
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
 echo ${rtpswd} | sudo -S  ifconfig bridge0 ether b8:12:34:b6:bb:b8
 echo ${rtpswd} | sudo -S ifconfig en0 ether  b4:48:b7:77:13:ab
@@ -849,6 +854,14 @@ sudo ifconfig bridge0 ether AB:CD:78:12:34:56
 
 sudo ifconfig bridge0 inet6  8888::bbbb:6666:555:8888%bridge0 prefixlen 64 secured scopeid 0x6
 sudo ifconfig bridge0 inet6  '8888::bbbb:6666:555:8888%bridge0 prefixlen 64 secured scopeid 0x6'
+```
+
+## whereami Install whereami on Mac OSX
+```
+# http://macappstore.org
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+brew install whereami
+whereami
 ```
 
 ## 关闭ipv6
