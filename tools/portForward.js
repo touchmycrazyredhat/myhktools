@@ -6,6 +6,7 @@ now ssh socks port 8111 to my kali
 you see：/tmp/0.6580720119184813
 2、Simple port forwarding ...
 `which proxychains4` -f /tmp/0.6580720119184813 node tools/portForward.js -l 8080,3306 --rhost 172.17.0.2
+# test
 curl -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v  https://127.0.0.1:8080
 
 3、other
