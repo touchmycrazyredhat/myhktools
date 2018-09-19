@@ -39,7 +39,7 @@ except:
     raise
 EOT
 echo "jdbc连接池密码..."
-${wlst}  ${tmpFl}  ${sdomain} ${enPswd}
+${wlst}  ${tmpFl}  ${sdomain} "${enPswd}"
 # 搜索weblogic console admin用户名及密码
 export DOMAIN_HOME=${sdomain}
 cd $DOMAIN_HOME/security
