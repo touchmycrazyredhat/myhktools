@@ -5,12 +5,21 @@ echo "查找数据库连接"
 netstat -antp|grep ":1521"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):1521"|sort -u
 netstat -antp|grep ":3306"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):3306"|sort -u
 # doman
-sdomain=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|sort -u`
+sdomain=`ps -ef|grep domain||grep -v 'grep'|grep -Eo '([^ ]*?\.sh)'|sort -u`
+if [ "${sdomain}" = "" ];
+then
+   tpid=`ps -ef|grep java|grep  'weblogic.Server'|awk '{print $2}'`
+   sdomain=`lsof -p $tpid |grep -Eo '([^ ]+/user_projects/domains/.*domain/)'|sort -u`
+fi
 
 if [ "${sdomain}" = "" ];
 then
   tmp=`ps -ef|grep java|grep -Eo "(home=[^ ]+)"|sed  's/home=//g'|sed 's/\/wlserver.*$//g'|sort -u|head -n 1`;
   sdomain=`find ${tmp} -type d -name "domains"|grep 'user_projects'`
+  cd "${domains}";
+  cd "user_projects";
+  cd "domains";
+  sdomain=`pwd`
   wlst=`find ${tmp} -type f -name "wlst.*"|sort -u`
 fi
 
