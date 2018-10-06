@@ -248,6 +248,7 @@ iptablesSh.sh
 
 # Contributor
 
+[hktalent](https://github.com/hktalent/myhktools)
 
 [musicalpike](https://github.com/musicalpike)
 
@@ -255,6 +256,6 @@ iptablesSh.sh
 
 [EnterpriseForever](https://github.com/EnterpriseForever)
 
-[musicalpike](https://github.com/musicalpike/pentest_tools)
+
 
 [hanerkui](https://github.com/hanerkui)
