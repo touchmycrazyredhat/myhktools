@@ -243,5 +243,5 @@ iptablesSh.sh
 ``` 
 ....
 </code>
-<img src=https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true width=400>
+![exploit](https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true)
 </pre>
