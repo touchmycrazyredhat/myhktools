@@ -243,19 +243,5 @@ iptablesSh.sh
 ``` 
 ....
 </code>
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true)
+<img src=https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true width=400>
 </pre>
-
-# Contributor
-
-[hktalent](https://github.com/hktalent/myhktools)
-
-[musicalpike](https://github.com/musicalpike)
-
-[black-mirror](https://github.com/black-mirror)
-
-[EnterpriseForever](https://github.com/EnterpriseForever)
-
-
-
-[hanerkui](https://github.com/hanerkui)
