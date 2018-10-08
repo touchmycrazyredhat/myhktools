@@ -1,3 +1,4 @@
 # brew install exiftool
-exiftool -T -filename -PageCount -s3 -ext pdf "$1"
+# get pdf file pages number
+exiftool -T -filename -PageCount -s3 -FileSize -ext pdf "$1"
 

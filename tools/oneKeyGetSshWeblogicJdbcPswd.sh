@@ -30,6 +30,7 @@ then
   wlst=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "wlst.*"|sort -u`
 fi
 
+sdomain=`echo ${sdomain}|sed 's/domain\/.*$/domain/g'`
 echo "wlst= ${wlst}"
 echo "sdomain = ${sdomain}"
 
