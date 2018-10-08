@@ -1,10 +1,8 @@
 # penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
 
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>
+|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
+|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
 
 
 ## how install
@@ -21,7 +19,7 @@ cd myhktools
 sh ./install.sh
 node checkUrl.js -h
 ```
-# update all node js lib
+## update all node js lib
 ```
 vi ~/npm-upgrade.sh 
 
@@ -33,11 +31,11 @@ do
     npm -g install "$package"
 done
 ```
-### run
+## run
 ```
 sh ~/npm-upgrade.sh 
 ```
-# how use
+## how use
 node checkUrl.js -h
 ```
 Usage: checkUrl [options]
