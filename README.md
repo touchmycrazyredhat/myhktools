@@ -1,10 +1,10 @@
 # penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
 
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true)
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true)
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true)
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true)
+<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>
+<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>
+<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>
+<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>
 
 
 ## how install
@@ -247,5 +247,5 @@ iptablesSh.sh
 iptablesSh.sh
 ``` 
 </code>
-![exploit](https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true)
+<img src="https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
 </pre>
