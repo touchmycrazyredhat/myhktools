@@ -9,17 +9,22 @@
 
 ## how install
 ```
+# mac os
 brew install node
+# linux
+apt install nodejs node
+yum install nodejs node
+
 mkdir ~/safe && cd ~/safe
-git clone https://github.com/hktalent/weblogic_java_des  mtx_jfxl
 git clone https://github.com/hktalent/myhktools.git
 cd myhktools
 sh ./install.sh
-myhktools
+node checkUrl.js -h
 ```
 # update all node js lib
-vi ~/npm-upgrade.sh 
 ```
+vi ~/npm-upgrade.sh 
+
 #!/bin/sh
 set -e
 #set -x
@@ -28,7 +33,7 @@ do
     npm -g install "$package"
 done
 ```
-运行
+### run
 ```
 sh ~/npm-upgrade.sh 
 ```
@@ -236,12 +241,11 @@ r.on('ready',function()
 });
 ```
 
-# other 一些常用的防火墙，禁ping、nmap
+# iptables, disabele ping、nmap
 ``` 
 iptablesSh.sh
 iptablesSh.sh
 ``` 
-....
 </code>
 ![exploit](https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true)
 </pre>
