@@ -5,7 +5,7 @@ rm ins.tmp
 ls -1 /usr/local/lib/node_modules/ >ins3.tmp
 grep -F -f ins3.tmp ins1.tmp| sort | uniq > ins4.tmp
 chmod 777 install.sh
-cat ins4.tmp | awk '{print "npm i -g "$1}' > install.sh
+cat ins4.tmp | awk '{print "npm i "$1}' > install.sh
 rm ins1.tmp
 rm ins4.tmp
 rm ins3.tmp

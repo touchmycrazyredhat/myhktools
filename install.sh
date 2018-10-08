@@ -1,65 +1,71 @@
-npm i -g Buffer
-npm i -g async
-npm i -g bencode
-npm i -g body-parser
-npm i -g buffer-equal-constant-time
-npm i -g child_process
-npm i -g colors
-npm i -g commander
-npm i -g compression
-npm i -g constants
-npm i -g cookie-parser
-npm i -g cookie-session
-npm i -g crypto
-npm i -g d3-node
-npm i -g detect-character-encoding
-npm i -g dgram
-npm i -g eml-format
-npm i -g events
-npm i -g exif
-npm i -g express
-npm i -g express-limiter
-npm i -g express-session
-npm i -g file-metadata
-npm i -g fs
-npm i -g gps-util
-npm i -g helmet
-npm i -g html-entities
-npm i -g http
-npm i -g https
-npm i -g iconv
-npm i -g iconv-lite
-npm i -g ip-to-int
-npm i -g jsqr
-npm i -g juicer
-npm i -g levelup
-npm i -g magnet-uri
-npm i -g md5
-npm i -g md5-file
-npm i -g moment
-npm i -g morgan
-npm i -g mysql
-npm i -g net
-npm i -g node-uuid
-npm i -g node-zip
-npm i -g p2pspider
-npm i -g path
-npm i -g poplib
-npm i -g qrcode
-npm i -g qrcode-reader
-npm i -g readline
-npm i -g redis
-npm i -g request
-npm i -g sendmail
-npm i -g serve-favicon
-npm i -g socks-proxy-agent
-npm i -g socksv5
-npm i -g ssh2
-npm i -g system
-npm i -g text-to-svg
-npm i -g url
-npm i -g useragent
-npm i -g util
-npm i -g webpage
-npm i -g webtorrent
-npm i -g zip-folder
+npm i Buffer
+npm i async
+npm i bencode
+npm i body-parser
+npm i buffer-equal-constant-time
+npm i child_process
+npm i colors
+npm i commander
+npm i compression
+npm i constants
+npm i cookie-parser
+npm i cookie-session
+npm i crypto
+npm i crypto-js
+npm i d3-node
+npm i detect-character-encoding
+npm i dgram
+npm i eml-format
+npm i events
+npm i exif
+npm i express
+npm i express-limiter
+npm i express-session
+npm i file-metadata
+npm i fs
+npm i global-tunnel
+npm i gps-util
+npm i helmet
+npm i html-convert
+npm i html-entities
+npm i http
+npm i http-proxy
+npm i iconv
+npm i iconv-lite
+npm i ip-to-int
+npm i jsqr
+npm i juicer
+npm i levelup
+npm i magnet-uri
+npm i md5
+npm i md5-file
+npm i moment
+npm i morgan
+npm i mysql
+npm i net
+npm i node-uuid
+npm i node-zip
+npm i p2pspider
+npm i parse-torrent
+npm i path
+npm i poplib
+npm i pretty-bytes
+npm i qrcode
+npm i qrcode-reader
+npm i readline
+npm i redis
+npm i request
+npm i sendmail
+npm i serve-favicon
+npm i socksv5
+npm i ssh2
+npm i stream
+npm i system
+npm i text-to-svg
+npm i tunnel-ssh
+npm i url
+npm i useragent
+npm i util
+npm i webpage
+npm i webtorrent
+npm i zip-folder
