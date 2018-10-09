@@ -398,7 +398,8 @@ def askGeorg(connectString):
         # print response.getheader("ip")
         sslStr = response.data.strip()
         print sslStr
-        if -1 != sslStr.find(BASICCHECKSTRING):
+        # 
+        if -1 != sslStr.find(BASICCHECKSTRING) or -1 != sslStr.find("_xx_xx_"):
             log.info(BASICCHECKSTRING)
             return True
     conn.close()

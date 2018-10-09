@@ -115,6 +115,6 @@ out.println(disr); disr = dis.readLine();}
             out.print("<!-- ip:" + szIp + " -->");  
         } catch (Exception e) {
         }
-        out.print("<!-- Georg says, 'All seems fine' -->"); 
+        out.print("<!-- _xx_xx_ -->"); 
     }
 %>
