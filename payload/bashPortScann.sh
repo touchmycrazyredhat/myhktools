@@ -81,5 +81,6 @@ scan() {
     alarm 1 "echo >/dev/tcp/$host/$port" &&
       echo "$port/tcp open" ||
       echo "$port/tcp closed"
+    echo >/dev/udp/$host/$port
   done
 }
