@@ -37,7 +37,7 @@ def main(argv):
     connectObj = cx_Oracle.connect(user, passwd, oracle_tns)
     cursorObj = connectObj.cursor()
 
-    sql = "select owner,TABLE_NAME,NUM_ROWS from all_tables where not 'CHANGE_ON_INSTALL,CTXSYS,DBSNMP,INTERNAL,LBACSYS,MANAGER,MDSYS,MTRPW,MTSSYS,ODM,ODM_MTR,OLAPSYS,ORACLE,ORDPLUGINS,ORDSYS,OUTLN,SCOTT,SYS,SYSTEM,TIGER' like '%'||owner||'%'  and num_rows>100 and not (table_name like '%LOG%' or  table_name like '%$%' or table_name like '%BAK%' or table_name like '%TMP%' or table_name like '%TEMP%' or table_name like '%TEST%') order by num_rows desc"
+    sql = "select owner,TABLE_NAME,NUM_ROWS from all_tables where not 'CHANGE_ON_INSTALL,CTXSYS,DBSNMP,INTERNAL,LBACSYS,MANAGER,MDSYS,MTRPW,MTSSYS,ODM,ODM_MTR,OLAPSYS,ORACLE,ORDPLUGINS,ORDSYS,OUTLN,SCOTT,SYS,SYSTEM,TIGER' like '%'||owner||'%'  and num_rows>10000 and not (table_name like '%LOG%' or  table_name like '%$%' or table_name like '%BAK%' or table_name like '%TMP%' or table_name like '%TEMP%' or table_name like '%TEST%') order by num_rows desc"
     cursorObj.prepare(sql)
     r1 = cursorObj.execute(None, {})
 
@@ -49,7 +49,7 @@ def main(argv):
         os.makedirs(path,0755)
 
     for row in cursorObj:
-        (TABLE_NAME,NUM_ROWS) = row
+        (owner,TABLE_NAME,NUM_ROWS) = row
         print "SPOOL " + path + TABLE_NAME + ".csv"
         print "SELECT * FROM " + TABLE_NAME + ";"
         print "SPOOL OFF"

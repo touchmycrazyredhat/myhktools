@@ -26,7 +26,7 @@ fi
 # 精准找到wlst.*， 用于破解jdbc连接池密码
 if [ "${wlst}" = "" ];
 then
-  wlst=`ps -ef|grep domain|grep -Eo '([^ ]*?\.sh)'|grep -Eo '(.*?)/user_projects'|sed 's/user_projects//g'|xargs -I {}  find {} -type f -name "wlst.*"|sort -u`
+   wlst=`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`
 fi
 
 sdomain=`echo ${sdomain}|sed 's/domain\/.*$/domain/g'`
