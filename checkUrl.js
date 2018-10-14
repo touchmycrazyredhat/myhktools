@@ -1,4 +1,18 @@
 #!/usr/bin/env node
+// (function () {
+//   var oldCall = Function.prototype.call;
+//   var newCall = function(self) {
+//     Function.prototype.call = oldCall;
+    
+//     var args = Array.prototype.slice.call(arguments, 1);
+//     var res = this.apply(self, args);
+//     console.log('Function called:', this.name);
+//     Function.prototype.call = newCall;
+//     return res
+//   }
+//   Function.prototype.call = newCall;
+// })();
+
 var kkk = require('./lib/core_new.js');
 var r = new kkk(),colors = require('colors');
 // -v 参数才会输出
@@ -10,9 +24,13 @@ r.on('info',function(s)
 {
 	if(s)console.log(s);
 });
+r.on('jspShell',function(s)
+{
+	if(s)console.log(s);
+});
+
 r.on('error',function(s,t,o)
 {
-	console.log(s)
 	if(s)
 	{
 		s = String(s.stdout||s.stderr||s);

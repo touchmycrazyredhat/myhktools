@@ -231,7 +231,8 @@ cat 内网445漏洞主机.txt |cut -d" " -f2 |cut -d":" -f1
 ## 去除重复文件
 ```
 brew reinstall fdupes
-fdupes -d  -N -r  /Volumes/mtx_hktalent/bak/loot
+fdupes -d  -N -r  /Volumes/mtx_hktalent/
+bak/loot
 fdupes -d  -N -r  /Volumes/mtx_hktalent/Awesome
 fdupes -d  -N -s -r  /Volumes/mtx_hktalent/
 -s --symlinks    	follow symlinks
@@ -270,7 +271,9 @@ route get google.com
 
 ## 查看当前ip
 ```
+echo en0:
 ipconfig getifaddr en0
+echo bridge0:
 ipconfig getifaddr bridge0
 ip addr
 ```
