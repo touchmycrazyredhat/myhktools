@@ -50,7 +50,7 @@ if (cmd != null)
         szSys += "\n" + x6.getMessage() + "\n";
         try{
             p = Runtime.getRuntime().exec(cmd);
-            p.waitFor();
+            // p.waitFor();
 
             os = p.getOutputStream();
             in = p.getInputStream();
