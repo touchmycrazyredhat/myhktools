@@ -4,7 +4,7 @@
   "description": "巅狼团队",
   "main": "checkUrl.js",
   "dependencies": {
-    
+    "ip-to-int": "^0.3.1"
   },
   "devDependencies": {},
   "scripts": {

