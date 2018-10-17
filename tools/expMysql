@@ -3,7 +3,7 @@ curIp="$1"
 curPort="$2"
 curU="$3"
 curP="$4"
-configNm="$curDir/mysqlCnf_curIp.cnf"
+configNm="$curDir/mysqlCnf_$curIp.cnf"
 nowStr=`date '+%Y%m%d_%H%M%S'`
 
 cat <<EOT > $configNm
