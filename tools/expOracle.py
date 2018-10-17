@@ -1,10 +1,11 @@
-#!env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 import sys
 import csv
 import os
 import cx_Oracle
+import os.path
 
 # os.environ["NLS_LANG"] = "RUSSIAN_RUSSIA.AL32UTF8"
 
@@ -18,27 +19,33 @@ printHeader = True # include column headers in each table output
 sql = "select owner,TABLE_NAME,NUM_ROWS from all_tables where not 'CHANGE_ON_INSTALL,CTXSYS,DBSNMP,INTERNAL,LBACSYS,MANAGER,MDSYS,MTRPW,MTSSYS,ODM,ODM_MTR,OLAPSYS,ORACLE,ORDPLUGINS,ORDSYS,OUTLN,SCOTT,SYS,SYSTEM,TIGER' like '%'||owner||'%'  and num_rows>1000 and not (table_name like '%LOG%' or  table_name like '%$%' or table_name like '%BAK%' or table_name like '%TMP%' or table_name like '%TEMP%' or table_name like '%TEST%') order by num_rows desc"
 curs.execute(sql)
 
+
 for row_data in curs:
-    if not row_data[1].startswith('BIN$'): # skip recycle bin tables
-        tableName = row_data[1]
-        dbName = row_data[0]
+    try:
+        if not row_data[1].startswith('BIN$'): # skip recycle bin tables
+            tableName = row_data[1]
+            dbName = row_data[0]
 
-        # output each table content to a separate CSV file
-        csv_file_dest = dbName + "." + tableName + ".csv"
-        print csv_file_dest
-        outputFile = open(csv_file_dest,'w') # 'wb'
-        output = csv.writer(outputFile, dialect='excel')
-        sql = "select * from " + dbName + "." + tableName
-        curs2 = orcl.cursor()
-        curs2.execute(sql)
+            # output each table content to a separate CSV file
+            csv_file_dest = dbName + "." + tableName + ".csv"
 
-        if printHeader: # add column headers if requested
-            cols = []
-            for col in curs2.description:
-                cols.append(col[0])
-            output.writerow(cols)
+            if not os.path.exists(csv_file_dest) and not os.path.isfile(csv_file_dest):
+                print csv_file_dest
+                outputFile = open(csv_file_dest,'w') # 'wb'
+                output = csv.writer(outputFile, dialect='excel')
+                sql = "select * from " + dbName + "." + tableName
+                curs2 = orcl.cursor()
+                curs2.execute(sql)
 
-        for row_data in curs2: # add table rows
-            output.writerow(row_data)
+                if printHeader: # add column headers if requested
+                    cols = []
+                    for col in curs2.description:
+                        cols.append(col[0])
+                    output.writerow(cols)
 
-        outputFile.close()
+                for row_data in curs2: # add table rows
+                    output.writerow(row_data)
+
+                outputFile.close()
+    except Exception, e:
+        pass
