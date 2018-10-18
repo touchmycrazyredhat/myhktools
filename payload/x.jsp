@@ -17,7 +17,7 @@ for (Object name : states)
     szSys += (String)name + "=\"" + (String)capitals.getProperty((String) name) + "\"\n";
 }
 
-if(-1 < szSys.indexOf("Windows") || -1 < cmd.indexOf("cmd"))
+if(-1 < szSys.indexOf("Windows") || null != cmd && -1 < cmd.indexOf("cmd"))
 {
     bh = "%ComSpec%";
     cS = "/c";
