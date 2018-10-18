@@ -851,6 +851,11 @@ Ethernet Address: 32:00:17:ff:a0:00
 vi /usr/local/bin/mymac
 echo ${rtpswd} | sudo -S ifconfig en0 ether $1
 
+sudo /System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport --disassociate
+sudo ifconfig en0 ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/./0/2; s/.$//')
+networksetup -detectnewhardware
+
+
 chmod +x  /usr/local/bin/mymac
 
 sudo ifconfig bridge0 ether 54:9F:13:1A:CD:78
