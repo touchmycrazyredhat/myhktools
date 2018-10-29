@@ -1,7 +1,6 @@
 # penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
 
-[![GitHub release](https://img.shields.io/github/release/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/releases) 
 [![GitHub issues](https://img.shields.io/github/issues/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/issues) 
 [![Github Stars](https://img.shields.io/github/stars/hktalent/myhktools.svg?style=social&label=Stars)](https://github.com/hktalent/myhktools/) 
 [![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
@@ -9,6 +8,7 @@
 [![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
 ![os](https://img.shields.io/badge/OS-Linux,%20Window,%20macOS-green.svg)
 ![nodejs](https://img.shields.io/badge/nodejs-blue.svg)
+![python](https://img.shields.io/badge/python2-red.svg)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 
