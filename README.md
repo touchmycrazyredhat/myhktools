@@ -77,7 +77,7 @@ Usage: checkUrl [options]
 - [x] Struts2_001
 - [ ] Struts2_005
 - [x] Struts2_007
-- [ ] Struts2_008
+- [x] Struts2_008
 - [ ] Struts2_009
 - [x] Struts2_012
 - [x] Struts2_013
