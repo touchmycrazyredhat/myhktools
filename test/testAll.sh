@@ -1,7 +1,8 @@
 node checkUrl.js -u http://192.168.10.216:8088/S2-001/ --struts2 001
 # node checkUrl.js -u http://192.168.10.216:8088/S2-005/ --struts2 005
 node checkUrl.js -u http://192.168.10.216:8088/S2-007/ --struts2 007
-# node checkUrl.js -u http://192.168.10.216:8088/S2-008/ --struts2 008
+node checkUrl.js -u http://192.168.10.216:8088/S2-008/ --struts2 008 -v
+node checkUrl.js -u 'http://192.168.10.216:8088/S2-009/showcase.action' --struts2 009 -v
 node checkUrl.js -u http://192.168.10.216:8088/S2-012/ --struts2 012
 node checkUrl.js -u http://192.168.10.216:8088/S2-013/link.action --struts2 013
 node checkUrl.js -u http://192.168.10.216:8088/S2-015/ --struts2 015
