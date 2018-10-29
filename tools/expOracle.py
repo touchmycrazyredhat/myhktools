@@ -30,7 +30,7 @@ for row_data in curs:
             csv_file_dest = dbName + "." + tableName + ".csv"
 
             if not os.path.exists(csv_file_dest) and not os.path.isfile(csv_file_dest):
-                print csv_file_dest
+                print csv_file_dest + ":"  + row_data[2]
                 outputFile = open(csv_file_dest,'w') # 'wb'
                 output = csv.writer(outputFile, dialect='excel')
                 sql = "select * from " + dbName + "." + tableName

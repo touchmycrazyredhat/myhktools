@@ -7,6 +7,10 @@
 [![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
 [![Tweet](https://img.shields.io/twitter/url/http/Hktalent3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Fhktalent%2Fmyhktools)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
+![os](https://img.shields.io/badge/OS-Linux,%20Window,%20macOS-green.svg)
+![nodejs](https://img.shields.io/badge/nodejs-blue.svg)
+![license](https://img.shields.io/github/license/mashape/apistatus.svg)
+
 
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
@@ -67,30 +71,39 @@ Usage: checkUrl [options]
     -a, --host              host attack test,设置代理后该项功能可能无法使用,default true
     -k, --keys [value]      scan html keywords, default ./urls/keywords
     -h, --help              output usage information
-	tomcat Put test
-	Struts2_001
-	Struts2_005
-	Struts2_007
-	Struts2_008
-	Struts2_009
-	Struts2_012
-	Struts2_013
-	Struts2_015
-	Struts2_016
-	Struts2_019
-	Struts2_020
-	Struts2_029
-	Struts2_032
-	Struts2_033
-	Struts2_037
-	Struts2_DevMode
-	Struts2_045
-	Struts2_046
-	Struts2_048
-	Struts2_053
-	elasticsearch
-	伪造host等检测
+```
+#### Features
+- [x] tomcat Put test
+- [x] Struts2_001
+- [ ] Struts2_005
+- [x] Struts2_007
+- [ ] Struts2_008
+- [ ] Struts2_009
+- [x] Struts2_012
+- [x] Struts2_013
+- [x] Struts2_015
+- [x] Struts2_016
+- [x] Struts2_019
+- [ ] Struts2_020
+- [x] Struts2_029
+- [x] Struts2_032
+- [ ] Struts2_033
+- [ ] Struts2_037
+- [ ] Struts2_DevMode
+- [x] Struts2_045
+- [x] Struts2_046
+- [x] Struts2_048
+- [x] Struts2_053
+- [ ] Struts2_052
+- [x] Struts2_055
+- [x] Struts2_057
+- [ ] elasticsearch
+- [x] 伪造host等检测
+- [x] t3
+- [x] 10271
 
+#### other help
+```
 	node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 
 	# 利用struts2 045漏洞，下载metasploit反弹程序并执行，以下在一行中
