@@ -1,6 +1,13 @@
 # penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
 
+[![GitHub release](https://img.shields.io/github/release/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/releases) 
+[![GitHub issues](https://img.shields.io/github/issues/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/issues) 
+[![Github Stars](https://img.shields.io/github/stars/hktalent/myhktools.svg?style=social&label=Stars)](https://github.com/hktalent/myhktools/) 
+[![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
+[![Tweet](https://img.shields.io/twitter/url/http/Hktalent3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Fhktalent%2Fmyhktools)
+[![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
+
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
 
