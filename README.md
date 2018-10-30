@@ -10,7 +10,6 @@
 ![GitHub watchers](https://img.shields.io/github/watchers/hktalent/myhktools.svg?label=Watch)
 ![GitHub contributors](https://img.shields.io/github/contributors/hktalent/myhktools.svg?colorB=red&colorA=orange)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/hktalent/myhktools.svg?colorB=ff9988&colorA=006666)
-![GitHub repo size in bytes](https://img.shields.io/github/repo-size/hktalent/myhktools.svg?colorB=789012&colorA=123456)
 ![GitHub language count](https://img.shields.io/github/languages/count/hktalent/myhktools.svg?colorB=995500&colorA=551166)
 ![GitHub search hit counter](https://img.shields.io/github/search/hktalent/myhktools/goto.svg?colorB=0077ff&colorA=11aadd)
 ![GitHub top language](https://img.shields.io/github/languages/top/hktalent/myhktools.svg?colorB=red&colorA=dd88ff)
