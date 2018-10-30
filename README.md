@@ -1,11 +1,19 @@
 # penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
-
-[![GitHub issues](https://img.shields.io/github/issues/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/issues) 
-[![Github Stars](https://img.shields.io/github/stars/hktalent/myhktools.svg?style=social&label=Stars)](https://github.com/hktalent/myhktools/) 
-[![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
 [![Tweet](https://img.shields.io/twitter/url/http/Hktalent3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Fhktalent%2Fmyhktools)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
+
+[![GitHub issues](https://img.shields.io/github/issues/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/issues) 
+[![Github Stars](https://img.shields.io/github/stars/hktalent/myhktools.svg?style=social&label=Stars&color=orange)](https://github.com/hktalent/myhktools/) 
+[![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
+![GitHub forks](https://img.shields.io/github/forks/hktalent/myhktools.svg?style=social&label=Fork)
+![GitHub watchers](https://img.shields.io/github/watchers/hktalent/myhktools.svg?label=Watch)
+![GitHub contributors](https://img.shields.io/github/contributors/hktalent/myhktools.svg?colorB=red&colorA=orange)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/hktalent/myhktools.svg?colorB=ff9988&colorA=006666)
+![GitHub repo size in bytes](https://img.shields.io/github/repo-size/hktalent/myhktools.svg?colorB=789012&colorA=123456)
+![GitHub language count](https://img.shields.io/github/languages/count/hktalent/myhktools.svg?colorB=995500&colorA=551166)
+![GitHub search hit counter](https://img.shields.io/github/search/hktalent/myhktools/goto.svg?colorB=0077ff&colorA=11aadd)
+![GitHub top language](https://img.shields.io/github/languages/top/hktalent/myhktools.svg?colorB=red&colorA=dd88ff)
 ![os](https://img.shields.io/badge/OS-Linux,%20Window,%20macOS-green.svg)
 ![nodejs](https://img.shields.io/badge/nodejs-blue.svg)
 ![python](https://img.shields.io/badge/python2-red.svg)
