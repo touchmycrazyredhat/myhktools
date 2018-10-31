@@ -22,7 +22,8 @@ curs.execute(sql)
 
 for row_data in curs:
     try:
-        if not row_data[1].startswith('BIN$'): # skip recycle bin tables
+        #  and "AC01" == row_data[1]
+        if not row_data[1].startswith('BIN$') : # skip recycle bin tables
             tableName = row_data[1]
             dbName = row_data[0]
 
@@ -30,7 +31,7 @@ for row_data in curs:
             csv_file_dest = dbName + "." + tableName + ".csv"
 
             if not os.path.exists(csv_file_dest) and not os.path.isfile(csv_file_dest):
-                print csv_file_dest + ":"  + row_data[2]
+                print csv_file_dest + ":"  + str(row_data[2])
                 outputFile = open(csv_file_dest,'w') # 'wb'
                 output = csv.writer(outputFile, dialect='excel')
                 sql = "select * from " + dbName + "." + tableName
@@ -48,4 +49,5 @@ for row_data in curs:
 
                 outputFile.close()
     except Exception, e:
+        # print e
         pass
