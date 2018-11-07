@@ -125,7 +125,7 @@ function fnGo()
 		{
 			var tP = "/tmp/" + Math.random();
 			fs.writeFileSync(tP,szCode.join("\n"));
-			var szCmd = "`which proxychains4` -f " + tP + " node /Users/`whoami`/safe/myhktools/tools/mySocks5.js  -h 127.0.0.1 -p " + youPort + " &";
+			var szCmd = "`which proxychains4` -f " + tP + " node tools/mySocks5.js  -h 127.0.0.1 -p " + youPort + " &";
 			console.log("已经启动终结代理端口：" + youPort);
 			console.log("proxychains4 config: " + tP);
 			child_process.execSync(szCmd);
