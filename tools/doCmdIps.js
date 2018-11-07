@@ -3,10 +3,12 @@ var fs = require('fs'),
 	program = require('commander');
 
 /**
- * 
+ * cat ~/.ssh/known_hosts |grep -Eo "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"|sort -u
  * node tools/doCmdIps.js -f data/Ok1.txt -c 'netstat -ant'
+ * node tools/doCmdIps.js -f data/Ok1.txt -c 'find . -name "*.war"|grep -Ev "(bea|uudi|wls|wsat|weblogic)"'
+ * 
  */
-program.version("parse jdbc 1.0")
+program.version("parse webshell urls 1.0")
 			.option('-f, --file [value]', 'filename')
 			.option('-u, --url [value]', 'url')
 			.option('-t, --timeout [value]', 'timeout,default 3s')
@@ -15,7 +17,8 @@ program.version("parse jdbc 1.0")
 			.option('-c, --cmd [value]', 'cmd')
 			.on('--help',function()
 			{
-				console.log("\n\nnode tools/doCmdIps.js -f data/Ok1.txt -c 'netstat -ant'");
+				console.log("\n\nnode tools/doCmdIps.js -f data/Ok1.txt -c 'netstat -ant'\n\n",
+				"node tools/doCmdIps.js -f data/Ok1.txt -c 'find . -name \"*.war\"|grep -Ev \"bea|uudi|wls|wsat|weblogic\"'\n\n");
 			})
 			.parse(process.argv);
 var a = fs.readFileSync(program.file || "data/Ok.txt").toString().split(/\n/),
