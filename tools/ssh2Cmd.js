@@ -2,6 +2,7 @@
 msfconsole中拷贝，生成sshIps.txt
 cat sshIps.txt |awk '{print $1" "$5" "$6}'|xargs -I {} echo {}|xargs -n3 sh ./sshCmd.sh
 
+cat /mysvn/22U_P.txt|sed 's/"//g'|awk -F ',' '{print $1" "$4" "$5}'|xargs -n3 sh ./tools/sshCmd.sh
 cat sshCmd.sh
 echo "$1"
 node ../tools/ssh2Cmd.js --port 22 --host "$1" --username "$2" --password "$3" --cmd "netstat -antp"
