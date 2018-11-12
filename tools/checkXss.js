@@ -19,7 +19,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
  * cat ~/.ssh/known_hosts |grep -Eo "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"|sort -u
  * node tools/doCmdIps.js -f data/Ok1.txt -c 'netstat -ant'
  * node tools/doCmdIps.js -f data/Ok1.txt -c 'find . -name "*.war"|grep -Ev "(bea|uudi|wls|wsat|weblogic)"'
- * 
+ * make xss whitelist
+ * find . -type f|xargs -I % grep -Eo "\b[a-z]+\b" %|sort -u >>/myhktools/tools/xss_whitelist.txt
+ * sort -i -u /myhktools/tools/xss_whitelist.txt
+ * cd /myhktools;git add /myhktools/tools/xss_whitelist.txt;git commit -m "add xss_whitelist" .;git push
  */
 program.version("parse webshell urls 1.0")
 			
@@ -63,7 +66,11 @@ mylen = program.len || mylen;
 		
 		return _req;
 	};
-
+/*
+"}</script><script>alert(2)</script><script>if(1){//
+"}alert(2);if(1){//
+");}alert(1);{//
+*/
 if(program.url)
 {
 	var url = program.url,szOurl = url, req = fnGetRequest(request),  s = "<script>alert(" + new Date().getTime() + ")</script>";
