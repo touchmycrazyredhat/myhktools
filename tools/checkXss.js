@@ -23,9 +23,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 program.version("parse webshell urls 1.0")
 			
 			.option('-u, --url [value]', 'url')
+			.option('-v, --verbose', 'show logs')
 			.on('--help',function()
 			{
-				console.log("\n\nnode tools/checkXss.js -u url\n\n");
+				console.log("\n\ncat /tmp/u.txt|xargs -I % node tools/checkXss.js -v -u %\n\n");
 			})
             .parse(process.argv);
             
@@ -73,9 +74,14 @@ if(program.url)
 	{
 		if(!e && b)
 		{
-			if(-1 < String(b).indexOf(s))
+			var ss = String(b), i = 0;
+			if(-1 < (i = ss.indexOf(s)))
 			{
 				console.log("found XSS: " + szOurl);
+				if(program && program.verbose)
+				{
+					console.log(ss.substr(i - 180, 280))
+				}
 			}
 		}
 	});
