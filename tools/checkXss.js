@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter,
 	request = require('request'),
 	program = require('commander'),
 	maxSockets = 333,
+	mylen = 180,
 	timeout = 2000,
 	n_maxLs = maxSockets;
 
@@ -23,13 +24,14 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 program.version("parse webshell urls 1.0")
 			
 			.option('-u, --url [value]', 'url')
+			.option('-l, --len [value]', 'default 180')
 			.option('-v, --verbose', 'show logs')
 			.on('--help',function()
 			{
 				console.log("\n\ncat /tmp/u.txt|xargs -I % node tools/checkXss.js -v -u %\n\n");
 			})
             .parse(process.argv);
-            
+mylen = program.len || mylen;
 // 获取一个包装后的请求对象，包含设置代理后的
 	// 优先使用系统环境变量中的代理，如果设置了，则覆盖系统代理
 	function fnGetRequest(req,opt)
@@ -80,7 +82,7 @@ if(program.url)
 				console.log("found XSS: " + szOurl);
 				if(program && program.verbose)
 				{
-					console.log(ss.substr(i - 180, 280))
+					console.log(ss.substr(i - mylen, mylen * 1.5))
 				}
 			}
 		}
