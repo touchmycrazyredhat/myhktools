@@ -37,6 +37,26 @@ cd myhktools
 sh ./install.sh
 node checkUrl.js -h
 ```
+## New features
+```
+# check Xss
+cat /mysvn/new_url_list.txt|xargs -I % node tools/checkXss.js -v -u %
+# check svn paswd
+node tools/checkSvn.js http://12.68.10.7:8090/svn/ userName Pswd
+
+# socks5
+node tools/mySocks5.js --user mser --password W_x*d -p 15533
+
+#one key get weblogic passwd
+ssh -i YouKey userName@YouTargetIp -p targetPort < tools/oneKeyGetSshWeblogicJdbcPswd.sh >out.txt
+
+# port Forward
+node  tools/portForward.js -l 8080,3306 --rhost 172.17.0.2 -s 127.0.0.1 -p 8111
+
+# ssh cmd
+node tools/ssh2Cmd.js --port 29156 --host 12.8.22.48 --username root --password '#$'
+
+```
 ## update all node js lib
 ```
 vi ~/npm-upgrade.sh 
