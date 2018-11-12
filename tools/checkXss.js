@@ -42,35 +42,35 @@ program.version("parse webshell urls 1.0")
 mylen = program.len || mylen;
 // 获取一个包装后的请求对象，包含设置代理后的
 	// 优先使用系统环境变量中的代理，如果设置了，则覆盖系统代理
-	function fnGetRequest(req,opt)
-	{
-		var _req = req, s = program && program.proxy || process.env["HTTP_PROXY"] || '',option = 
-			{
-				agent: false, pool: {maxSockets: 200},
-				'timeout':timeout||2000,
-				'maxSockets':n_maxLs,
-				maxRedirects:10,
-				agentOptions: {
-			      rejectUnauthorized: false
-			    },
-				// localAddress:'192.168.24.1',// 指定网卡Local interface to bind for network connections when issuing the request
-				rejectUnauthorized:false,
-				removeRefererHeader:false,
-				followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
-				followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
-				'headers':{'connection':'close'}
-			};
-		if(opt)
+function fnGetRequest(req,opt)
+{
+	var _req = req, s = program && program.proxy || process.env["HTTP_PROXY"] || '',option = 
 		{
-			for(var k in opt)option[k] = opt[k];
-		}
-		// process.env["HTTP_PROXY"] = "http://127.0.0.1:8880";
-		if(s)option['proxy'] = s,log("当前代理：" + s);
-		
-		_req = req.defaults(option);
-		
-		return _req;
-	};
+			agent: false, pool: {maxSockets: 200},
+			'timeout':timeout||2000,
+			'maxSockets':n_maxLs,
+			maxRedirects:10,
+			agentOptions: {
+				rejectUnauthorized: false
+			},
+			// localAddress:'192.168.24.1',// 指定网卡Local interface to bind for network connections when issuing the request
+			rejectUnauthorized:false,
+			removeRefererHeader:false,
+			followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
+			followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
+			'headers':{'connection':'close'}
+		};
+	if(opt)
+	{
+		for(var k in opt)option[k] = opt[k];
+	}
+	// process.env["HTTP_PROXY"] = "http://127.0.0.1:8880";
+	if(s)option['proxy'] = s,log("当前代理：" + s);
+	
+	_req = req.defaults(option);
+	
+	return _req;
+};
 /*
 "}</script><script>alert(2)</script><script>if(1){//
 "}alert(2);if(1){//
@@ -105,11 +105,12 @@ function fnInfo(url,ss,i)
 		console.log(ss.substr(i - mylen, mylen * 1.5))
 	}
 }
-if(program.url)
+
+function fnDoCheckUrl(szUrl)
 {
-	var url = program.url,szOurl = url, req = fnGetRequest(request),  s = "<script>alert(" + new Date().getTime() + ")</script>";
+	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<script>alert(" + new Date().getTime() + ")</script>";
 	// 寻找注入点
-	fnDoReq(req,{uri:url,
+	fnDoReq(req,{uri:szOurl,
 		},function(b)
 		{
 			if(b)
@@ -129,20 +130,18 @@ if(program.url)
 					// 这些都需要进行XSS的测试
 					if(0 < aP.length)
 					{
+						aP.push("")
 						myXss = aP.join("=" + encodeURIComponent(s) + "&");
 						// console.log(myXss);
-						fnDoReq(req,{uri:url,
-							body:myXss
-							},function(b)
+						fnDoReq(req,{uri:szOurl,body:myXss},function(b)
 						{
 							var i = 0;
 							if(-1 < (i = b.indexOf(s)))
 							{
-								fnInfo(url,b,i);
+								fnInfo(szOurl,b,i);
 							}
 						});
 					}
-					
 				}
 			}
 		});
@@ -151,7 +150,6 @@ if(program.url)
 		url += "/";
 	url = url.replace(/\/[^\/]*$/gmi, "/") + "login.jsp?samelogin=" + encodeURIComponent("null\";</script>" + s);
 	
-
 	fnDoReq(req,{uri:url},function(b)
 	{
 		if(b)
@@ -163,4 +161,9 @@ if(program.url)
 			}
 		}
 	});
+}
+
+if(program.url)
+{
+	fnDoCheckUrl(program.url)	
 }
