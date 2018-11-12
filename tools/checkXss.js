@@ -1,10 +1,18 @@
-var fs = require('fs'),
+var EventEmitter = require('events').EventEmitter,
+	fs = require('fs'),
 	request = require('request'),
 	program = require('commander'),
-	maxSockets = 200,
+	maxSockets = 333,
 	timeout = 2000,
 	n_maxLs = maxSockets;
 
+EventEmitter.prototype._maxListeners = n_maxLs;
+var _fnNull = function(e){if(program && program.verbose)console.log(e)};
+process.on('uncaughtException', _fnNull);
+process.on('unhandledRejection', _fnNull);
+
+EventEmitter.defaultMaxListeners = n_maxLs;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 /**
  *  cat All_netstat.txt|grep -E "[0-9]{3}\."|grep -vE "(127|\(|LISTEN)"|grep -Ev '192.*?192'|grep -v '223'
  * cat ~/.ssh/known_hosts |grep -Eo "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"|sort -u
