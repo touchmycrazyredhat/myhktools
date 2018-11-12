@@ -20,6 +20,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
  * node tools/doCmdIps.js -f data/Ok1.txt -c 'netstat -ant'
  * node tools/doCmdIps.js -f data/Ok1.txt -c 'find . -name "*.war"|grep -Ev "(bea|uudi|wls|wsat|weblogic)"'
  * make xss whitelist
+ * cd /mysvn/js_tutorial
+ * wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np http://www.runoob.com/js/js-tutorial.html
+ * wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np https://www.w3cschool.cn/javascript/
+ * wget --remote-encoding=UTF8 -x -c -nH --progress=bar:force:noscroll --tries=0 -N --timeout=3 -r -np http://www.w3school.com.cn/js/index.asp
  * find . -type f|xargs -I % grep -Eo "\b[a-z]+\b" %|sort -u >>/myhktools/tools/xss_whitelist.txt
  * sort -i -u /myhktools/tools/xss_whitelist.txt
  * cd /myhktools;git add /myhktools/tools/xss_whitelist.txt;git commit -m "add xss_whitelist" .;git push
@@ -32,6 +36,7 @@ program.version("parse webshell urls 1.0")
 			.on('--help',function()
 			{
 				console.log("\n\ncat /mysvn/new_url_list.txt|xargs -I % node tools/checkXss.js -v -u %\n\n");
+				console.log("\n\nnode tools/checkXss.js -v -u http://xxx.xxx\n\n");
 			})
             .parse(process.argv);
 mylen = program.len || mylen;
