@@ -114,6 +114,11 @@ function fnInfo(url,ss,i)
 	}
 }
 
+function setInfoCbk(fn)
+{
+	fnInfo = fn;
+}
+
 var g_ScrIpt = "iframe";
 function fnDoCheckUrl(szUrl,fnCbk1)
 {
@@ -192,7 +197,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	});
 }
 
-if(program.url)
+if(program.url && !program.struts2)
 {
 	fnDoCheckUrl(program.url,function(h)
 	{
@@ -204,4 +209,4 @@ if(program.url)
 	})	
 }
 
-module.exports={fnDoCheckUrl:fnDoCheckUrl};
+module.exports={fnDoCheckUrl:fnDoCheckUrl,setInfoCbk:setInfoCbk};

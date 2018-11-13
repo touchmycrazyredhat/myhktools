@@ -61,7 +61,7 @@ r.on('ready',function()
 {
 	// console.log('准备好了....');
 	// r.runChecks();
-	var cXss = require('./tools/checkXss.js');
+	
 	// cXss.fnDoCheckUrl(r.url);
 });
 
