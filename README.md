@@ -69,7 +69,7 @@ do
     npm -g install "$package"
 done
 ```
-## run
+## upgrade all npm
 ```
 sh ~/npm-upgrade.sh 
 ```

