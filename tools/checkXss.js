@@ -119,7 +119,7 @@ function setInfoCbk(fn)
 	fnInfo = fn;
 }
 
-var g_ScrIpt = "iframe";
+var g_ScrIpt = "script";
 function fnDoCheckUrl(szUrl,fnCbk1)
 {
 	szUrl = szUrl.trim().replace(/[\s\r\n]*/gmi,'');
