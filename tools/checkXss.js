@@ -57,7 +57,7 @@ function fnGetRequest(req,opt)
 			rejectUnauthorized:false,
 			removeRefererHeader:false,
 			followRedirect:true,     // follow HTTP 3xx responses as redirects (default: true).
-			followAllRedirects:false,// follow non-GET HTTP 3xx responses as redirects (default: false)
+			followAllRedirects:true,// follow non-GET HTTP 3xx responses as redirects (default: false)
 			'headers':{'connection':'close'}
 		};
 	if(opt)
@@ -80,7 +80,7 @@ var xss_wt = fs.readFileSync("tools/xss_whitelist.txt").toString("utf-8");
 function fnDoReq(req,opt,fnCbk)
 {
 	var o = {
-		method: 'POST',
+		method: opt.body ? 'POST':'GET',
 		"content-type":"application/x-www-form-urlencoded",
 		"User-Agent": "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540"
 	};
@@ -88,8 +88,9 @@ function fnDoReq(req,opt,fnCbk)
 	{
 		o[k] = opt[k];
 	}
-	req.post(o,function(e,r,b)
+	req(o,function(e,r,b)
 	{
+		// console.log(b);
 		if(!e && b)
 		{
 			fnCbk(String(b));
@@ -108,21 +109,22 @@ function fnInfo(url,ss,i)
 
 function fnDoCheckUrl(szUrl)
 {
-	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<script>alert(" + new Date().getTime() + ")</script>";
+	szUrl = szUrl.replace(/[\s\r\n]/gmi,'').replace(/[^\/\.]+\?.*?$/gmi,'');
+	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<ScrIpt>alert(" + new Date().getTime() + ")</script>";
 	// 寻找注入点
 	fnDoReq(req,{uri:szOurl,
-		},function(b)
+		},function(b3)
 		{
-			if(b)
+			if(b3)
 			{
-				var  b = String(b), re1 = new RegExp("(\\b"+ xss_wt.trim().replace(/[^a-z\n]/gmi,'').replace(/\n{1,}/gmi,'\n').replace(/\n/gmi, "\\b)|(\\b") +"\\b)","gmi");
+				var  b3 = String(b3), re1 = new RegExp("(\\b"+ xss_wt.trim().replace(/[^a-z\n]/gmi,'').replace(/\n{1,}/gmi,'\n').replace(/\n/gmi, "\\b)|(\\b") +"\\b)","gmi");
 				// console.log(re1)
-				b = b.replace(re1,'');
+				b3 = b3.replace(re1,'');
 				// console.log(b)
-				if(b)
+				if(b3)
 				{
 					var re = /(\b[a-z]+\b)/gmi,aP = [],oG={};
-					while(ss = re.exec(b))
+					while(ss = re.exec(b3))
 					{
 						if(!oG[ss[1]])
 							oG[ss[1]]=1,aP.push(ss[1]);
@@ -133,12 +135,12 @@ function fnDoCheckUrl(szUrl)
 						aP.push("")
 						myXss = aP.join("=" + encodeURIComponent(s) + "&");
 						// console.log(myXss);
-						fnDoReq(req,{uri:szOurl,body:myXss},function(b)
+						fnDoReq(req,{uri:szOurl,body:myXss},function(b1)
 						{
 							var i = 0;
-							if(-1 < (i = b.indexOf(s)))
+							if(-1 < (i = b1.indexOf(s)))
 							{
-								fnInfo(szOurl,b,i);
+								fnInfo(szOurl,b1,i);
 							}
 						});
 					}
@@ -148,8 +150,19 @@ function fnDoCheckUrl(szUrl)
 	
 	if(/\/[^\/\.]+$/gmi.test(url))
 		url += "/";
-	url = url.replace(/\/[^\/]*$/gmi, "/") + "login.jsp?samelogin=" + encodeURIComponent("null\";</script>" + s);
-	
+
+	var aH = /((?:http|https):\/\/([^\.\/]+\.){3,}([^\.\/]+)*)/gmi.exec(url);
+	if(aH)
+	{
+		aH = aH[1];
+		url = url.substr(aH.length);
+	}
+	else aH = "";
+	// console.log([aH,url])
+	if(url)
+		url = url.replace(/\/[^\/]*$/gmi, "/");
+	url = aH + url + "/login.jsp?samelogin=" + encodeURIComponent("null\";</script>" + s);
+	// console.log(url)
 	fnDoReq(req,{uri:url},function(b)
 	{
 		if(b)

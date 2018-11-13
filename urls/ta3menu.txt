@@ -117,3 +117,6 @@ ta3tool/ta3FtlAction.do
 templateMg/templateMgController.do
 xpass/platform/%0d%0alocation:project/projectAction.do
 xpass/platform/project/projectAction.do
+/CMHS
+/flashDataService
+
