@@ -56,6 +56,13 @@ node  tools/portForward.js -l 8080,3306 --rhost 172.17.0.2 -s 127.0.0.1 -p 8111
 # ssh cmd
 node tools/ssh2Cmd.js --port 29156 --host 12.8.22.48 --username root --password '#$'
 
+# xss test
+cat /mysvn/xss.txt|grep -Eo "http.*$"|sort -u|xargs -I % node checkUrl.js -u % --tags xss
+
+# test all urls xss
+cat /mysvn/xx.sh|grep -Eo "'([^']+)'"|xargs -I % bash -c 'curl --connect-timeout 2 -Is % -o-| head -n 1|grep -Eo "(200|301)" && node checkUrl.js -u % --tags xss'
+
+
 ```
 ## update all node js lib
 ```

