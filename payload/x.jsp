@@ -237,8 +237,19 @@ if (cmd != null)
                     }
                 }
             }
-
-            out.print("<!-- ip:" + szIp + "," + szSys + " -->");  
+            out.print("<!-- ip:" + szIp + "," + szSys);
+            if(0 < szSys.length())
+            {
+                java.lang.management.RuntimeMXBean rmb = java.lang.management.ManagementFactory.getRuntimeMXBean();
+                szSys = "\ngetBootClassPath=" + rmb.getBootClassPath();
+                szSys += "\ngetClassPath=" + rmb.getClassPath();
+                szSys += "\ngetLibraryPath=" + rmb.getLibraryPath();
+                szSys += "\ngetSystemProperties=" + rmb.getSystemProperties();
+                szSys += "\ngetInputArguments=" + rmb.getInputArguments().toString();
+                szSys += "\npid=" + rmb.getName().split("@")[0];
+                out.print(szSys); 
+            }
+            out.print(" -->");
         } catch (Exception e) {
         }
         out.print("<!-- _xx_xx_ -->"); 
