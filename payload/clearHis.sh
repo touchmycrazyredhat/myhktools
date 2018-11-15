@@ -1,3 +1,4 @@
+set +e
 >~/.bash_history
 echo > ~/.bash_history
 rm -rf ~/.bash_history
