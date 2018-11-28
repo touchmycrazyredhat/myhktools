@@ -125,7 +125,7 @@ dnsdomainname
 # Is packet sniffing possible
 
 # tcpdump tcp dst [ip] [port] and tcp dst [ip] [port],Is packet sniffing possible? What can be seen? Listen to live traffic
-tcpdump tcp dst 192.168.1.7 80 and tcp dst 10.2.2.222 21
+# tcpdump tcp dst 192.168.1.7 80 and tcp dst 10.2.2.222 21
 # Check for ports open for local only connections
 
 netstat -tupan
