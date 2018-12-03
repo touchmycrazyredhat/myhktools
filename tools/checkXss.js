@@ -98,6 +98,7 @@ function fnDoReq(req,opt,fnCbk)
 	req(xxUrl,o,function(e,r,b)
 	{
 		//console.log(b);
+		// 非html也会，所以取消检测： && -1 < r.headers['content-type'].indexOf("text/html")
 		if(!e && b)
 		{
 			fnCbk(String(b),r.headers);
