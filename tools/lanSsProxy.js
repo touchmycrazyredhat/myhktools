@@ -45,9 +45,14 @@ function fnMySSocks5(ip,u,p,port,fnCbk,sshport)
 	var ssh_config = {
 	  host: ip,
 	  "port": sshport,
-	  username: u,
+		username: u,
 	  password: p
 	};
+	var sZ = process.env['HOME'] + '/.ssh/id_rsa';
+	if(fs.existsSync(sZ))
+	{
+		ssh_config.privateKey = fs.readFileSync(sZ).toString("utf-8");
+	}
 	// console.log(ssh_config);
 
 	socks.createServer(function(info, accept, deny)
