@@ -27,6 +27,8 @@
 ## dependencies
 | Command | Description |
 | --- | --- |
+| kali linux | recommend system |
+| node js | program runtime |
 | javac、java | auto generate payload |
 | metasploit | auto generate payload,and autoexploit|
 | gcc | auto generate payload |

