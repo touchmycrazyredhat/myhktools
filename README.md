@@ -18,10 +18,21 @@
 ![python](https://img.shields.io/badge/python2-red.svg)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 
+<!--
 
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
+-->
 
+## dependencies
+| Command | Description |
+| --- | --- |
+| javac、java | auto generate payload |
+| metasploit | auto generate payload,and autoexploit|
+| gcc | auto generate payload |
+| tmux | auto background send payload, shell |
+| bash | base64、tr、nc,auto generate payload |
+| python | auto generate and send payload |
 
 ## how install
 ```
@@ -307,5 +318,8 @@ iptablesSh.sh
 iptablesSh.sh
 ``` 
 </code>
+<!--
+
 <img src="https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
+-->
 </pre>
