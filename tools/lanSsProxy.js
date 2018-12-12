@@ -10,7 +10,10 @@ now ssh socks port 8111 to my kali
 内网渗透时隐藏ip最终，通过若干ssh建立代理池
 proxychains4 -f ~/safe/`whoami`/proxychains.conf node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -p 15533
 
-curl -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v -x 'socks5://127.0.0.1:8111' https://172.17.0.2:8080
+curl -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v -x 'socks5://127.0.0.1:8111' http://192.168.10.115:8083/QIMS/login.jsp
+
+cat tmp/p.txt|grep -Eo "4[0-9]{3}"|xargs -I % curl --connect-timeout 3 -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v -x 'socks5://127.0.0.1:%' http://192.168.10.115:8083/QIMS/login.jsp
+
 netstat -ant|grep LISTEN|grep tcp4
 
 */
@@ -31,6 +34,7 @@ var fs  = require("fs"),
 	.option('-n, --startPort [value]', 'start port，default 4000')
 	.option('-s, --youPort [value]', 'proxychains port，default 8111')
 	.parse(process.argv);
+
 process.setMaxListeners(0);
 process.on('uncaughtException', fnE);
 process.on('unhandledRejection', fnE);
