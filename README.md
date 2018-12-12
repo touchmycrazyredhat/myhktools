@@ -71,7 +71,6 @@ cat /mysvn/xx.sh|grep -Eo "'([^']+)'"|xargs -I % bash -c 'curl --connect-timeout
 
 ```
 ## plugins
-
 |name|tags|dependencies|des|
 | --- | ---  | ---  | --- |
 |/bash/CVE-2014-6271.js|shellshock,web,CVE-2014-6271,rci|java,ysoserial,base64,tr|Shellshock Remote Command Injection (CVE-2014-6271)|

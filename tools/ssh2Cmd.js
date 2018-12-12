@@ -24,6 +24,7 @@ program.version("远程命令执行")
   .option('-h, --host [value]', '访问主机的ip')
   .option('-f, --fileName [value]', 'ip信息文件，转化，获取其经纬度信息，格式：["ip1","ip2"]')
   .option('-u, --username [value]', '用户名, 默认：root')
+  .option('-k, --key [value]', 'key,/root/.ssh/id_rsa')
   .option('-s, --password [value]', "密码")
   .option('-c, --cmd [value]', "命令")
   .parse(process.argv);
@@ -35,7 +36,7 @@ if(!program.cmd)
 
 function fnErr(e)
 {
-  // console.log(e);
+  console.log(e);
 }
 process.on('uncaughtException', fnErr);
 process.on('unhandledRejection', fnErr);
@@ -68,8 +69,6 @@ function fnGetIps(s,myCurIp,fnCbk)
     if( oT[szTT] || 
         -1 < szTT.indexOf('0.0.0.0') ||
         -1< szTT.indexOf('127.0.0.1') ||
-        -1< szTT.indexOf('192.168.24.15') ||
-        -1< szTT.indexOf('192.168.24.10') ||
         -1< a[2].indexOf('192.168') ||
         -1< a[2].indexOf('172.1') ||
         (myCurIp == a[1] && a[1] == a[2]))
@@ -97,7 +96,18 @@ function fnGetIps(s,myCurIp,fnCbk)
 
 function fnMySsh(prm,fnCbk)
 {
-  var conn = new Client();
+  var conn = new Client(),oConfig = {
+    host: prm.host,
+    port: prm.port || 22,
+    username: prm.username || 'root'
+    // ,privateKey: require('fs').readFileSync('/here/is/my/key')
+  };
+  if(prm.key)
+  {
+    oConfig.privateKey = fs.readFileSync(prm.key);
+    // delete oConfig.username;
+  }
+  else oConfig.password = prm.password || "xxx123";
   conn.on('ready', function()
   {
     var a = [];
@@ -120,14 +130,7 @@ function fnMySsh(prm,fnCbk)
       });
       stream.end((prm.cmd || 'netstat -antlp\n') + '\nhistory -c\nexit\n');
     });
-  }).connect(
-  {
-    host: prm.host,
-    port: prm.port || 22,
-    username: prm.username || 'root',
-    password: prm.password || "xxx123"
-    // ,privateKey: require('fs').readFileSync('/here/is/my/key')
-  });
+  }).connect(oConfig);
 }
 
 function fnCvtIps(s)

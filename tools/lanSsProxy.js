@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /*
-node tools/lanSsProxy.js -p 127 -f ~/safe/myKali.txt
+node tools/lanSsProxy.js -p 192 -f tmp/sshIps.txt
+cat data/Ok.txt |grep 192|grep -Eo "192\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"|sort -u|xargs -I % bash -c 'echo % % 22/tcp ssh   root  xxx!@#$         Password' >tmp/sshIps.txt
 cat tmp/sshIps.txt
 192.168.22.98   192.168.22.98    22/tcp (ssh)  root  xxx!@#$         Password
 
@@ -10,6 +11,8 @@ now ssh socks port 8111 to my kali
 proxychains4 -f ~/safe/`whoami`/proxychains.conf node /Users/`whoami`/safe/myhktools/tools/mySocks5.js -p 15533
 
 curl -H 'user-agent:Mozilla/5.0 (Linux; Android 5.1.1; OPPO A33 Build/LMY47V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043409 Safari/537.36 V1_AND_SQ_7.1.8_718_YYB_D PA QQ/7.1.8.3240 NetType/4G WebP/0.3.0 Pixel/540' -k -v -x 'socks5://127.0.0.1:8111' https://172.17.0.2:8080
+netstat -ant|grep LISTEN|grep tcp4
+
 */
 var fs  = require("fs"),
 	program = require('commander'),
@@ -17,7 +20,7 @@ var fs  = require("fs"),
 	startPort = 4000,
 	util = require('util'),
 	prefix = "192",
-	youPort = 8111,
+	youPort = 9111,
 	child_process = require('child_process'),
 	a = [],
 	fnE = function(e){console.log(e)};
@@ -52,6 +55,7 @@ function fnMySSocks5(ip,u,p,port,fnCbk,sshport)
 	if(fs.existsSync(sZ))
 	{
 		ssh_config.privateKey = fs.readFileSync(sZ).toString("utf-8");
+		// console.log(ssh_config.privateKey);
 	}
 	// console.log(ssh_config);
 
@@ -78,10 +82,13 @@ function fnMySSocks5(ip,u,p,port,fnCbk,sshport)
 	      } else
 	        conn.end();
 	    });
-	  }).on('error', function(err) {fnE(err);
+		}).on('error', function(err) 
+		{
+			fnE(err);
 	    deny();
 	  }).connect(ssh_config);
-	}).listen(port, '127.0.0.1', function() {
+	}).listen(port, '127.0.0.1', function() 
+	{
 		console.log("ssh forwarding listen: " + port);
 		fnCbk(port);
 	  // console.log('SOCKSv5 proxy server started on port '+ port);
@@ -100,15 +107,14 @@ function fnDoIp(ip,u,p,fnCbk,sshport)
 	fnMySSocks5(ip,u,p,startPort,fnCbk,sshport);
 }
 
-var szCode = (function(){/*
-random_chain
+var szCode = String(`random_chain
 quiet_mode
 remote_dns_subnet 224
 tcp_read_time_out 15000
 tcp_connect_time_out 8000
 localnet 127.0.0.0/255.0.0.0
 [ProxyList]
-*/}).toString().split(/\n/).slice(1, -1);
+`).split("\n");
 /*
 1、建立proxychains配置文件
 2、启动ssh远程socks代理，启动前，杀掉相同ip的进程
@@ -119,7 +125,7 @@ function fnGo()
 {
 	var szFileName = path.resolve(process.env.PWD,program.file);
 	a = fs.readFileSync(szFileName).toString().split(/\n/gmi)
-	if(0 == a.length)console.log("没有读取到内容：" + szFileName);
+	if(0 == a.length)console.log("read list file ：" + szFileName);
 
 	var i = 0;
 	var nC = 0,c = [""],fnCbk1 = function(n)
@@ -131,25 +137,35 @@ function fnGo()
 			var tP = "/tmp/" + Math.random();
 			fs.writeFileSync(tP,szCode.join("\n"));
 			var szCmd = "`which proxychains4` -f " + tP + " node tools/mySocks5.js  -h 127.0.0.1 -p " + youPort + " &";
-			console.log("已经启动终结代理端口：" + youPort);
+			console.log("run\n" + szCmd);
+			console.log("start proxy port ：" + youPort);
 			console.log("proxychains4 config: " + tP);
 			child_process.execSync(szCmd);
+			// check port start LISTEN ok?
+			var szTmp = child_process.execSync("netstat -ant|grep LISTEN|grep tcp4|grep " + youPort);
+			if(szTmp)
+			{
+				console.log("start proxy port " + youPort + " is Ok: \n" + szTmp);
+			}
 		}
-		else console.log("注意：服务没有成功开启");
+		// else console.log("warning：service not start");
 	};
+	// console.log(a)
 	for(; i < a.length; i++)
 	{
 		if(!a[i])continue;
 		var t = a[i].trim().split(/[\s\t]+/);
 		if(4 > t.length)
 		{
-			console.log("格式错误：" + t);
+			console.log("format error：" + t);
 			continue;
 		}
 		nC++;
 		var sshport = t[2].split("/")[0];
+		// console.log(`[${sshport}]`)
+		// console.log([t[0],t[4],t[5]])
 		if(-1 < t[0].indexOf(prefix))fnDoIp(t[0],t[4],t[5],fnCbk1,sshport);
-		if(t[0] != t[1] && -1 < t[1].indexOf(prefix))fnDoIp(t[1],t[4],t[5],fnCbk1,sshport);
+		else if(t[0] != t[1] && -1 < t[1].indexOf(prefix))fnDoIp(t[1],t[4],t[5],fnCbk1,sshport);
 	}
 	return (szCode);
 }

@@ -12,6 +12,10 @@ open strDecodeEncode.html
 ```
 node decode.js youCode
 ```
+## get pdf file pages number
+```
+getPdfPagesNum.sh pdfilename
+```
 
 ## 内网服务转发
 1. 别人能够访问的机器
