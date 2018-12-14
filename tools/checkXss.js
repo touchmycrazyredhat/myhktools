@@ -79,6 +79,13 @@ function fnGetRequest(req,opt)
 "}alert(2);if(1){//
 ");}alert(1);{//
 */
+var _s = 0,_t = 0;
+function setT(s,t)
+{
+	_s = s;
+	_t = t;
+}
+
 var xss_wt = fs.readFileSync("tools/xss_whitelist.txt").toString("utf-8"),
 	xss_Oks = g_bSkip?fs.readFileSync("data/xssUrls.txt").toString("utf-8") :"";
 function fnDoReq(req,opt,fnCbk)
@@ -94,11 +101,12 @@ function fnDoReq(req,opt,fnCbk)
 	}
 	
 	var xxUrl = o.uri;delete o.uri;
-	// console.log(o);
-	// console.log(xxUrl)
 	req(xxUrl,o,function(e,r,b)
 	{
-		// console.log(b);
+		if(_s && _t && _t.fnDoForm)
+		{
+			_t.fnDoForm(b,xxUrl,r,'xss');
+		}
 		// 非html也会，所以取消检测： && -1 < r.headers['content-type'].indexOf("text/html")
 		if(!e && b)
 		{
@@ -132,7 +140,6 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 	var url = szUrl,szOurl = url, req = fnGetRequest(request),  
 	// new payload 
 		s =  "<" + g_ScrIpt + ">alert(" + new Date().getTime() + ")</" + g_ScrIpt + ">";
-	// console.log([url, szOurl])
 	// 寻找注入点
 	fnDoReq(req,{uri:szOurl,
 		},function(b3)
@@ -140,9 +147,7 @@ function fnDoCheckUrl(szUrl,fnCbk1)
 			if(b3)
 			{
 				var  b3 = String(b3), re1 = new RegExp("(\\b"+ xss_wt.trim().replace(/[^a-z\n]/gmi,'').replace(/\n{1,}/gmi,'\n').replace(/\n/gmi, "\\b)|(\\b") +"\\b)","gmi");
-				// console.log(re1)
 				b3 = b3.replace(re1,'');
-				// console.log(b)
 				if(b3)
 				{
 					var re = /(\b[a-z]+\b)/gmi,aP = [],oG={};
@@ -221,4 +226,10 @@ if(program.url && !program.struts2)
 	})	
 }
 
-module.exports={fnDoCheckUrl:fnDoCheckUrl,setInfoCbk:setInfoCbk};
+
+module.exports=
+{
+	fnDoCheckUrl:fnDoCheckUrl,
+	setInfoCbk:setInfoCbk,
+	setT:setT
+};
