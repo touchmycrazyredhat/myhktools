@@ -4,6 +4,7 @@
 Sample script showing how to do remote port forwarding over paramiko.
 
 py2  py/rforward.py -r 192.168.10.115:8083 -p 9999 -u root 162.219.126.11:27449
+curl http://162.219.126.11:9999/QIMS/login.jsp -v
 ===============================================================================
 
 This script connects to the requested SSH server and sets up remote port
@@ -25,7 +26,6 @@ SSH_PORT = 22
 DEFAULT_PORT = 4000
 
 g_verbose = True
-
 
 def handler(chan, host, port):
     sock = socket.socket()
