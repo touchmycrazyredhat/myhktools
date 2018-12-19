@@ -192,14 +192,17 @@ Usage: checkUrl [options]
 
 ```
 
-# iptables, disabele ping、nmap
-``` 
-iptablesSh.sh
-iptablesSh.sh
-``` 
-</code>
 <!--
 
 <img src="https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
 -->
-</pre>
+
+
+# Thanks to
+-  [![Follow on Twitter](https://img.shields.io/twitter/follow/hanerkui.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=hanerkui) github:[hanerkui](https://github.com/hanerkui)
+- [![Follow on Twitter](https://img.shields.io/twitter/follow/pwncrestfallen.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=pwncrestfallen) github:[musicalpike](https://github.com/musicalpike)
+- [![Follow on Twitter](https://img.shields.io/twitter/follow/tiger_mirror.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=tiger_mirror) github: [black-mirro](https://github.com/black-mirror)
+- [![Follow on Twitter](https://img.shields.io/twitter/follow/Arthur22573102.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Arthur22573102) github:[EnterpriseForever](https://github.com/EnterpriseForever)
+
+- 
+ 
