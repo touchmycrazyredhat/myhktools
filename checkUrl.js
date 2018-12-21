@@ -71,3 +71,4 @@ r.on('ready',function()
 	// cXss.fnDoCheckUrl(r.url);
 });
 
+// process.on('SIGUSR1', function(){   console.trace()   });
