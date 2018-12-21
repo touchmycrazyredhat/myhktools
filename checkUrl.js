@@ -15,6 +15,12 @@
 
 var kkk = require('./lib/core_new.js');
 var r = new kkk(),colors = require('colors');
+var fnTTTTT = console.log;
+console.log = function(s){
+	fnTTTTT(s);
+	// throw "x";
+	// console.trace();
+}
 // -v 参数才会输出
 r.on('log',function(s)
 {
