@@ -651,6 +651,14 @@ brew install ImageMagick
 1）、convert ok.jpg \( +clone -blur 0x20 \) -compose Divide_Src -composite  kkk.jpg
 2）、convert ok.jpg -fuzz 20% -transparent white result.png
 
+分享：如何将pdf转换为长图？两个linux命令
+gs -sDEVICE=pngalpha -o file-%03d.png -r144   信息安全部公约.pdf
+
+convert file-001.png file-002.png file-003.png file-004.png file-005.png file-006.png file-007.png file-008.png  -append group_1.png
+convert `ls  file-0*.png`  -append oneAll.png
+convert image.png -gravity Center -region 10x10-40+20 -negate output.png
+-compress jpeg -quality 50
+
 magicwand 1,1 -t 20 -f image -r outside -m overlay -o 0 image.jpg imgOutput.png
 magick 1335624623-956109868.jpg -fuzz 20% -fill none -draw "alpha 1x1 floodfill" result.png
 
