@@ -201,11 +201,15 @@ Usage: checkUrl [options]
 <!-- ender -->
 # Donation
 ## AliPay
-![donation-alipay](/md/wc.png)
+![donation-AliPay](/md/wc.png)
 ## Wechat Pay
-![donation-alipay](/md/zfb.png)
+![donation-Wechat](/md/zfb.png)
 ## Paypal
 Donate money by [paypal](https://www.paypal.me/pwned2019) to my account **miracletalent@gmail.com**.
+## BTC Pay
+![donation-BTC](/md/BTC.png)
+## BCH Pay
+![donation-BCH](/md/bch.jpg)
 
 
 # Thanks to
