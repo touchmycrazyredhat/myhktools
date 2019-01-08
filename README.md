@@ -209,7 +209,7 @@ Donate money by [paypal](https://www.paypal.me/pwned2019) to my account **miracl
 ## BTC Pay
 ![donation-BTC](/md/BTC.png)
 ## BCH Pay
-![donation-BCH](/md/bch.jpg)
+![donation-BCH](/md/BCH.jpg)
 
 
 # Thanks to
