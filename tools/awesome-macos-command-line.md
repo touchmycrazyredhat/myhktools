@@ -946,6 +946,7 @@ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Curre
 ```
 Adobe Acrobat Pro DC
 可以批量处理背景图片哈
+convert 61549100306_.pic_hd.jpg -resize 16x16 favicon.ico
 
 http://www.imagemagick.org/script/convert.php
 

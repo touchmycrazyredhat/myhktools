@@ -658,6 +658,11 @@ convert file-001.png file-002.png file-003.png file-004.png file-005.png file-00
 convert `ls  file-0*.png`  -append oneAll.png
 convert image.png -gravity Center -region 10x10-40+20 -negate output.png
 -compress jpeg -quality 50
+convert 895452632.png -compress jpeg -quality 50 xxx.jpg
+
+convert xxx.jpg -resize 200x200 wx.jpg
+convert -delay 20 -loop 0 xxx.jpg xiatian2.jpg myimage.gif
+convert -resize 768x576 -delay 20 -loop 0 `ls -v` myimage.gif
 
 magicwand 1,1 -t 20 -f image -r outside -m overlay -o 0 image.jpg imgOutput.png
 magick 1335624623-956109868.jpg -fuzz 20% -fill none -draw "alpha 1x1 floodfill" result.png
