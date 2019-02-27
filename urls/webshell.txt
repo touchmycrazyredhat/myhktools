@@ -1,3 +1,4 @@
+/static/../../../a/../../../../etc/passwd
 0.php
 007.php
 07.php
