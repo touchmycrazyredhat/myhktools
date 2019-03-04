@@ -2,6 +2,28 @@
 author: M.T.X. 2018-05-14 
 Twitter: @Hktalent3135773
 
+# 一键备份所有的images
+```
+bakdir=/Users/0x101/Downloads/myDcocker/
+docker images>${bakdir}dockerListNames.txt
+docker images|grep -Ev "REPOSITORY|m\.t\.x"|awk '{print $3}'|xargs -I % bash -c "[ -f  ${bakdir}%]||docker save % ${bakdir}%"
+```
+# 一键还原docker备份的images
+```
+bakdir=/Users/0x101/Downloads/myDcocker/
+cat <<EOT>${bakdir}loadOne.sh
+bakdir=${bakdir}
+t="\$1"
+if [[ -f "\${bakdir}\${t}" ]];
+then
+docker load -i \${bakdir}\${t}
+tagname=\`cat \${bakdir}dockerListNames.txt|grep "\${t}"|awk '{print \$1":"\$2}'\`
+docker tag \${t} \${tagname}
+docker images |grep \$t
+fi
+EOT
+cat ${bakdir}dockerListNames.txt|grep 567d1f9f6edc|grep -Ev "REPOSITORY|m\.t\.x"|awk '{print $3}'|xargs -I % ${bakdir}loadOne.sh %
+```
 ## To convert in.mov into out.gif
 ```
 https://gist.github.com/spicycode/b5f25392b2a7359c6c27
