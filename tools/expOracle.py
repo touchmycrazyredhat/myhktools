@@ -12,8 +12,12 @@ import os.path
 # py2 /root/mytools/myhktools/tools/expOracle.py xx/xx@12.18.102.5/xxx
 connection = sys.argv[1]
 dbName=""
+tbname=""
 if len(sys.argv) > 2:
     dbName = sys.argv[2]
+if len(sys.argv) > 3:
+    tbname = sys.argv[3]
+
 # print connection
 orcl = cx_Oracle.connect(connection,encoding = "UTF-8", nencoding = "UTF-8")
 curs = orcl.cursor()
@@ -22,8 +26,10 @@ printHeader = True # include column headers in each table output
 owner=""
 if dbName:
     owner="owner='" + dbName + "' and "
+if tbname:
+    tbname="TABLE_NAME='" + tbname + "' and "
 
-sql = "select owner,TABLE_NAME,NUM_ROWS from all_tables where " + owner + " not 'CHANGE_ON_INSTALL,CTXSYS,DBSNMP,INTERNAL,LBACSYS,MANAGER,MDSYS,MTRPW,MTSSYS,ODM,ODM_MTR,OLAPSYS,ORACLE,ORDPLUGINS,ORDSYS,OUTLN,SCOTT,SYS,SYSTEM,TIGER' like '%'||owner||'%'  and num_rows>1000 and not (table_name like '%LOG%' or  table_name like '%$%' or table_name like '%BAK%' or table_name like '%TMP%' or table_name like '%TEMP%' or table_name like '%TEST%') order by num_rows desc"
+sql = "select owner,TABLE_NAME,NUM_ROWS from all_tables where "  + tbname + owner + " not 'CHANGE_ON_INSTALL,CTXSYS,DBSNMP,INTERNAL,LBACSYS,MANAGER,MDSYS,MTRPW,MTSSYS,ODM,ODM_MTR,OLAPSYS,ORACLE,ORDPLUGINS,ORDSYS,OUTLN,SCOTT,SYS,SYSTEM,TIGER' like '%'||owner||'%'  and num_rows>1000 and not (table_name like '%LOG%' or  table_name like '%$%' or table_name like '%BAK%' or table_name like '%TMP%' or table_name like '%TEMP%' or table_name like '%TEST%') order by num_rows desc"
 curs.execute(sql)
 
 
