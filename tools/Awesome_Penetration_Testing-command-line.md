@@ -4,6 +4,16 @@ Twitter: @Hktalent3135773
 
 <!--  
 -->
+
+## 一键得到无数的webshell，并去重
+```
+curl -s -q -k https://raw.githubusercontent.com/We5ter/Scanners-Box/master/webshell_samples/README.md -o- |grep "github"|sed 's/- //g'|sed 's/github/codeload\.github/g' |xargs -I % wget %/zip/master
+ls master*|xargs -I % bash -c "mv % %.zip"
+ls master.*|xargs -I % unzip -B % -d files/
+fdupes -d  -N -r files/
+rm -rf master*
+```
+
 ## other awesome-macos-command-line
 ```
 https://github.com/hktalent/tools/awesome-macos-command-line
