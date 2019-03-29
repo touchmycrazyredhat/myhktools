@@ -24,11 +24,12 @@ program.version("parse webshell urls 1.0")
 		"node tools/doCmdIps.js -f data/Ok1.txt -c 'find . -name \"*.war\"|grep -Ev \"bea|uudi|wls|wsat|weblogic\"'\n\n");
 	})
 	.parse(process.argv);
+	// console.log(program.cmd)
 var a = [],
 	oIps = {},sFilt = '',
 	nTimeout = program.timeout||3,
 	szOut = program.out||"data/Ok1.txt",
-	szCmd2 = decodeURIComponent(program.cmd||'whoami');
+	szCmd2 = (program.cmd||'whoami');
 if(program.file)
 	a = fs.readFileSync(program.file || "data/Ok.txt").toString().split(/\n/)
 	,sFilt = program.filter||"192.";
@@ -44,7 +45,6 @@ self.on('readable', function() {
 self.on('end', function() {
     program.cmd = data.join("").trim();
 });
-
 
 function fnDoCmd(url,szCmd1,ip1,fnCbk)
 {

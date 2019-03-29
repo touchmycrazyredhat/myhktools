@@ -11,7 +11,8 @@ bakdir="$1"
 fi
 
 docker images>${bakdir}dockerListNames.txt
-docker images|grep -Ev "REPOSITORY|m\.t\.x"|awk '{print $3}'|xargs -I % bash -c "[ -f  ${bakdir}%]||docker save % ${bakdir}%"
+docker images|grep -Ev "REPOSITORY|m\.t\.x"|awk '{print $3}'|xargs -I % bash -c "bakdir=/Users/0x101/Downloads/myDcocker/;[ -f ${bakdir}% ] || docker save % -o ${bakdir}%"
+
 ```
 # 一键还原docker备份的images
 ```
@@ -996,7 +997,7 @@ sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Curre
 ```
 Adobe Acrobat Pro DC
 可以批量处理背景图片哈
-convert 61549100306_.pic_hd.jpg -resize 16x16 favicon.ico
+convert /mytools/hktools_MTX/app/static/img/ico.jpg -resize 64x64 /mytools/hktools_MTX/app/static/favicon.ico
 
 http://www.imagemagick.org/script/convert.php
 

@@ -1,6 +1,25 @@
 /static/../../../a/../../../../etc/passwd
 0.php
 007.php
+JspWebshell 1.2.jsp
+browser.jsp
+cmd.jsp
+cmd_win32.jsp
+jspShell.jsp
+jspbd.jsp
+list.jsp
+up.jsp
+up_win32.jsp
+simple.jsp
+cmd.jsp
+jsp-reverse.jsp
+browser.jsp
+up.jsp
+cmd.jsp
+cmdjsp.jsp
+cmd_win32.jsp
+up_win32.jsp
+list.jsp
 07.php
 0wn3d.php
 1.php
