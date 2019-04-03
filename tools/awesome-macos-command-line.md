@@ -10,7 +10,9 @@ then
 bakdir="$1"
 fi
 
-docker images>${bakdir}dockerListNames.txt
+docker images>>${bakdir}dockerListNames.txt
+cat ${bakdir}dockerListNames.txt|grep -v "REPOSITORY"|awk '{print $1" "$2" "$3" "$7}'|sort -t ' ' -k 1,3 -u >${bakdir}dockerListNames.txt1
+mv ${bakdir}dockerListNames.txt1 ${bakdir}dockerListNames.txt
 docker images|grep -Ev "REPOSITORY|m\.t\.x"|awk '{print $3}'|xargs -I % bash -c "bakdir=/Users/0x101/Downloads/myDcocker/;[ -f ${bakdir}% ] || docker save % -o ${bakdir}%"
 
 ```
