@@ -65,10 +65,11 @@ r.on('vul',function(v,t,s)
 
 r.on('ready',function()
 {
-	// console.log('准备好了....');
-	// r.runChecks();
 	
+	// console.log('准备好了....');
+	r.runChecks();
 	// cXss.fnDoCheckUrl(r.url);
 });
-
+// r.fnInit();
+// r.fnMkPayload();
 // process.on('SIGUSR1', function(){   console.trace()   });

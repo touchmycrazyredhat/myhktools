@@ -1,8 +1,8 @@
 {
   "name": "MTX_hktools",
   "version": "1.1.0",
-  "description": "巅狼团队",
-  "main": "checkUrl.js",
+  "description": "巅狼团队,checkUrl, hacker pwn tools",
+  "main": "./lib/core_new.js",
   "dependencies": {
     "detect-character-encoding": "^0.6.0",
     "global-tunnel": "^1.2.0",
