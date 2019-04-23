@@ -8,7 +8,7 @@ xx="/root/mytools/node-v10.12.0-linux-x64/lib/node_modules/"
 if ![[ -d $xx ]];then
     xx="/usr/local/lib/node_modules/"
 fi
-ls -1 /usr/local/lib/node_modules/ >ins3.tmp
+ls -1 $xx >ins3.tmp
 grep -F -f ins3.tmp ins1.tmp| sort | uniq > ins4.tmp
 chmod 777 install.sh
 cat ins4.tmp | awk '{print "npm i "$1}' > install.sh
