@@ -80,55 +80,55 @@ cat /mysvn/xx.sh|grep -Eo "'([^']+)'"|xargs -I % bash -c 'curl --connect-timeout
 |name|tags|dependencies|des|
 | --- | ---  | ---  | --- |
 |/bash/CVE-2014-6271.js|shellshock,web,CVE-2014-6271,rci|java,ysoserial,base64,tr|Shellshock Remote Command Injection (CVE-2014-6271)|
-|/GlassFish/4.1.0.js|glassfish,web||glassfish 4.1.0 漏洞检测|
-|/elasticsearch/CVE-2015-1427.js|elasticsearch,web,CVE-2015-1427|java,ysoserial,base64,tr|elasticsearch,web,CVE-2015-1427,RCE,ElasticSearch Groovy 沙盒绕过 && 代码执行漏洞（CVE-2015-1427）测试环境|
+|/GlassFish/4.1.0.js|glassfish,web||glassfish 4.1.0 Vulnerability detection|
+|/elasticsearch/CVE-2015-1427.js|elasticsearch,web,CVE-2015-1427|java,ysoserial,base64,tr|elasticsearch,web,CVE-2015-1427,RCE,ElasticSearch Groovy Sandbox bypass && code execution vulnerability (CVE-2015-1427) test environment|
 |/elasticsearch/CVE-2014-3120.js|elasticsearch,web,CVE-2014-3120|java,ysoserial,base64,tr|elasticsearch,web,CVE-2014-3120,RCE|
-|/elasticsearch/CVE-2015-3337.js|CVE-2015-3337,||ElasticSearch 目录穿越漏洞（CVE-2015-3337）测试环境|
-|/flask/ssti.js|ssti,flask,parms||Flask（Jinja2） 服务端模板注入漏洞|
-|/jackson/drupal_CVE-2018-7600.js|CVE-2018-7600,web,drupal|java,ysoserial,base64,tr|drupal,漏洞检测|
-|/jackson/CVE-2017-7525.js|jackson,web,CVE-2017-7525,CVE-2017-17485|java,ysoserial,base64,tr|CVE-2017-7525,漏洞检测,JDK7u21,CVE-2017-17485|
-|/jackson/fastjson.js|fastjson,web,|java,ysoserial,base64,tr|fastjson,漏洞检测|
-|/http/attackhost.js|http,host,spoof,web||spoof host,漏洞检测|
-|/goahead/CVE-2017-17562.js|CVE-2017-17562,goahead,web|gcc,c lib,rm(/tmp/xx)|GoAhead 远程命令执行漏洞（CVE-2017-17562） 漏洞检测|
-|/java/CVE-2017-5645_log4j.js|log4j,web,CVE-2017-5645|java,ysoserial,base64,nc|CVE-2017-5645,漏洞检测,log4j|
-|/java/CVE-2018-1297_jmeter.js|jmeter,CVE-2018-1297|java,ysoserial|jmeter,CVE-2018-1297,漏洞检测|
-|/jboss/CVE-2017-12149.js|jboss,CVE-2017-12149|java,ysoserial|jboss,CVE-2018-1297,漏洞检测|
-|/jdk/7u25.js|jre7,jdk7,jre1.7,jdk1.7,1.7,web,CVE-2013-0431,0431||jre7,jdk7,jre1.7,jdk1.7,1.7,web漏洞检测,|
-|/smb/CVE-2017-7494.js|smb,win,CVE-2017-7494|java,ysoserial,base64,tr|smb,win,CVE-2017-7494,漏洞检测|
-|/spring/CVE-2018-1270.js|spring,CVE-2018-1270,1270,parms,web||spring CVE-2018-1270 RCE漏洞检测,CVE-2018-1270: Remote Code Execution with spring-messaging|
-|/spring/cve-2017-4971.js|spring,cve-2017-4971,4917,parms,web|java,ysoserial,base64,tr|spring cve-2017-4971 RCE漏洞检测,CVE-2017-4971: Remote Code Execution Vulnerability In The Spring Web Flow Framework|
-|/struts/001.js|struts2,001,ww-2030,2030,parms,web||WW-2030,struts2 001漏洞检测|
-|/struts/005.js|struts2,005,ww-3470,xw-641,641,3470,web||WW-3470,XW-641,struts2 005漏洞检测|
-|/struts/007.js|struts2,007,ww-3668,3668,parms||WW-3668,struts2 007漏洞检测|
-|/struts/008.js|struts2,008,ww-3729,3729,web||WW-3729,struts2 漏洞检测|
-|/struts/012.js|struts2,012,cve-2013-1965,parms,20131965||CVE-2013-1965,struts2 012漏洞检测|
-|/struts/009.js|struts2,009||struts2 漏洞检测|
-|/struts/013.js|struts2,013,parms||struts2 013漏洞检测|
-|/struts/015.js|struts2,015||struts2 015漏洞检测|
-|/struts/016.js|struts2,016||struts2 016漏洞检测|
-|/struts/019.js|struts2,019||struts2 019漏洞检测|
-|/struts/029.js|struts2,029,parms||struts2 029漏洞检测|
-|/struts/032.js|struts2,032||struts2 032漏洞检测|
-|/struts/037.js|struts2,037,cve-2016-4438,20164438||CVE-2016-4438,struts2 037漏洞检测|
-|/struts/045.js|web,struts2,045,cve-2017-5638,20175638||CVE-2017-5638,struts2 045漏洞检测|
-|/struts/033.js|struts2,033,cve-2016-3087,20163087||CVE-2016-3087,struts2 033漏洞检测|
-|/struts/046.js|struts2,046,cve-2017-5638,20175638||CVE-2017-5638,struts2 046漏洞检测|
-|/struts/048.js|struts2,048,cve-2017-9791,20179791,parms||CVE-2017-9791,struts2 048漏洞检测|
-|/struts/053.js|struts2,053,parms||struts2 053漏洞检测|
-|/struts/052.js|struts2,052||struts2 052漏洞检测,CVE-2017-9805|
-|/struts/054.js|struts2,052||struts2 052漏洞检测|
-|/struts/CVE-2016-100031.js|web,acf,CVE-2016-100031,fileupload,CVE-2013-2186|java,|CVE-2016-100031,CVE-2013-2186,Apache Commons FileUpload 漏洞检测|
-|/struts/055.js|struts2,055,CVE-2017-7525,7525,parms|javac|struts2 055漏洞检测,|
-|/struts/057.js|web,struts2,057||CVE-2018-11776,struts2 057漏洞检测|
-|/struts/devMode.js|struts2,devMode||struts2 devMode漏洞检测|
-|/struts/ognl.js|struts2,parms,ognl||struts2 052漏洞检测|
-|/struts/pythonBc.js|struts2,python|python,struts-scan.py|struts2 python脚本漏洞检测补充|
-|/tomcat/CVE-2016-6816.js|tomcat,CVE-2016-6816||Apache Tomcat CVE-2016-6816 Security Bypass Vulnerability 漏洞检测|
-|/tomcat/CVE-2017-12616.js|tomcat,CVE-2017-12616,12616,CVE-2017-12617||tomcat,漏洞检测|
+|/elasticsearch/CVE-2015-3337.js|CVE-2015-3337,||ElasticSearch Directory traversal vulnerability（CVE-2015-3337）test environment|
+|/flask/ssti.js|ssti,flask,parms||Flask（Jinja2） Server Template Injection Vulnerability|
+|/jackson/drupal_CVE-2018-7600.js|CVE-2018-7600,web,drupal|java,ysoserial,base64,tr|drupal,Vulnerability detection|
+|/jackson/CVE-2017-7525.js|jackson,web,CVE-2017-7525,CVE-2017-17485|java,ysoserial,base64,tr|CVE-2017-7525,Vulnerability detection,JDK7u21,CVE-2017-17485|
+|/jackson/fastjson.js|fastjson,web,|java,ysoserial,base64,tr|fastjson,Vulnerability detection|
+|/http/attackhost.js|http,host,spoof,web||spoof host,Vulnerability detection|
+|/goahead/CVE-2017-17562.js|CVE-2017-17562,goahead,web|gcc,c lib,rm(/tmp/xx)|GoAhead Remote command execution vulnerability（CVE-2017-17562） Vulnerability detection|
+|/java/CVE-2017-5645_log4j.js|log4j,web,CVE-2017-5645|java,ysoserial,base64,nc|CVE-2017-5645,Vulnerability detection,log4j|
+|/java/CVE-2018-1297_jmeter.js|jmeter,CVE-2018-1297|java,ysoserial|jmeter,CVE-2018-1297,Vulnerability detection|
+|/jboss/CVE-2017-12149.js|jboss,CVE-2017-12149|java,ysoserial|jboss,CVE-2018-1297,Vulnerability detection|
+|/jdk/7u25.js|jre7,jdk7,jre1.7,jdk1.7,1.7,web,CVE-2013-0431,0431||jre7,jdk7,jre1.7,jdk1.7,1.7,webVulnerability detection,|
+|/smb/CVE-2017-7494.js|smb,win,CVE-2017-7494|java,ysoserial,base64,tr|smb,win,CVE-2017-7494,Vulnerability detection|
+|/spring/CVE-2018-1270.js|spring,CVE-2018-1270,1270,parms,web||spring CVE-2018-1270 RCEVulnerability detection,CVE-2018-1270: Remote Code Execution with spring-messaging|
+|/spring/cve-2017-4971.js|spring,cve-2017-4971,4917,parms,web|java,ysoserial,base64,tr|spring cve-2017-4971 RCEVulnerability detection,CVE-2017-4971: Remote Code Execution Vulnerability In The Spring Web Flow Framework|
+|/struts/001.js|struts2,001,ww-2030,2030,parms,web||WW-2030,struts2 001Vulnerability detection|
+|/struts/005.js|struts2,005,ww-3470,xw-641,641,3470,web||WW-3470,XW-641,struts2 005Vulnerability detection|
+|/struts/007.js|struts2,007,ww-3668,3668,parms||WW-3668,struts2 007Vulnerability detection|
+|/struts/008.js|struts2,008,ww-3729,3729,web||WW-3729,struts2 Vulnerability detection|
+|/struts/012.js|struts2,012,cve-2013-1965,parms,20131965||CVE-2013-1965,struts2 012Vulnerability detection|
+|/struts/009.js|struts2,009||struts2 Vulnerability detection|
+|/struts/013.js|struts2,013,parms||struts2 013Vulnerability detection|
+|/struts/015.js|struts2,015||struts2 015Vulnerability detection|
+|/struts/016.js|struts2,016||struts2 016Vulnerability detection|
+|/struts/019.js|struts2,019||struts2 019Vulnerability detection|
+|/struts/029.js|struts2,029,parms||struts2 029Vulnerability detection|
+|/struts/032.js|struts2,032||struts2 032Vulnerability detection|
+|/struts/037.js|struts2,037,cve-2016-4438,20164438||CVE-2016-4438,struts2 037Vulnerability detection|
+|/struts/045.js|web,struts2,045,cve-2017-5638,20175638||CVE-2017-5638,struts2 045Vulnerability detection|
+|/struts/033.js|struts2,033,cve-2016-3087,20163087||CVE-2016-3087,struts2 033Vulnerability detection|
+|/struts/046.js|struts2,046,cve-2017-5638,20175638||CVE-2017-5638,struts2 046Vulnerability detection|
+|/struts/048.js|struts2,048,cve-2017-9791,20179791,parms||CVE-2017-9791,struts2 048Vulnerability detection|
+|/struts/053.js|struts2,053,parms||struts2 053Vulnerability detection|
+|/struts/052.js|struts2,052||struts2 052Vulnerability detection,CVE-2017-9805|
+|/struts/054.js|struts2,052||struts2 052Vulnerability detection|
+|/struts/CVE-2016-100031.js|web,acf,CVE-2016-100031,fileupload,CVE-2013-2186|java,|CVE-2016-100031,CVE-2013-2186,Apache Commons FileUpload Vulnerability detection|
+|/struts/055.js|struts2,055,CVE-2017-7525,7525,parms|javac|struts2 055Vulnerability detection,|
+|/struts/057.js|web,struts2,057||CVE-2018-11776,struts2 057Vulnerability detection|
+|/struts/devMode.js|struts2,devMode||struts2 devModeVulnerability detection|
+|/struts/ognl.js|struts2,parms,ognl||struts2 052Vulnerability detection|
+|/struts/pythonBc.js|struts2,python|python,struts-scan.py|struts2 python脚本Vulnerability detection补充|
+|/tomcat/CVE-2016-6816.js|tomcat,CVE-2016-6816||Apache Tomcat CVE-2016-6816 Security Bypass Vulnerability Vulnerability detection|
+|/tomcat/CVE-2017-12616.js|tomcat,CVE-2017-12616,12616,CVE-2017-12617||tomcat,Vulnerability detection|
 |/weblogic/SSRF.js|ssrf,weblogic,uddi,xspa||SSRF开放状态监测,CVE-2014-4210,UDDI Explorer,CVE-2014-4241, CVE-2014-4242)|
-|/weblogic/201710271.js|weblogic,CVE-2017-10271,10271,3506|payload/[x.jsp,*.sh],msfvenom,curl|CVE-2017-10271,weblogic CVE-2017-10271,CVE-2017-3506漏洞检测|
+|/weblogic/201710271.js|weblogic,CVE-2017-10271,10271,3506|payload/[x.jsp,*.sh],msfvenom,curl|CVE-2017-10271,weblogic CVE-2017-10271,CVE-2017-3506Vulnerability detection|
 |/weblogic/t3.js|t3,weblogic||T3开放状态监测|
-|/xss/xss1.js|xss,parms,web||xx,漏洞检测|
+|/xss/xss1.js|xss,parms,web||xx,Vulnerability detection|
 
 
 ## how install
