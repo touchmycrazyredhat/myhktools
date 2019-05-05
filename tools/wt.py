@@ -3,11 +3,16 @@
 # mkdir /tmp/xx
 # mount -t cifs -o username=yhwls,password='SXrst@)!(7' //12.168.111.22/u01/  /tmp/xx
 # sudo sshfs -o allow_other,defer_permissions yhwls@192.167.183.7:/u01/Middleware/user_projects/domains/yh_domain/servers/Server-64352 /mysvn/x3
-# sudo sshfs -o allow_other yhwls@192.167.183.7:/u01/Middleware/user_projects/domains/yh_domain/servers/Server-64352 /mysvn/x3
 # sudo umount /usr/local/droplet
-# yhwls@192.167.183.7 
-# SXrst@)!(7
+# apt install sshfs
+
+# mkdir -p /mysvn/x3
 # pip3 install watchdog
+# sudo sshfs -o allow_other yhwls@192.167.183.7:/u01/Middleware/user_projects/domains/yh_domain/servers/Server-64352 /mysvn/x3
+# SXrst@)!(7
+# yhwls@192.167.183.7 
+# py3 wt.py
+
 
 from watchdog.observers import Observer
 from watchdog.events import *
