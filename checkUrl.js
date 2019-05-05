@@ -17,8 +17,8 @@ var kkk = require('./lib/core_new.js');
 var r = new kkk(),colors = require('colors');
 var fnTTTTT = console.log;
 console.log = function(s){
-	if(-1 == String(s).indexOf("404--Not Found"))
-	fnTTTTT(s);
+	if(!/(错误页|404\-\-Not Found|<\/body>)/g.test(String(s)))
+		fnTTTTT(s);
 	// throw "x";
 	// console.trace();
 }
