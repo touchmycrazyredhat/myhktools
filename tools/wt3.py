@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # py3 tools/wt3.py shell-command --patterns="*.jsp;*.jspx" --recursive --command='echo "${watch_src_path}"' /mysvn/ 
+# pip3 install watchdog;watchmedo shell-command --patterns="*.jsp;*.jspx" --recursive --command='echo "${watch_src_path}"' /mysvn/
 
 import sys
 import time
