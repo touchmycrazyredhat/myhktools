@@ -292,6 +292,8 @@ sudo ipconfig set en1 DHCP
 ```
 ifconfig | grep inet | grep -v inet6 | cut -d" " -f2 | tail -n1
 ifconfig | grep inet | grep -v inet6 | cut -d" " -f2,3 
+grep -Eo "([0-9]{1,3}\.){3}[0-9]{1,3}" jd.xm
+sudo nmap -oX jd.xml -p- -iL jdIps.txt -T4 --version-all -A
 ```
 ### 文本中获取本机ip
 ```
