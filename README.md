@@ -199,17 +199,10 @@ Node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 
 <!-- ender -->
 # Donation
-## Wechat Pay
-![donation-AliPay](/md/wc.png)
-## AliPay
-![donation-Wechat](/md/zfb.png)
-## Paypal
-Donate money by [paypal](https://www.paypal.me/pwned2019) to my account **miracletalent@gmail.com**.
-## BTC Pay
-![donation-BTC](/md/BTC.png)
-## BCH Pay
-![donation-BCH](/md/BCH.jpg)
-
+# Donation
+| Wechat Pay | AliPay | Paypal | BTC Pay |BCH Pay |
+| --- | --- | --- | --- | --- |
+|<img src=https://github.com/hktalent/myhktools/blob/master/md/wc.png>|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/zfb.png>|[paypal](https://www.paypal.me/pwned2019) **miracletalent@gmail.com**|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BTC.png>|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BCH.jpg>|
 
 # Thanks to
 - [![Follow on Twitter](https://img.shields.io/twitter/follow/hanerkui.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=hanerkui ) github: [hanerkui] (https://github.com/hanerkui)
