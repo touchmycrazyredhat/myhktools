@@ -1,17 +1,17 @@
-##### Twitter: [@Hktalent3135773](https://twitter.com/Hktalent3135773)
-[![Tweet](https://img.shields.io/twitter/url/http/Hktalent3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner%20%40Hktalent3135773&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Fhktalent%2Fmyhktools)
-[![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Hktalent3135773)
-[![Github Stars](https://img.shields.io/github/stars/hktalent/myhktools.svg?style=social&label=Stars&color=orange)](https://github.com/hktalent/myhktools/)
-[![GitHub Followers](https://img.shields.io/github/followers/hktalent.svg?style=social&label=Follow)](https://github.com/hktalent/myhktools/)
-![GitHub forks](https://img.shields.io/github/forks/hktalent/myhktools.svg?style=social&label=Fork)
+##### Twitter: [@trhacknon3135773](https://twitter.com/trhacknon3135773)
+[![Tweet](https://img.shields.io/twitter/url/http/trhacknon3135773.svg?style=social)](https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdeveloper.twitter.com%2Fen%2Fdocs%2Ftwitter-for-websites%2Ftweet-button%2Foverview&ref_src=twsrc%5Etfw&text=myhktools%20-%20Automated%20Pentest%20Recon%20Scanner%20%40Hktalent3135773&tw_p=tweetbutton&url=https%3A%2F%2Fgithub.com%2Ftrhacknon%2Fmyhktools)
+[![Follow on Twitter](https://img.shields.io/twitter/follow/Hktalent3135773.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=trhacknon3135773)
+[![Github Stars](https://img.shields.io/github/stars/trhacknon/myhktools.svg?style=social&label=Stars&color=orange)](https://github.com/trhacknon/myhktools/)
+[![GitHub Followers](https://img.shields.io/github/followers/trhacknon.svg?style=social&label=Follow)](https://github.com/trhacknon/myhktools/)
+![GitHub forks](https://img.shields.io/github/forks/trhacknon/myhktools.svg?style=social&label=Fork)
 
-[![GitHub issues](https://img.shields.io/github/issues/hktalent/myhktools.svg)](https://github.com/hktalent/myhktools/issues)
-![GitHub watchers](https://img.shields.io/github/watchers/hktalent/myhktools.svg?label=Watch)
-![GitHub contributors](https://img.shields.io/github/contributors/hktalent/myhktools.svg?colorB=red&colorA=orange)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/hktalent/myhktools.svg?colorB=ff9988&colorA=006666)
-![GitHub language count](https://img.shields.io/github/languages/count/hktalent/myhktools.svg?colorB=995500&colorA=551166)
-![GitHub search hit counter](https://img.shields.io/github/search/hktalent/myhktools/goto.svg?colorB=0077ff&colorA=11aadd)
-![GitHub top language](https://img.shields.io/github/languages/top/hktalent/myhktools.svg?colorB=red&colorA=dd88ff)
+[![GitHub issues](https://img.shields.io/github/issues/trhacknon/myhktools.svg)](https://github.com/trhacknon/myhktools/issues)
+![GitHub watchers](https://img.shields.io/github/watchers/trhacknon/myhktools.svg?label=Watch)
+![GitHub contributors](https://img.shields.io/github/contributors/trhacknon/myhktools.svg?colorB=red&colorA=orange)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/trhacknon/myhktools.svg?colorB=ff9988&colorA=006666)
+![GitHub language count](https://img.shields.io/github/languages/count/trhacknon/myhktools.svg?colorB=995500&colorA=551166)
+![GitHub search hit counter](https://img.shields.io/github/search/trhacknon/myhktools/goto.svg?colorB=0077ff&colorA=11aadd)
+![GitHub top language](https://img.shields.io/github/languages/top/trhacknon/myhktools.svg?colorB=red&colorA=dd88ff)
 ![os](https://img.shields.io/badge/OS-Linux,%20Window,%20macOS-green.svg)
 ![nodejs](https://img.shields.io/badge/nodejs-blue.svg)
 ![python](https://img.shields.io/badge/python2-red.svg)
@@ -20,8 +20,8 @@
 # penetration tools
 <!--
 
-|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/ Hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
-|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/ Hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
+|<img src="https://github.com/trhacknon/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/trhacknon/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
+|<img src="https://github.com/trhacknon/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/trhacknon/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
 -->
 
 ## dependencies
@@ -138,7 +138,7 @@ Apt install nodejs node
 Yum install nodejs node
 
 Mkdir ~/safe && cd ~/safe
-Git clone https://github.com/hktalent/myhktools.git
+Git clone https://github.com/trhacknon/myhktools.git
 Cd myhktools
 Sh ./install.sh
 Node checkUrl.js -h
@@ -194,7 +194,7 @@ Node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 
 <!--
 
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
+<img src="https://github.com/trhacknon/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
 -->
 
 <!-- ender -->
