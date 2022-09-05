@@ -122,7 +122,7 @@ Apt install nodejs node
 Yum install nodejs node
 
 Mkdir ~/safe && cd ~/safe
-Git clone https://github.com/hktalent/myhktools.git
+Git clone https://github.com/touchmycrazyredhat/myhktools.git
 Cd myhktools
 Sh ./install.sh
 Node checkUrl.js -h
@@ -178,7 +178,7 @@ Node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 
 <!--
 
-<img src="https://github.com/hktalent/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
+<img src="https://github.com/touchmycrazyredhat/myhktools/blob/master/bin/wb1.jpg?raw=true" width=400>
 -->
 
 <!-- ender -->
@@ -186,10 +186,10 @@ Node checkUrl.js -u http://192.168.10.216:8082/s2-032/ --struts2 045
 # Donation
 | Wechat Pay | AliPay | Paypal | BTC Pay |BCH Pay |
 | --- | --- | --- | --- | --- |
-|<img src=https://github.com/hktalent/myhktools/blob/master/md/wc.png>|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/zfb.png>|[paypal](https://www.paypal.me/pwned2019) **miracletalent@gmail.com**|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BTC.png>|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BCH.jpg>|
+|<img src=https://github.com/touchmycrazyredhat/myhktools/blob/master/md/wc.png>|<img width=166 src=https://github.com/trhacknon/myhktools/blob/master/md/zfb.png>|[paypal](https://www.paypal.me/pwned2019) **miracletalent@gmail.com**|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BTC.png>|<img width=166 src=https://github.com/hktalent/myhktools/blob/master/md/BCH.jpg>|
 
 # Thanks to
-- [![Follow on Twitter](https://img.shields.io/twitter/follow/hanerkui.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=hanerkui ) github: [hanerkui] (https://github.com/hanerkui)
+- [![Follow on Twitter](https://img.shields.io/twitter/follow/hanerkui.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=hanerkui ) github: [hanerkui] (https://github.com/trhacknon)
 - [![Follow on Twitter](https://img.shields.io/twitter/follow/pwncrestfallen.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=pwncrestfallen ) github:[musicalpike](https://github.com/musicalpike)
 - [![Follow on Twitter](https://img.shields.io/twitter/follow/tiger_mirror.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=tiger_mirror ) github: [black-mirror](https://github.com/black-mirror)
 - [![Follow on Twitter](https://img.shields.io/twitter/follow/Arthur22573102.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=Arthur22573102 ) github: [EnterpriseForever] (https://github.com/EnterpriseForever)
