@@ -4,8 +4,8 @@
 # penetration tools
 <!--
 
-|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/ Hktalent/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
-|<img src="https://github.com/hktalent/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/ Hktalent/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
+|<img src="https://github.com/touchmycrazyredhat/myhktools/blob/master/bin/hk1.jpg?raw=true" width=400>|<img src="https://github.com/touchmycrazyredhat/myhktools/blob/master/bin/hk2.jpg?raw=true" width=400>|
+|<img src="https://github.com/touchmycrazyredhat/myhktools/blob/master/bin/hk3.jpg?raw=true" width=400>|<img src="https://github.com/touchmycrazyredhat/myhktools/blob/master/bin/hk4.jpg?raw=true" width=400>|
 -->
 
 ## dependencies
@@ -122,10 +122,10 @@ Apt install nodejs node
 Yum install nodejs node
 
 Mkdir ~/safe && cd ~/safe
-Git clone https://github.com/touchmycrazyredhat/myhktools.git
-Cd myhktools
-Sh ./install.sh
-Node checkUrl.js -h
+git clone https://github.com/touchmycrazyredhat/myhktools.git
+cd myhktools
+sh ./install.sh
+node checkUrl.js -h
 ```
 
 ## update all node js lib
